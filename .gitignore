@@ -1,7 +1,6 @@
-BackEnd/.git/
-BackEnd/.venv/
-BackEnd/venv/
-BackEnd/.env/
-BackEnd/env/
-BackEnd/*/__pycache__/
-BackEnd/db.sqlite3
+.venv/
+venv/
+.env/
+env/
+__pycache__/
+db.sqlite3
