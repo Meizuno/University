@@ -11,6 +11,7 @@ class Permission(models.Model):
     class Meta:
         db_table = "permission"
 
+
 class User(AbstractUser):
     """Custom user for authorization app"""
 
