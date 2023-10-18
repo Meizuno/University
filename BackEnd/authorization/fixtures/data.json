@@ -1,0 +1,42 @@
+[
+    {
+        "model": "authorization.Permission",
+        "pk": 1,
+        "fields": {
+            "level": 1,
+            "description": "admin"
+        }
+    },
+    {
+        "model": "authorization.Permission",
+        "pk": 2,
+        "fields": {
+            "level": 2,
+            "description": "guarantor"
+        }
+    },
+    {
+        "model": "authorization.Permission",
+        "pk": 3,
+        "fields": {
+            "level": 3,
+            "description": "instructor"
+        }
+    },
+    {
+        "model": "authorization.Permission",
+        "pk": 4,
+        "fields": {
+            "level": 4,
+            "description": "scheduler"
+        }
+    },
+    {
+        "model": "authorization.Permission",
+        "pk": 5,
+        "fields": {
+            "level": 5,
+            "description": "student"
+        }
+    }
+]
