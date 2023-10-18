@@ -41,8 +41,8 @@ INSTALLED_APPS = [
 
     'rest_framework',
     'authorization',
-    'education'
-]
+    'education.apps.EducationConfig'
+] # ????
 
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
