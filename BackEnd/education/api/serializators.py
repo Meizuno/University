@@ -17,7 +17,8 @@ class CreateUserSerializer(serializers.Serializer):
     last_name = serializers.CharField(required=True, max_length=150)
     permission_id = serializers.IntegerField(
         required=True,
-        help_text="ID of user's permission.\n Get enum on 'api/auth/permissions/'"
+        help_text="ID of user's permission.\n \
+            Get enum on 'api/auth/permissions/'"
     )
 
 
@@ -29,11 +30,13 @@ class UpdateUserSerializer(serializers.Serializer):
     last_name = serializers.CharField(required=False, max_length=150)
     permission_id = serializers.IntegerField(
         required=False,
-        help_text="ID of user's permission.\n Get enum on 'api/auth/permissions/'"
+        help_text="ID of user's permission.\n \
+            Get enum on 'api/auth/permissions/'"
     )
 
 
 class ReadUserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = ('id', 'username', 'email', 'first_name', 'last_name', 'permission')
+        fields = ('id', 'username', 'email', 
+                  'first_name', 'last_name', 'permission')

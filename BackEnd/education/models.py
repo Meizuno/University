@@ -1,14 +1,23 @@
 from django.db import models
 from authorization.models import User
+from django.core.validators import MinValueValidator
 
 
 class Subject(models.Model):
     code = models.CharField(max_length=3, unique=True)
     name = models.CharField(max_length=20)
     language = models.CharField(max_length=2, default='cz')
-    credits = models.IntegerField()
-    capacity = models.IntegerField()
-    guarantor = models.ForeignKey(User, on_delete=models.PROTECT, related_name="garant_subject")  # think about restrict
+    credits = models.IntegerField(validators=[MinValueValidator(1)])
+    capacity = models.IntegerField(validators=[MinValueValidator(1)])
+    students = models.ManyToManyField(
+        User,
+        through="StudentSubject",
+        related_name="subjects"
+    )
+    guarantor = models.ForeignKey(
+        User, on_delete=models.PROTECT, 
+        related_name="garant_subject"
+    )
     description = models.CharField(max_length=255)
 
     class Meta:
@@ -17,37 +26,51 @@ class Subject(models.Model):
 
 class Activity(models.Model):
     annotation = models.CharField(max_length=255)
-    duration = models.IntegerField()
-    capacity = models.IntegerField()
-    subject = models.ForeignKey(Subject, on_delete=models.CASCADE, related_name="subject_activity")
+    duration = models.IntegerField(validators=[MinValueValidator(1)])
+    capacity = models.IntegerField(validators=[MinValueValidator(1)])
+    students = models.ManyToManyField(
+        User,
+        through="StudentActivity",
+        related_name="activities"
+    )
+    subject = models.ForeignKey(
+        Subject,
+        on_delete=models.CASCADE,
+        related_name="subject_activity"
+    )
 
     class Meta:
         db_table = "activity"
 
 
 class StudentActivity(models.Model):
-    student = models.ForeignKey(User, on_delete=models.CASCADE, related_name="student_act")
-    activity = models.ForeignKey(Activity, on_delete=models.CASCADE, related_name="student_act")
+    student = models.ForeignKey(User, on_delete=models.CASCADE)
+    activity = models.ForeignKey(Activity, on_delete=models.PROTECT)
     datetime = models.DateTimeField()
 
     class Meta:
-        db_table = "studentActivity"
+        db_table = "student_activity"
 
 
 class StudentSubject(models.Model):
-    passed = models.BooleanField(default=False)
-    student = models.ForeignKey(User, on_delete=models.CASCADE, related_name="student_subject")
-    subject = models.ForeignKey(Subject, on_delete=models.CASCADE, related_name="student_subject")
-    points = models.IntegerField()
-    grade = models.CharField(max_length=1)
+    student = models.ForeignKey(User, on_delete=models.CASCADE)
+    subject = models.ForeignKey(Subject, on_delete=models.PROTECT)
 
     class Meta:
-        db_table = "studentSubject"
+        db_table = "student_subject"
 
 
 class Schedule(models.Model):
-    scheduler = models.ForeignKey(User, on_delete=models.CASCADE, related_name="schedule")
-    activity = models.ForeignKey(Activity, on_delete=models.CASCADE, related_name="schedule")
+    scheduler = models.ForeignKey(
+        User,
+        on_delete=models.PROTECT,
+        related_name="schedule"
+    )
+    activity = models.ForeignKey(
+        Activity,
+        on_delete=models.CASCADE,
+        related_name="schedule"
+    )
     datetime = models.DateTimeField()
 
     class Meta:
@@ -56,8 +79,13 @@ class Schedule(models.Model):
 
 class Room(models.Model):
     code = models.CharField(max_length=6, unique=True)
-    capacity = models.IntegerField()
-    schedule = models.ForeignKey(Schedule, on_delete=models.PROTECT, related_name="room")
+    capacity = models.IntegerField(validators=[MinValueValidator(1)])
+    schedule = models.ForeignKey(
+        Schedule,
+        on_delete=models.SET_NULL,
+        null=True,
+        related_name="room"
+    )
     description = models.CharField(max_length=255)
 
     class Meta:
@@ -65,19 +93,35 @@ class Room(models.Model):
 
 
 class InstructorRequest(models.Model):
-    instructor = models.ForeignKey(User, on_delete=models.CASCADE, related_name="instructor_request")
-    activity = models.ForeignKey(Activity, on_delete=models.CASCADE, related_name="instructor_request")
+    instructor = models.ForeignKey(
+        User,
+        on_delete=models.CASCADE,
+        related_name="instructor_request"
+    )
+    activity = models.ForeignKey(
+        Activity,
+        on_delete=models.CASCADE,
+        related_name="instructor_request"
+    )
     datetime = models.DateTimeField()
 
     class Meta:
-        db_table = "instructorRequest"
+        db_table = "instructor_request"
 
 
 class InstructorActivity(models.Model):
-    instructor = models.ForeignKey(User, on_delete=models.CASCADE, related_name="instructor_activity")
-    activity = models.ForeignKey(Activity, on_delete=models.CASCADE, related_name="instructor_activity")
+    instructor = models.ForeignKey(
+        User,
+        on_delete=models.CASCADE,
+        related_name="instructor_activity"
+    )
+    activity = models.ForeignKey(
+        Activity,
+        on_delete=models.CASCADE,
+        related_name="instructor_activity"
+    )
     description = models.CharField(max_length=255)
 
     class Meta:
-        db_table = "instructorActivity"
+        db_table = "instructor_activity"
 
