@@ -42,7 +42,8 @@ INSTALLED_APPS = [
     'rest_framework',
     'drf_yasg',
     'authorization.apps.AuthorizationConfig',
-    'education.apps.EducationConfig'
+    'education.apps.EducationConfig',
+    'corsheaders',
 ]
 
 REST_FRAMEWORK = {
@@ -99,6 +100,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
 ]
 
 ROOT_URLCONF = 'university.urls'
@@ -180,3 +182,16 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 
 AUTH_USER_MODEL = "authorization.User"
+
+CORS_ALLOW_ALL_ORIGINS = True  # for using API
+
+CORS_ALLOW_METHODS = [
+    'DELETE',
+    'GET',
+    'OPTIONS',
+    'PATCH',
+    'POST',
+    'PUT',
+]
+
+
