@@ -1,6 +1,6 @@
 from django.db import models
 from authorization.models import User
-from django.core.validators import MinValueValidator
+from django.core.validators import MinValueValidator, MaxValueValidator
 
 
 class Subject(models.Model):
@@ -87,7 +87,10 @@ class Schedule(models.Model):
 
 
 class Room(models.Model):
-    code = models.CharField(max_length=6, unique=True)
+    number = models.IntegerField(
+        unique=True,
+        validators=[MinValueValidator(100), MaxValueValidator(999)]
+    )
     capacity = models.IntegerField(validators=[MinValueValidator(1)])
     schedule = models.ForeignKey(
         Schedule,

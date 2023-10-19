@@ -1,6 +1,7 @@
 from rest_framework import serializers
-from authorization.decorators import handle_error
 from authorization.models import Permission, User
+from education.models import Room
+from django.core.validators import MinValueValidator, MaxValueValidator
 
 
 class PermissionSerializer(serializers.ModelSerializer):
@@ -40,3 +41,35 @@ class ReadUserSerializer(serializers.ModelSerializer):
         model = User
         fields = ('id', 'username', 'email', 
                   'first_name', 'last_name', 'permission')
+
+
+class ReadRoomSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Room
+        fields = "__all__"
+
+
+class CreateRoomSerializer(serializers.Serializer):
+    number = serializers.IntegerField(
+        validators=[
+            MinValueValidator(100),
+            MaxValueValidator(999)
+        ]
+    )
+    capacity = serializers.IntegerField(validators=[MinValueValidator(1)])
+    description = serializers.CharField(required=False)
+
+
+class UpdateRoomSerializer(serializers.Serializer):
+    number = serializers.IntegerField(
+        validators=[
+            MinValueValidator(100),
+            MaxValueValidator(999)
+        ],
+        required=False
+    )
+    capacity = serializers.IntegerField(
+        validators=[MinValueValidator(1)],
+        required=False
+    )
+    description = serializers.CharField(required=False)
