@@ -24,10 +24,19 @@ class Subject(models.Model):
         db_table = "subject"
 
 
+class ActivityType(models.Model):
+    notation = models.CharField(max_length=5, unique=True)
+    description = models.CharField(max_length=128, null=True)
+
+    class Meta:
+        db_table = "activity_type"
+
+
 class Activity(models.Model):
     annotation = models.CharField(max_length=255)
     duration = models.IntegerField(validators=[MinValueValidator(1)])
     capacity = models.IntegerField(validators=[MinValueValidator(1)])
+    activity_type = models.ForeignKey(ActivityType, on_delete=models.PROTECT)
     students = models.ManyToManyField(
         User,
         through="StudentActivity",

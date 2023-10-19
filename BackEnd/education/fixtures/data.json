@@ -38,5 +38,29 @@
             "level": 5,
             "description": "student"
         }
+    },
+    {
+        "model": "education.ActivityType",
+        "pk": 1,
+        "fields": {
+            "notation": "L",
+            "description": "lecture"
+        }
+    },
+    {
+        "model": "education.ActivityType",
+        "pk": 2,
+        "fields": {
+            "notation": "P",
+            "description": "practice"
+        }
+    },
+    {
+        "model": "education.ActivityType",
+        "pk": 3,
+        "fields": {
+            "notation": "D",
+            "description": "demo"
+        }
     }
 ]
