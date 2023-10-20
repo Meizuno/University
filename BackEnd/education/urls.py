@@ -1,29 +1,24 @@
 from django.urls import path
 from education.api.view import (
     get_permissions,
-
     get_users_or_create,
     rud_user,
-
     get_rooms_or_create,
     rud_room,
-    
     get_subjects_or_create,
-    rud_subject
+    rud_subject,
 )
 
 
 urlpatterns = [
     # User's endpoints
-    path('permission', get_permissions),
-    path('user', get_users_or_create),
-    path('user/<int:user_id>', rud_user),
-
+    path("permission", get_permissions),
+    path("user", get_users_or_create),
+    path("user/<int:user_id>", rud_user),
     # Room's endpoints
-    path('room', get_rooms_or_create),
-    path('room/<int:room_id>', rud_room),
-    
+    path("room", get_rooms_or_create),
+    path("room/<int:room_id>", rud_room),
     # Subject's endpoints
-    path('subject', get_subjects_or_create),
-    path('subject/<int:subject_id>', rud_subject),
+    path("subject", get_subjects_or_create),
+    path("subject/<int:subject_id>", rud_subject),
 ]

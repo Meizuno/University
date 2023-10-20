@@ -7,6 +7,6 @@ from rest_framework_simplejwt.views import (
 
 urlpatterns = [
     # Authorization endpoints
-    path('token', TokenObtainPairView.as_view()),
-    path('token/refresh', TokenRefreshView.as_view()),
+    path("token", TokenObtainPairView.as_view()),
+    path("token/refresh", TokenRefreshView.as_view()),
 ]

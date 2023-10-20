@@ -18,7 +18,7 @@ class User(AbstractUser):
     permission = models.ForeignKey(
         Permission,
         on_delete=models.PROTECT,
-        related_name="user"
+        related_name="user",
     )
 
     class Meta:

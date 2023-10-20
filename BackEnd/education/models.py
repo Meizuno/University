@@ -6,17 +6,18 @@ from django.core.validators import MinValueValidator, MaxValueValidator
 class Subject(models.Model):
     code = models.CharField(max_length=3, unique=True)
     name = models.CharField(max_length=20)
-    language = models.CharField(max_length=2, default='cz')
+    language = models.CharField(max_length=2, default="cz")
     credits = models.IntegerField(validators=[MinValueValidator(1)])
     capacity = models.IntegerField(validators=[MinValueValidator(1)])
     students = models.ManyToManyField(
         User,
         through="StudentSubject",
-        related_name="subjects"
+        related_name="subjects",
     )
     guarantor = models.ForeignKey(
-        User, on_delete=models.PROTECT, 
-        related_name="garant_subject"
+        User,
+        on_delete=models.PROTECT,
+        related_name="garant_subject",
     )
     description = models.CharField(max_length=255)
 
@@ -40,12 +41,12 @@ class Activity(models.Model):
     students = models.ManyToManyField(
         User,
         through="StudentActivity",
-        related_name="activities"
+        related_name="activities",
     )
     subject = models.ForeignKey(
         Subject,
         on_delete=models.CASCADE,
-        related_name="subject_activity"
+        related_name="subject_activity",
     )
 
     class Meta:
@@ -73,12 +74,12 @@ class Schedule(models.Model):
     scheduler = models.ForeignKey(
         User,
         on_delete=models.PROTECT,
-        related_name="schedule"
+        related_name="schedule",
     )
     activity = models.ForeignKey(
         Activity,
         on_delete=models.CASCADE,
-        related_name="schedule"
+        related_name="schedule",
     )
     datetime = models.DateTimeField()
 
@@ -89,14 +90,14 @@ class Schedule(models.Model):
 class Room(models.Model):
     number = models.IntegerField(
         unique=True,
-        validators=[MinValueValidator(100), MaxValueValidator(999)]
+        validators=[
+            MinValueValidator(100),
+            MaxValueValidator(999),
+        ],
     )
     capacity = models.IntegerField(validators=[MinValueValidator(1)])
     schedule = models.ForeignKey(
-        Schedule,
-        on_delete=models.SET_NULL,
-        null=True,
-        related_name="room"
+        Schedule, on_delete=models.SET_NULL, null=True, related_name="room"
     )
     description = models.CharField(max_length=255)
 
@@ -108,12 +109,12 @@ class InstructorRequest(models.Model):
     instructor = models.ForeignKey(
         User,
         on_delete=models.CASCADE,
-        related_name="instructor_request"
+        related_name="instructor_request",
     )
     activity = models.ForeignKey(
         Activity,
         on_delete=models.CASCADE,
-        related_name="instructor_request"
+        related_name="instructor_request",
     )
     datetime = models.DateTimeField()
 
@@ -125,15 +126,14 @@ class InstructorActivity(models.Model):
     instructor = models.ForeignKey(
         User,
         on_delete=models.CASCADE,
-        related_name="instructor_activity"
+        related_name="instructor_activity",
     )
     activity = models.ForeignKey(
         Activity,
         on_delete=models.CASCADE,
-        related_name="instructor_activity"
+        related_name="instructor_activity",
     )
     description = models.CharField(max_length=255)
 
     class Meta:
         db_table = "instructor_activity"
-

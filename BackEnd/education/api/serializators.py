@@ -17,7 +17,7 @@ class CreateUserSerializer(serializers.Serializer):
     first_name = serializers.CharField(max_length=150)
     last_name = serializers.CharField(max_length=150)
     permission_id = serializers.IntegerField(
-        help_text="ID of user's permission.\n \
+        help_text="ID of user's permission. \
             Get enum on 'api/auth/permissions/'"
     )
 
@@ -30,16 +30,22 @@ class UpdateUserSerializer(serializers.Serializer):
     last_name = serializers.CharField(required=False, max_length=150)
     permission_id = serializers.IntegerField(
         required=False,
-        help_text="ID of user's permission.\n \
-            Get enum on 'api/auth/permissions/'"
+        help_text="ID of user's permission. \
+            Get enum on 'api/auth/permissions/'",
     )
 
 
 class ReadUserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = ('id', 'username', 'email', 
-                  'first_name', 'last_name', 'permission')
+        fields = (
+            "id",
+            "username",
+            "email",
+            "first_name",
+            "last_name",
+            "permission",
+        )
 
 
 class ReadRoomSerializer(serializers.ModelSerializer):
@@ -50,24 +56,31 @@ class ReadRoomSerializer(serializers.ModelSerializer):
 
 class CreateRoomSerializer(serializers.Serializer):
     number = serializers.IntegerField(
-        validators=[MinValueValidator(100), MaxValueValidator(999)]
+        validators=[
+            MinValueValidator(100),
+            MaxValueValidator(999),
+        ]
     )
-    capacity = serializers.IntegerField(validators=[MinValueValidator(1)])
+    capacity = serializers.IntegerField(
+        validators=[MinValueValidator(1)],
+    )
     description = serializers.CharField(required=False)
 
 
 class UpdateRoomSerializer(serializers.Serializer):
     number = serializers.IntegerField(
-        validators=[MinValueValidator(100), MaxValueValidator(999)],
-        required=False
+        validators=[
+            MinValueValidator(100),
+            MaxValueValidator(999),
+        ],
+        required=False,
     )
     capacity = serializers.IntegerField(
-        validators=[MinValueValidator(1)],
-        required=False
+        validators=[MinValueValidator(1)], required=False
     )
     description = serializers.CharField(required=False)
-    
-    
+
+
 class ReadSubjectSerializer(serializers.ModelSerializer):
     class Meta:
         model = Subject
@@ -79,10 +92,16 @@ class CreateSubjectSerializer(serializers.Serializer):
     name = serializers.CharField(max_length=20)
     language = serializers.CharField(required=False, max_length=2)
     credits = serializers.IntegerField(
-        validators=[MinValueValidator(1), MaxValueValidator(7)]
+        validators=[
+            MinValueValidator(1),
+            MaxValueValidator(7),
+        ]
     )
     capacity = serializers.IntegerField(
-        validators=[MinValueValidator(1), MaxValueValidator(9999)]
+        validators=[
+            MinValueValidator(1),
+            MaxValueValidator(9999),
+        ]
     )
     guarantor_id = serializers.IntegerField()
     description = serializers.CharField(required=False)
@@ -94,12 +113,17 @@ class UpdateSubjectSerializer(serializers.Serializer):
     language = serializers.CharField(required=False, max_length=2)
     creaits = serializers.IntegerField(
         required=False,
-        validators=[MinValueValidator(1), MaxValueValidator(7)]
+        validators=[
+            MinValueValidator(1),
+            MaxValueValidator(7),
+        ],
     )
     capacity = serializers.IntegerField(
         required=False,
-        validators=[MinValueValidator(1), MaxValueValidator(9999)]
+        validators=[
+            MinValueValidator(1),
+            MaxValueValidator(9999),
+        ],
     )
     guarantor_id = serializers.IntegerField(required=False)
     description = serializers.CharField(required=False)
-    
