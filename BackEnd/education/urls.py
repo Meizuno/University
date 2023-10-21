@@ -1,13 +1,5 @@
 from django.urls import path
-from education.api.view import (
-    get_permissions,
-    get_users_or_create,
-    rud_user,
-    get_rooms_or_create,
-    rud_room,
-    get_subjects_or_create,
-    rud_subject,
-)
+from education.api.view import *
 
 
 urlpatterns = [
@@ -21,4 +13,6 @@ urlpatterns = [
     # Subject's endpoints
     path("subject", get_subjects_or_create),
     path("subject/<int:subject_id>", rud_subject),
+    # Student register subject
+    path("register/<int:user_id>/<int:subject_id>", register_subject),
 ]

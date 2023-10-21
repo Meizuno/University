@@ -4,7 +4,7 @@ from authorization.decorators import handle_error
 from authorization.models import Permission, User
 from drf_yasg.utils import swagger_auto_schema
 from rest_framework import status
-from education.models import Room, Subject
+from education.models import *
 from education.api.serializators import *
 from education.api.doc_responses import *
 
@@ -318,3 +318,81 @@ def rud_subject(request, subject_id):
             )
         subject.delete()
         return Response({"success": True, "errors": None})
+
+
+@swagger_auto_schema(
+    method="post",
+    responses={
+        200: OK_200_RESPONSE_DEFAULT,
+        404: ERROR_404_RESPONSE_STUDENT_SUBJECT,
+    },
+)
+@swagger_auto_schema(
+    method="delete",
+    responses={
+        200: OK_200_RESPONSE_DEFAULT,
+        404: ERROR_404_RESPONSE_STUDENT_SUBJECT,
+    },
+)
+@api_view(["POST", "DELETE"])
+def register_subject(request, user_id, subject_id):
+    """Register subject to user"""
+
+    if request.method == "POST":
+        user = User.objects.filter(id=user_id)
+        if not user.exists():
+            return Response(
+                {
+                    "success": False,
+                    "errors": "User doesn't exist.",
+                }
+            )
+
+        if user[0].permission_id != "5":
+            return Response(
+                {
+                    "success": False,
+                    "errors": "User can't register subject.",
+                }
+            )
+
+        subject = Subject.objects.filter(id=subject_id)
+        if not subject.exists():
+            return Response(
+                {
+                    "success": False,
+                    "errors": "Subject doesn't exist.",
+                }
+            )
+
+        StudentSubject.objects.create(
+            student=user[0],
+            subject=subject[0],
+        )
+        return Response(
+            {
+                "success": True,
+                "errors": None,
+            }
+        )
+    elif request.method == "DELETE":
+        student_subject = StudentSubject.objects.filter(
+            student_id=user_id,
+            subject_id=subject_id,
+        )
+
+        if not student_subject.exists():
+            return Response(
+                {
+                    "success": False,
+                    "errors": "Student didn't register subject.",
+                }
+            )
+
+        student_subject.delete()
+        return Response(
+            {
+                "success": True,
+                "errors": None,
+            }
+        )

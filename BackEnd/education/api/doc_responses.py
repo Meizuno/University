@@ -98,3 +98,13 @@ ERROR_404_RESPONSE_SUBJECT = openapi.Response(
         },
     },
 )
+
+ERROR_404_RESPONSE_STUDENT_SUBJECT = openapi.Response(
+    "Bad request",
+    examples={
+        "application/json": {
+            "success": False,
+            "errors": "message_error",
+        },
+    },
+)

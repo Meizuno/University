@@ -55,11 +55,12 @@ class Activity(models.Model):
 
 class StudentActivity(models.Model):
     student = models.ForeignKey(User, on_delete=models.CASCADE)
-    activity = models.ForeignKey(Activity, on_delete=models.PROTECT)
+    activity = models.ForeignKey(Activity, on_delete=models.CASCADE)
     datetime = models.DateTimeField()
 
     class Meta:
         db_table = "student_activity"
+        unique_together = ("student", "activity")
 
 
 class StudentSubject(models.Model):
@@ -68,6 +69,7 @@ class StudentSubject(models.Model):
 
     class Meta:
         db_table = "student_subject"
+        unique_together = ("student", "subject")
 
 
 class Schedule(models.Model):
@@ -85,6 +87,7 @@ class Schedule(models.Model):
 
     class Meta:
         db_table = "schedule"
+        unique_together = ("activity", "datetime")
 
 
 class Room(models.Model):
@@ -120,6 +123,7 @@ class InstructorRequest(models.Model):
 
     class Meta:
         db_table = "instructor_request"
+        unique_together = ("activity", "datetime")
 
 
 class InstructorActivity(models.Model):
@@ -137,3 +141,4 @@ class InstructorActivity(models.Model):
 
     class Meta:
         db_table = "instructor_activity"
+        unique_together = ("instructor", "activity")
