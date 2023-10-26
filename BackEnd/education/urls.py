@@ -7,6 +7,7 @@ urlpatterns = [
     path("permission", get_permissions),
     path("user", get_users_or_create),
     path("user/<int:user_id>", rud_user),
+    path("my-info", my_info),
     # Room's endpoints
     path("room", get_rooms_or_create),
     path("room/<int:room_id>", rud_room),

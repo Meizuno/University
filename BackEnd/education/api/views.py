@@ -1,6 +1,6 @@
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
-from authorization.decorators import handle_error
+from authorization.decorators import handle_error, login_required
 from authorization.models import Permission, User
 from drf_yasg.utils import swagger_auto_schema
 from rest_framework import status
@@ -24,6 +24,21 @@ def get_permissions(request):
     permissions = Permission.objects.all()
     serializator = PermissionSerializer(permissions, many=True)
     return Response({"data": serializator.data})
+
+
+@swagger_auto_schema(
+    method="get",
+    responses={
+        200: OK_200_RESPONSE_USER,
+        403: ERROR_403_RESPONSE_DEFAULT,
+    },
+)
+@api_view(["GET"])
+@handle_error
+@login_required
+def my_info(request):
+    serializer = ReadUserSerializer(request.user)
+    return Response(serializer.data, status=status.HTTP_200_OK)
 
 
 @swagger_auto_schema(
