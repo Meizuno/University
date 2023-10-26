@@ -1,5 +1,5 @@
 from django.urls import path
-from education.api.view import *
+from education.api.views import *
 
 
 urlpatterns = [

@@ -5,7 +5,7 @@ from authorization.models import Permission, User
 from drf_yasg.utils import swagger_auto_schema
 from rest_framework import status
 from education.models import *
-from education.api.serializators import *
+from education.api.serializers import *
 from education.api.doc_responses import *
 
 
@@ -224,6 +224,7 @@ def rud_room(request, room_id):
 
 @swagger_auto_schema(
     method="get",
+    manual_parameters=get_parameters_from_serializer(ReadSubjectSerializer),
     responses={
         200: OK_200_RESPONSE_SUBJECT,
         403: ERROR_403_RESPONSE_DEFAULT,
@@ -244,7 +245,8 @@ def get_subjects_or_create(request):
     """Read subjects or create new"""
 
     if request.method == "GET":
-        subjects = Subject.objects.all()
+        params = request.GET.dict()
+        subjects = Subject.objects.filter(**params)
         serializator = ReadSubjectSerializer(subjects, many=True)
         return Response({"data": serializator.data})
     elif request.method == "POST":

@@ -1,5 +1,5 @@
 from drf_yasg import openapi
-from education.api.serializators import (
+from education.api.serializers import (
     PermissionSerializer,
     ReadUserSerializer,
     ReadRoomSerializer,
@@ -108,3 +108,16 @@ ERROR_404_RESPONSE_STUDENT_SUBJECT = openapi.Response(
         },
     },
 )
+
+
+def get_parameters_from_serializer(serializer):
+    parameters = []
+    for field_name, field in serializer().get_fields().items():
+        parameter = openapi.Parameter(
+            name=field_name,
+            in_=openapi.IN_QUERY,
+            description=field.help_text,
+            type=openapi.TYPE_STRING  # Здесь вы можете использовать соответствующий тип
+        )
+        parameters.append(parameter)
+    return parameters
