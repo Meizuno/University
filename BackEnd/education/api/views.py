@@ -414,32 +414,6 @@ def register_subject(request, user_id, subject_id):
             }
         )
 
-@swagger_auto_schema(
-    method="get",
-    responses={
-        200: OK_200_RESPONSE_USER,
-        403: ERROR_403_RESPONSE_DEFAULT,
-    },
-)
-@swagger_auto_schema(
-    method="put",
-    request_body=UpdateUserSerializer,
-    responses={
-        200: OK_200_RESPONSE_DEFAULT,
-        403: ERROR_403_RESPONSE_DEFAULT,
-        404: ERROR_404_RESPONSE_USER,
-    },
-)
-@swagger_auto_schema(
-    method="delete",
-    responses={
-        200: OK_200_RESPONSE_DEFAULT,
-        403: ERROR_403_RESPONSE_DEFAULT,
-        404: ERROR_404_RESPONSE_USER,
-    },
-)
-@api_view(["GET", "PUT", "DELETE"])
-@handle_error
 
 @swagger_auto_schema(
     method="post",
