@@ -1,3 +1,6 @@
+// Use DBML to define your database structure
+// Docs: https://dbml.dbdiagram.io/docs
+
 Table User {
   id ID [pk, not null]
   username char(255) [unique, not null]
@@ -13,14 +16,13 @@ Table User {
 Table Permission {
   id ID [pk, not null]
   level char(20) [not null]
+  description char(50) [not null]
 }
 
 Table Subject {
   id ID [pk, not null]
-  code char(3) [not null]
+  code char(3) [unique, not null]
   name char(20) [not null]
-  language char(2) [not null, default: 'cs']
-  credits int [not null]
   capacity int [not null]
   guarantor FK [ref: - User.id, not null]
   description char(255)
@@ -31,7 +33,6 @@ Table Activity {
   anotation char(255) [not null]
   duration int [not null, note: 'in hours']
   capacity int [not null]
-  repeating char(255) [not null]
   subject FK [ref: > Subject.id, not null]
 }
 
@@ -39,15 +40,13 @@ Table InstruktorActivity {
   id ID [pk, not null]
   instruktor FK [ref: < User.id, not null]
   activity FK [ref: < Activity.id, not null]
+  description char(255)
 }
 
 Table StudentSubject {
   id ID [pk, not null]
-  pass bool [not null, default: 'false']
   student FK [ref: < User.id, not null]
   subject FK [ref: < Subject.id, not null]
-  points int
-  grade char(1)
 }
 
 Table StudentActivity {
@@ -70,10 +69,9 @@ Table Schedule {
   scheduler FK [ref: > User.id, not null]
   activity FK [ref: < Activity.id, not null]
   data_time timestamp [not null]
-  weeks int[] [not null]
 }
 
-Table ScheduleRequest {
+Table InstruktorRequest {
   id ID [pk, not null]
   instructor FK [ref: > User.id, not null]
   activity FK [ref: > Activity.id, not null]

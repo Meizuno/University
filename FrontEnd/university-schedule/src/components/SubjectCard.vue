@@ -52,17 +52,17 @@ export default {
 <style scoped>
 
 .subject-main {
+    padding: 0px 30px;
     height: auto;
-    width: 100%;
     display: flex;
     flex-wrap: wrap;
     justify-content: space-between;
 }
 
 .subject-card {
-    margin: 2% 0%;
+    margin: 20px 0px;
     height: auto;
-    width: 43%;
+    width: calc(50% - 100px);
     background-color: white;
     padding: 20px 40px;
     border-radius: 20px;

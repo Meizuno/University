@@ -1,5 +1,3 @@
-<script></script>
-
 <template>
     <div class="header">
         <div class="user">
@@ -10,16 +8,27 @@
             <div class="menu">
                 <p>Home</p>
             </div>
-            <div class="btn-login">
+            <div class="btn-login" @click="Authorization">
                 Login
             </div>
         </nav>
     </div>
 </template>
 
+<script>
+export default {
+  methods: {
+    Authorization() {
+      this.$router.push('/authorization');
+    }
+  }
+};
+</script>
+
 <style scoped>
 
 .header {
+    margin: 30px;
     background-color: white;
     border-radius: 30px;
     padding: 10px 40px;
@@ -38,7 +47,7 @@
     padding: 10px 20px;
     border-radius: 20px;
     color: rgba(255,255,255,1);
-    font-size: 32px;
+    font-size: 28px;
     text-transform: uppercase;
 }
 
@@ -56,7 +65,7 @@
 
 .menu > * {
     margin: 5%;
-    font-size: 32px;
+    font-size: 28px;
     font-weight: bold;
     text-decoration: underline;
 }
@@ -69,7 +78,7 @@
 }
 
 .user p {
-    font-size: 32px;
+    font-size: 28px;
     font-weight: bold;
     color: rgba(0, 0, 0, 0.7);
     margin-left: 20px;
