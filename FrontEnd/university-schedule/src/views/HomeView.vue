@@ -1,9 +1,14 @@
 <script setup>
-import TheWelcome from '../components/TheWelcome.vue'
+import Navigation from '../components/Navigation.vue'
+import SubjectCard from '../components/SubjectCard.vue'
 </script>
 
 <template>
+  <header>
+    <Navigation />
+  </header>
+  
   <main>
-    <!-- <TheWelcome /> -->
+    <SubjectCard />
   </main>
 </template>

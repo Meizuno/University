@@ -22,7 +22,7 @@
 .header {
     background-color: white;
     border-radius: 30px;
-    padding: 2% 3%;
+    padding: 10px 40px;
     display: flex;
     flex-wrap: nowrap;
 }
