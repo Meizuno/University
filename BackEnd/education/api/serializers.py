@@ -127,3 +127,15 @@ class UpdateSubjectSerializer(serializers.Serializer):
     )
     guarantor_id = serializers.IntegerField(required=False)
     description = serializers.CharField(required=False)
+
+class CreateActivitySerializer(serializers.Serializer):
+    annotation = serializers.CharField(max_length=255)
+    duration = serializers.IntegerField(validators=[MinValueValidator(1)])
+    capacity = serializers.IntegerField(validators=[MinValueValidator(1)])
+    activity_type_id = serializers.IntegerField(
+       help_text="ID of activity's type. \
+           Get enum on 'api/auth/activity-type/'"
+   )
+    subject_id = serializers.IntegerField(
+        help_text="ID of activity's type."
+    )

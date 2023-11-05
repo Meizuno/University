@@ -413,3 +413,96 @@ def register_subject(request, user_id, subject_id):
                 "errors": None,
             }
         )
+
+@swagger_auto_schema(
+    method="get",
+    responses={
+        200: OK_200_RESPONSE_USER,
+        403: ERROR_403_RESPONSE_DEFAULT,
+    },
+)
+@swagger_auto_schema(
+    method="put",
+    request_body=UpdateUserSerializer,
+    responses={
+        200: OK_200_RESPONSE_DEFAULT,
+        403: ERROR_403_RESPONSE_DEFAULT,
+        404: ERROR_404_RESPONSE_USER,
+    },
+)
+@swagger_auto_schema(
+    method="delete",
+    responses={
+        200: OK_200_RESPONSE_DEFAULT,
+        403: ERROR_403_RESPONSE_DEFAULT,
+        404: ERROR_404_RESPONSE_USER,
+    },
+)
+@api_view(["GET", "PUT", "DELETE"])
+@handle_error
+
+@swagger_auto_schema(
+    method="post",
+    responses={
+        200: OK_200_RESPONSE_DEFAULT,
+        404: ERROR_404_RESPONSE_STUDENT_SUBJECT,
+    },
+)
+@api_view(["POST"])
+@handle_error
+def create_activity(request):
+    serializator = CreateActivitySerializer(data=request.data)
+    if serializator.is_valid():
+        Activity.objects.create(**serializator.data)
+        return Response({"success": True, "errors": None})
+    else:
+        return Response(
+            {"success": False, "errors": serializator.errors},
+            status=status.HTTP_400_BAD_REQUEST,
+        )
+
+@swagger_auto_schema(
+    method="delete",
+    responses={
+        200: OK_200_RESPONSE_DEFAULT,
+        403: ERROR_403_RESPONSE_DEFAULT,
+        404: ERROR_404_RESPONSE_USER,
+    },
+)
+@api_view(["DELETE"])
+@handle_error
+def delete_activity(request, activity_id):
+    activity = Activity.objects.filter(id=activity_id)
+    if not activity.exists():
+        return Response(
+            {
+                "success": True,
+                "errors": "Activity does not exist.",
+            },
+            status=status.HTTP_400_BAD_REQUEST,
+        )
+    activity.delete()
+    return Response({"success": True, "errors": None})
+
+@swagger_auto_schema(
+    method="get",
+    responses={
+        200: OK_200_RESPONSE_USER,
+        403: ERROR_403_RESPONSE_DEFAULT,
+    },
+)
+
+@api_view(["GET"])
+@handle_error
+def get_activity(request, activity_id):
+    activity = Activity.objects.filter(id=activity_id)
+    if not activity.exists():
+        return Response(
+            {
+                "success": False,
+                "errors": "Activity doesn't exist"
+            },
+            status=status.HTTP_400_BAD_REQUEST,
+        )
+    serializator = ReadSubjectSerializer(activity)
+    return Response({"data": serializator.data})
