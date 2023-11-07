@@ -47,12 +47,14 @@ export default {
 
       axios.post('http://127.0.0.1:8000/api/auth/token', postData)
           .then(response => {
-            console.log('Ответ сервера: token - ', response.data.access);
+            console.log('Server answer: token - ', response.data.access);
             localStorage.setItem('token', response.data.access);
             localStorage.setItem('IsAuth', response.data.access);
             //store.commit('setToken', response.data.access);
             //store.commit('setIsAuth', true);
             //router.push('/student');
+            this.$router.push('/student')
+
           })
           .catch(error => {
             console.log("Wrong user or password");
@@ -63,7 +65,7 @@ export default {
     },
     BackToHome() {
       this.$router.push('/');
-    }
+    },
   },
 }
 </script>
