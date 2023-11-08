@@ -14,35 +14,72 @@
 <script>
 export default {
   props: {
-    outsideColor: {
+    type: {
       type: String,
-      default: 'red'
-    },
-    insideColor: {
-      type: String,
-      default: 'red'
-    },
-    titleColor: {
-      type: String,
-      default: 'white'
+      default: 'Lecture'
     }
   },
   computed: {
     outside() {
+      let backgroundColor;
+      switch (this.type) {
+        case 'Lecture':
+          backgroundColor = '#84D296';
+          break;
+        case 'Practice':
+          backgroundColor = '#FFBB56';
+          break;
+        case 'Laboratory':
+          backgroundColor = '#45BFFF';
+          break;
+        case 'Exam':
+          backgroundColor = '#717EEE';
+          break;
+      }
       return {
-        backgroundColor: this.outsideColor
+        backgroundColor
       };
     },
     inside() {
+      let backgroundColor;
+      switch (this.type) {
+        case 'Lecture':
+          backgroundColor = '#9DDBAB';
+          break;
+        case 'Practice':
+          backgroundColor = '#FFB13B';
+          break;
+        case 'Laboratory':
+          backgroundColor = '#41B4F0';
+          break;
+        case 'Exam':
+          backgroundColor = '#8993ED';
+          break;
+      }
       return {
-        backgroundColor: this.insideColor
+        backgroundColor
       };
     },
     title() {
+      let color;
+      switch (this.type) {
+        case 'Lecture':
+          color = '#E2F4E6';
+          break;
+        case 'Practice':
+          color = '#FFD89D';
+          break;
+        case 'Laboratory':
+          color = '#C5CAF6';
+          break;
+        case 'Exam':
+          color = '#A2DAF8';
+          break;
+      }
       return {
-        color: this.titleColor
+        color
       };
-    }
+    },
   }
 };
 </script>
