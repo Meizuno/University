@@ -416,24 +416,38 @@ def register_subject(request, user_id, subject_id):
 
 
 @swagger_auto_schema(
+    method="get",
+    manual_parameters=get_parameters_from_serializer(ReadActivitySerializer),
+    responses={
+        200: OK_200_RESPONSE_SUBJECT,
+        403: ERROR_403_RESPONSE_DEFAULT,
+    },
+)
+@swagger_auto_schema(
     method="post",
     responses={
         200: OK_200_RESPONSE_DEFAULT,
         404: ERROR_404_RESPONSE_STUDENT_SUBJECT,
     },
 )
-@api_view(["POST"])
+@api_view(["GET", "POST"])
 @handle_error
-def create_activity(request):
-    serializator = CreateActivitySerializer(data=request.data)
-    if serializator.is_valid():
-        Activity.objects.create(**serializator.data)
-        return Response({"success": True, "errors": None})
-    else:
-        return Response(
-            {"success": False, "errors": serializator.errors},
-            status=status.HTTP_400_BAD_REQUEST,
-        )
+def get_activity_or_create(request):
+    if request.method == "GET":
+        params = request.GET.dict()
+        activity = Activity.objects.filter(**params)
+        serializator = ReadActivitySerializer(activity, many=True)
+        return Response({"data": serializator.data})
+    elif request.method == "POST":
+        serializator = CreateActivitySerializer(data=request.data)
+        if serializator.is_valid():
+            Activity.objects.create(**serializator.data)
+            return Response({"success": True, "errors": None})
+        else:
+            return Response(
+                {"success": False, "errors": serializator.errors},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
 
 
 @swagger_auto_schema(

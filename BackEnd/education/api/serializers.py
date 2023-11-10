@@ -1,6 +1,6 @@
 from rest_framework import serializers
 from authorization.models import Permission, User
-from education.models import Room, Subject
+from education.models import Activity, Room, Subject
 from django.core.validators import MinValueValidator, MaxValueValidator
 
 
@@ -8,6 +8,21 @@ class PermissionSerializer(serializers.ModelSerializer):
     class Meta:
         model = Permission
         fields = "__all__"
+
+
+
+class ReadUserSerializer(serializers.ModelSerializer):
+    permission = PermissionSerializer()
+    class Meta:
+        model = User
+        fields = (
+            "id",
+            "username",
+            "email",
+            "first_name",
+            "last_name",
+            "permission",
+        )
 
 
 class CreateUserSerializer(serializers.Serializer):
@@ -33,19 +48,6 @@ class UpdateUserSerializer(serializers.Serializer):
         help_text="ID of user's permission. \
             Get enum on 'api/auth/permissions/'",
     )
-
-
-class ReadUserSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = User
-        fields = (
-            "id",
-            "username",
-            "email",
-            "first_name",
-            "last_name",
-            "permission",
-        )
 
 
 class ReadRoomSerializer(serializers.ModelSerializer):
@@ -127,6 +129,14 @@ class UpdateSubjectSerializer(serializers.Serializer):
     )
     guarantor_id = serializers.IntegerField(required=False)
     description = serializers.CharField(required=False)
+
+
+class ReadActivitySerializer(serializers.ModelSerializer):
+    subject = ReadSubjectSerializer()
+    class Meta:
+        model = Activity
+        fields = "__all__"
+
 
 class CreateActivitySerializer(serializers.Serializer):
     annotation = serializers.CharField(max_length=255)

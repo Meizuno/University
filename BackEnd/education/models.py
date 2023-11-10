@@ -1,14 +1,12 @@
 from django.db import models
 from authorization.models import User
-from django.core.validators import MinValueValidator, MaxValueValidator
 
 
 class Subject(models.Model):
     code = models.CharField(max_length=3, unique=True)
-    name = models.CharField(max_length=20)
-    language = models.CharField(max_length=2, default="cz")
-    credits = models.IntegerField(validators=[MinValueValidator(1)])
-    capacity = models.IntegerField(validators=[MinValueValidator(1)])
+    name = models.CharField(max_length=50)
+    credits = models.IntegerField()
+    capacity = models.IntegerField()
     students = models.ManyToManyField(
         User,
         through="StudentSubject",
@@ -34,9 +32,9 @@ class ActivityType(models.Model):
 
 
 class Activity(models.Model):
-    annotation = models.CharField(max_length=255)
-    duration = models.IntegerField(validators=[MinValueValidator(1)])
-    capacity = models.IntegerField(validators=[MinValueValidator(1)])
+    annotation = models.CharField(max_length=255, null=True)
+    duration = models.IntegerField()
+    capacity = models.IntegerField()
     activity_type = models.ForeignKey(ActivityType, on_delete=models.PROTECT)
     students = models.ManyToManyField(
         User,
@@ -91,14 +89,8 @@ class Schedule(models.Model):
 
 
 class Room(models.Model):
-    number = models.IntegerField(
-        unique=True,
-        validators=[
-            MinValueValidator(100),
-            MaxValueValidator(999),
-        ],
-    )
-    capacity = models.IntegerField(validators=[MinValueValidator(1)])
+    number = models.IntegerField(unique=True)
+    capacity = models.IntegerField()
     schedule = models.ForeignKey(
         Schedule, on_delete=models.SET_NULL, null=True, related_name="room"
     )

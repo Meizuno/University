@@ -17,9 +17,9 @@ urlpatterns = [
     # Student register subject
     path("register/<int:user_id>/<int:subject_id>", register_subject),
     # Activity
-    path("activity/create", create_activity),
-    path("activity/delete<int:activity_id>", delete_activity),
-    path("activity/get<int:activity_id>", get_activity),
+    path("activity", get_activity_or_create),
+    path("activity/<int:activity_id>", delete_activity),
+    path("activity/<int:activity_id>", get_activity),
     # Student subjects endpoint
     path("student_subjects/<int:student_id>", get_student_subjects)
 ]

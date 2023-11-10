@@ -39,11 +39,63 @@
             "description": "student"
         }
     },
+
+
+    {
+        "model": "authorization.User",
+        "pk": 1,
+        "fields": {
+            "username": "xmyron00",
+            "email": "xmyron00@vutbr.cz",
+            "password": "xmyron00",
+            "first_name": "Yurii",
+            "last_name": "Myronov",
+            "permission": 1
+        }
+    },
+    {
+        "model": "authorization.User",
+        "pk": 2,
+        "fields": {
+            "username": "xrasst00",
+            "email": "xrasst00@vutbr.cz",
+            "password": "xrasst00",
+            "first_name": "Sergei",
+            "last_name": "Rasstrigin",
+            "permission": 2
+        }
+    },
+    {
+        "model": "authorization.User",
+        "pk": 3,
+        "fields": {
+            "username": "xklima34",
+            "email": "xklima34@vutbr.cz",
+            "password": "xklima34",
+            "first_name": "Aliaksei",
+            "last_name": "Klimau",
+            "permission": 2
+        }
+    },
+    {
+        "model": "authorization.User",
+        "pk": 4,
+        "fields": {
+            "username": "xroman00",
+            "email": "xroman00@vutbr.cz",
+            "password": "xroman00",
+            "first_name": "Oleh",
+            "last_name": "Romaniuk",
+            "permission": 4
+        }
+    },
+
+
     {
         "model": "education.ActivityType",
         "pk": 1,
         "fields": {
-            "notation": "L",
+            "notation": "Lec",
             "description": "lecture"
         }
     },
@@ -59,8 +111,83 @@
         "model": "education.ActivityType",
         "pk": 3,
         "fields": {
-            "notation": "D",
-            "description": "demo"
+            "notation": "Lab",
+            "description": "laboratory"
+        }
+    },
+    {
+        "model": "education.ActivityType",
+        "pk": 3,
+        "fields": {
+            "notation": "E",
+            "description": "exam"
+        }
+    },
+    
+
+    {
+        "model": "education.Subject",
+        "pk": 1,
+        "fields": {
+            "code": "IIS",
+            "name": "Information Systems",
+            "credits": 4,
+            "capacity": 200,
+            "guarantor": 2,
+            "description": "In publishing and graphic design, lorem ipsum is common placeholder text used to demonstrate the graphic elements of a document or visual presentation, such as web pages, typography, and graphical layout"
+        }
+    },
+    {
+        "model": "education.Subject",
+        "pk": 2,
+        "fields": {
+            "code": "ITU",
+            "name": "User Interface Programming",
+            "credits": 5,
+            "capacity": 200,
+            "guarantor": 3,
+            "description": "In publishing and graphic design, lorem ipsum is common placeholder text used to demonstrate the graphic elements of a document or visual presentation, such as web pages, typography, and graphical layout"
+        }
+    },
+
+    {
+        "model": "education.Activity",
+        "pk": 1,
+        "fields": {
+            "duration": 2,
+            "capacity": 20,
+            "activity_type": 1,
+            "subject": 1
+        }
+    },
+    {
+        "model": "education.Activity",
+        "pk": 2,
+        "fields": {
+            "duration": 2,
+            "capacity": 20,
+            "activity_type": 2,
+            "subject": 1
+        }
+    },
+    {
+        "model": "education.Activity",
+        "pk": 3,
+        "fields": {
+            "duration": 2,
+            "capacity": 20,
+            "activity_type": 1,
+            "subject": 2
+        }
+    },
+    {
+        "model": "education.Activity",
+        "pk": 4,
+        "fields": {
+            "duration": 2,
+            "capacity": 20,
+            "activity_type": 2,
+            "subject": 2
         }
     }
 ]
