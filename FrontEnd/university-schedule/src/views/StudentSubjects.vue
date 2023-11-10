@@ -14,11 +14,13 @@
       <div class="registered__subj">Registered Subjects</div>
       <div class="all-subjects">
         <RegisterSubjectCard
-            v-for="subject in subjects"
+            v-for="subject in getUnregisteredSubjects()"
+            @subjectsUpdate="reloadSubjects"
             :key="subject.id"
             :code="subject.code"
             :s-name="subject.name"
             :s-capacity="subject.capacity"
+            :s-id="subject.id"
         ></RegisterSubjectCard>
       </div>
       <div class="self-gap">
@@ -27,10 +29,12 @@
       <div class="registered-subjects">
         <registered-subject-card
             v-for="subject in registeredSubjects"
+            @subjectsUpdate="reloadSubjects"
             :key="subject.id"
             :code="subject.code"
             :s-name="subject.name"
             :s-capacity="subject.capacity"
+            :s-id="subject.id"
         ></registered-subject-card>
       </div>
     </div>
@@ -62,6 +66,15 @@ export default {
   methods:{
     Authorization() {
       this.$router.push('/authorization');
+    },
+    reloadSubjects(){
+      this.getRegisteredSubjects();
+      this.getUnregisteredSubjects();
+    },
+    getUnregisteredSubjects() {
+      return this.subjects.filter((subject) =>
+          this.registeredSubjects.every((registeredSubject) => registeredSubject.id !== subject.id)
+      );
     },
     async getUser(){
       try{

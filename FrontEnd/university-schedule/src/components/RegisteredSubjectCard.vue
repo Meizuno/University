@@ -5,7 +5,7 @@
       <div class="subject-name">{{ this.sName }}</div>
       <div class="subject-capacity">({{ this.sCapacity }})</div>
     </div>
-    <div class="register">
+    <div class="register" @click="unregisterSubject(this.user_id,this.sId)">
       <cross></cross>
     </div>
   </div>
@@ -13,12 +13,13 @@
 
 <script>
 import Cross from "@/components/icons/Cross.vue";
+import axios from "axios";
 
 export default {
   components: {Cross},
   data(){
     return{
-
+      user_id : Number,
     }
   },
   props: {
@@ -33,6 +34,28 @@ export default {
     sCapacity: {
       type: String,
       required: true,
+    },
+    sId : {
+      type: Number,
+      required: true,
+    }
+  },
+  methods: {
+    unregisterSubject(user_id, subject_id){
+      axios.delete(`http://127.0.0.1:8000/api/register/${user_id}/${subject_id}`)
+          .then(response => {
+            console.log("ok unregister");
+            this.$emit('subjectsUpdate');
+          })
+          .catch(error => {
+            console.error('Error response: ', error);
+          });
+    }
+  },
+  mounted() {
+    const storedUser = localStorage.getItem('user');
+    if(storedUser){
+      this.user_id = JSON.parse(storedUser).id;
     }
   },
 
