@@ -3,6 +3,7 @@ import Home from "@/views/HomeView.vue";
 import Authorization from "@/views/Authorization.vue";
 import StudentView from "@/views/StudentView.vue";
 import Scheduler from "@/views/Scheduler.vue";
+import StudentSubjects from "@/views/StudentSubjects.vue";
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -23,7 +24,12 @@ const router = createRouter({
     {
       path: '/scheduler',
       component: Scheduler
-    }
+    },
+    {
+      path: '/student/subjects',
+      component: StudentSubjects,
+    },
+
 
   ]
 })

@@ -1,6 +1,12 @@
 <template>
-  <navigation class="nav-bar"></navigation>
+  <navigation
+      class="nav-bar"
+      :username="user.username"
+      :status="'student'"
+      :buttons="buttons"
+  >
 
+  </navigation>
   <div class="main-container">
     <div class="schedule">
       <div class="time-div">
@@ -63,12 +69,52 @@
 
 <script>
 import Navigation from "@/components/Navigation.vue";
+import axios from "axios";
 
 export default {
   components: {Navigation},
-  Authorization() {
-    this.$router.push('/authorization');
+  data(){
+    return{
+      user: {},
+      buttons: [
+        {text:'Home', class:'not-selected', route: '/'},
+        {text:'Schedule', class:'selected', route:'/student'},
+        {text:'Subjects', class:'not-selected', route:'/student/subjects'},
+        {text:'Activities', class:'not-selected', route:'/student/activities'},
+      ]
+    }
+  },
+
+  methods:{
+    Authorization() {
+      this.$router.push('/authorization');
+    },
+    async getUser(){
+      try{
+        const token = localStorage.getItem('token');
+
+        const headers = {
+          'Authorization': 'Bearer ' + token,
+        };
+        axios.get('http://127.0.0.1:8000/api/my-info', {headers:headers})
+            .then(response => {
+              console.log('Ответ сервера:', response.data);
+              this.user = response.data;
+              localStorage.setItem('user', JSON.stringify(this.user));
+
+            })
+            .catch(error => {
+              console.error('Error send request');
+            });
+      }catch (error){
+        console.log(error);
+      }
+    },
+  },
+  mounted() {
+    this.getUser();
   }
+
 }
 </script>
 
