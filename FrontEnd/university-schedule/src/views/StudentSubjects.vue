@@ -25,7 +25,13 @@
         <div class="gap-line"></div>
       </div>
       <div class="registered-subjects">
-        <registered-subject-card></registered-subject-card>
+        <registered-subject-card
+            v-for="subject in registeredSubjects"
+            :key="subject.id"
+            :code="subject.code"
+            :s-name="subject.name"
+            :s-capacity="subject.capacity"
+        ></registered-subject-card>
       </div>
     </div>
   </div>
@@ -49,6 +55,7 @@ export default {
         {text:'Activities', class:'not-selected', route:'/student/activities'},
       ],
       subjects:[],
+      registeredSubjects:[],
     }
   },
 
@@ -79,11 +86,25 @@ export default {
       }catch (e) {
         console.log(e);
       }
+    },
+    async getRegisteredSubjects(){
+      try{
+        axios.get(`http://127.0.0.1:8000/api/student_subjects/${this.user.id}`)
+            .then(response => {
+              this.registeredSubjects = response.data.data;
+            })
+            .catch(error => {
+              console.error('Error response: ', error);
+            });
+      }catch (e) {
+        console.log(e);
+      }
     }
   },
   mounted() {
     this.getUser();
     this.getAllSubjects();
+    this.getRegisteredSubjects();
   }
 }
 </script>

@@ -19,5 +19,7 @@ urlpatterns = [
     # Activity
     path("activity/create", create_activity),
     path("activity/delete<int:activity_id>", delete_activity),
-    path("activity/get<int:activity_id>", get_activity)
+    path("activity/get<int:activity_id>", get_activity),
+    # Student subjects endpoint
+    path("student_subjects/<int:student_id>", get_student_subjects)
 ]

@@ -435,6 +435,7 @@ def create_activity(request):
             status=status.HTTP_400_BAD_REQUEST,
         )
 
+
 @swagger_auto_schema(
     method="delete",
     responses={
@@ -458,6 +459,7 @@ def delete_activity(request, activity_id):
     activity.delete()
     return Response({"success": True, "errors": None})
 
+
 @swagger_auto_schema(
     method="get",
     responses={
@@ -465,7 +467,6 @@ def delete_activity(request, activity_id):
         403: ERROR_403_RESPONSE_DEFAULT,
     },
 )
-
 @api_view(["GET"])
 @handle_error
 def get_activity(request, activity_id):
@@ -480,3 +481,19 @@ def get_activity(request, activity_id):
         )
     serializator = ReadSubjectSerializer(activity)
     return Response({"data": serializator.data})
+
+
+@swagger_auto_schema(
+    method="get",
+    responses={
+        200: OK_200_RESPONSE_SUBJECT,
+        403: ERROR_403_RESPONSE_DEFAULT,
+    },
+)
+@api_view(["GET"])
+@handle_error
+def get_student_subjects(request, student_id):
+    student = User.objects.get(id=student_id)
+    subjects = student.subjects
+    serializer = ReadSubjectSerializer(subjects, many=True)
+    return Response({"data": serializer.data})
