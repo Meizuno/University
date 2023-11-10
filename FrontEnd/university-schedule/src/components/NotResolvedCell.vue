@@ -2,7 +2,7 @@
     <div class="cell" :style="outside">
       <div class="col-1" :style="inside">
           <p :style="title">Subject</p>
-          <p class="var">ITU</p>
+          <p class="var">{{ name }}</p>
       </div>
       <div class="col-2">
         <RoomPicker />
@@ -25,6 +25,10 @@ export default {
     type: {
       type: String,
       default: 'Lecture'
+    },
+    name: {
+      type: String,
+      default: 'XXX'
     }
   },
   components: {
