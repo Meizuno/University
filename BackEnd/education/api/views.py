@@ -365,7 +365,7 @@ def register_subject(request, user_id, subject_id):
                 }
             )
 
-        if user[0].permission_id != "5":
+        if user[0].permission_id != 5:
             return Response(
                 {
                     "success": False,
