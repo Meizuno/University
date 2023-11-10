@@ -5,7 +5,7 @@
       <div class="subject-name">{{ this.sName }}</div>
       <div class="subject-capacity">({{ this.sCapacity }})</div>
     </div>
-    <div class="register">
+    <div class="register" @click="registerSubject(this.user_id, this.sId)">
       <checkmark></checkmark>
     </div>
   </div>
@@ -13,12 +13,32 @@
 
 <script>
 import Checkmark from "@/components/icons/Checkmark.vue";
+import axios from "axios";
 
 export default {
   components: {Checkmark},
   data(){
     return{
-
+      user_id: Number,
+    }
+  },
+  methods: {
+    registerSubject(user_id, subject_id){
+      axios.post(`http://127.0.0.1:8000/api/register/${user_id}/${subject_id}`)
+          .then(response => {
+            console.log("ok unregister");
+            this.$emit('subjectsUpdate');
+          })
+          .catch(error => {
+            console.error('Error response: ', error);
+          });
+    }
+  },
+  // передавать юзера через пропс
+  mounted() {
+    const storedUser = localStorage.getItem('user');
+    if(storedUser){
+      this.user_id = JSON.parse(storedUser).id;
     }
   },
   props: {
@@ -32,6 +52,10 @@ export default {
     },
     sCapacity: {
       type: String,
+      required: true,
+    },
+    sId:{
+      type: Number,
       required: true,
     }
   },
