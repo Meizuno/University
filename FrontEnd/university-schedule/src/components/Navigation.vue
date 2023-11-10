@@ -9,7 +9,7 @@
         </div>
         <nav>
             <div class="menu">
-                <button v-for="button in buttons" :key="button.text" :class=button.class>
+                <button v-for="button in buttons" :key="button.text" :class=button.class @click="handleButtonClick(button.route)">
                     {{ button.text }}
                 </button>
             </div>
@@ -37,6 +37,11 @@ export default {
         }
     },
     methods: {
+        handleButtonClick(path) {
+            if (path) {
+                this.$router.push(path);
+            }
+        },
         Authorization() {
             this.$router.push('/authorization');
         },
@@ -52,7 +57,7 @@ export default {
 .header {
     margin: 20px;
     background-color: white;
-    border-radius: 30px;
+    border-radius: 15px;
     padding: 10px 40px;
     display: flex;
     flex-wrap: nowrap;
@@ -88,6 +93,12 @@ export default {
 .selected {
     text-decoration: underline;
     color: black;
+}
+
+.not-selected:hover {
+    text-decoration: underline;
+    color: black;
+    cursor: pointer;
 }
 
 
