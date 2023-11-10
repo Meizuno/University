@@ -3,10 +3,10 @@
         <div v-for="subject in subjects" class="subject-card">
             <div class="subject-title">
                 <p>{{ subject.code }}</p>
-                <p>User Interface Programing</p>
+                <p>{{ subject.name }}</p>
             </div>
             <div class="subject-guarantor">
-                <p>Name Surname</p>
+                <p>{{ subject.guarantor.first_name + " " + subject.guarantor.last_name}}</p>
             </div>
             <div class="subject-time-span">
                 <p>Time span:</p>
@@ -16,7 +16,7 @@
                 </ul>
             </div>
             <div class="subject-description">
-                <p>In publishing and graphic design, lorem ipsum is common placeholder text used to demonstrate the graphic elements of a document or visual presentation ...</p>
+                <p>{{ subject.description }}</p>
             </div>
         </div>
     </div>
@@ -32,19 +32,13 @@ export default {
     };
   },
   mounted() {
-    this.fetchData();
-    setInterval(this.fetchData, 3000);
-  },
-  methods: {
-    fetchData() {
-      axios.get('http://127.0.0.1:8000/api/subject')
+    axios.get('http://127.0.0.1:8000/api/subject')
         .then(response => {
-          this.subjects = response.data.data;
+            this.subjects = response.data.data;
         })
         .catch(error => {
-          console.error('Error response: ', error);
+            console.error('Error response: ', error);
         });
-    }
   }
 };
 </script>

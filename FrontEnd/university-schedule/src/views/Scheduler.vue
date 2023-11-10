@@ -5,7 +5,7 @@
 
     <main>
         <div class="not-resolved-list">
-            <NotResolvedCell v-for="(notResolvedCell, index) in notResolvedCells" :key="index" :name="notResolvedCell.name" :type="notResolvedCell.type" />
+            <NotResolvedCell v-for="(activityNotResolved, index) in activitiesNotResolved" :key="index" :code="activityNotResolved.code" :type="activityNotResolved.type" />
         </div>
     </main>
 </template>
@@ -15,6 +15,7 @@
 import Navigation from '../components/Navigation.vue'
 import ScheduleCell from '../components/ScheduleCell.vue'
 import NotResolvedCell from '../components/NotResolvedCell.vue'
+import axios from 'axios';
 
 export default {
     components: {
@@ -29,19 +30,21 @@ export default {
             ],
             username: 'USERNAME',
             status : 'Scheduler',
-            notResolvedCells: []
+            activitiesNotResolved: []
         };
     },
-    created() {
-        this.notResolvedCells.push({name: "ITU", type: "Lecture"});
-        this.notResolvedCells.push({name: "ITU", type: "Practice"});
-        this.notResolvedCells.push({name: "ITU", type: "Laboratory"});
-        this.notResolvedCells.push({name: "ITU", type: "Exam"});
-
-        this.notResolvedCells.push({name: "IIS", type: "Lecture"});
-        this.notResolvedCells.push({name: "IIS", type: "Practice"});
-        this.notResolvedCells.push({name: "IIS", type: "Laboratory"});
-        this.notResolvedCells.push({name: "IIS", type: "Exam"});
+    mounted() {
+        axios.get('http://127.0.0.1:8000/api/activity')
+        .then(response => {
+            this.activities = response.data.data;
+            for (const activity of this.activities) {
+                this.activitiesNotResolved.push({code: activity.subject.code, type: activity.activity_type.description});
+            }
+            console.log(this.activitiesNotResolved);
+        })
+        .catch(error => {
+            console.error('Error response: ', error);
+        });
     }
 };
 

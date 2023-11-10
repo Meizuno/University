@@ -2,7 +2,7 @@
     <div class="cell" :style="outside">
       <div class="col-1" :style="inside">
           <p :style="title">Subject</p>
-          <p class="var">{{ name }}</p>
+          <p class="var">{{ code }}</p>
       </div>
       <div class="col-2">
         <RoomPicker />
@@ -26,7 +26,7 @@ export default {
       type: String,
       default: 'Lecture'
     },
-    name: {
+    code: {
       type: String,
       default: 'XXX'
     }

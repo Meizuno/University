@@ -4,7 +4,7 @@
         "pk": 1,
         "fields": {
             "level": 1,
-            "description": "admin"
+            "description": "Admin"
         }
     },
     {
@@ -12,7 +12,7 @@
         "pk": 2,
         "fields": {
             "level": 2,
-            "description": "guarantor"
+            "description": "Guarantor"
         }
     },
     {
@@ -20,7 +20,7 @@
         "pk": 3,
         "fields": {
             "level": 3,
-            "description": "instructor"
+            "description": "Instructor"
         }
     },
     {
@@ -28,7 +28,7 @@
         "pk": 4,
         "fields": {
             "level": 4,
-            "description": "scheduler"
+            "description": "Scheduler"
         }
     },
     {
@@ -36,7 +36,7 @@
         "pk": 5,
         "fields": {
             "level": 5,
-            "description": "student"
+            "description": "Student"
         }
     },
 
@@ -81,6 +81,18 @@
         "model": "authorization.User",
         "pk": 4,
         "fields": {
+            "username": "xnovak00",
+            "email": "xnovak00@vutbr.cz",
+            "password": "xnovak00",
+            "first_name": "Jan",
+            "last_name": "Novak",
+            "permission": 2
+        }
+    },
+    {
+        "model": "authorization.User",
+        "pk": 5,
+        "fields": {
             "username": "xroman00",
             "email": "xroman00@vutbr.cz",
             "password": "xroman00",
@@ -96,7 +108,7 @@
         "pk": 1,
         "fields": {
             "notation": "Lec",
-            "description": "lecture"
+            "description": "Lecture"
         }
     },
     {
@@ -104,7 +116,7 @@
         "pk": 2,
         "fields": {
             "notation": "P",
-            "description": "practice"
+            "description": "Practice"
         }
     },
     {
@@ -112,15 +124,15 @@
         "pk": 3,
         "fields": {
             "notation": "Lab",
-            "description": "laboratory"
+            "description": "Laboratory"
         }
     },
     {
         "model": "education.ActivityType",
-        "pk": 3,
+        "pk": 4,
         "fields": {
             "notation": "E",
-            "description": "exam"
+            "description": "Exam"
         }
     },
     
@@ -149,6 +161,19 @@
             "description": "In publishing and graphic design, lorem ipsum is common placeholder text used to demonstrate the graphic elements of a document or visual presentation, such as web pages, typography, and graphical layout"
         }
     },
+    {
+        "model": "education.Subject",
+        "pk": 3,
+        "fields": {
+            "code": "ISA",
+            "name": "Network Applications and Network Administration",
+            "credits": 5,
+            "capacity": 200,
+            "guarantor": 4,
+            "description": "In publishing and graphic design, lorem ipsum is common placeholder text used to demonstrate the graphic elements of a document or visual presentation, such as web pages, typography, and graphical layout"
+        }
+    },
+
 
     {
         "model": "education.Activity",
@@ -174,10 +199,10 @@
         "model": "education.Activity",
         "pk": 3,
         "fields": {
-            "duration": 2,
+            "duration": 1,
             "capacity": 20,
-            "activity_type": 1,
-            "subject": 2
+            "activity_type": 4,
+            "subject": 1
         }
     },
     {
@@ -186,8 +211,59 @@
         "fields": {
             "duration": 2,
             "capacity": 20,
+            "activity_type": 1,
+            "subject": 2
+        }
+    },
+    {
+        "model": "education.Activity",
+        "pk": 5,
+        "fields": {
+            "duration": 2,
+            "capacity": 20,
             "activity_type": 2,
             "subject": 2
+        }
+    },
+    {
+        "model": "education.Activity",
+        "pk": 6,
+        "fields": {
+            "duration": 1,
+            "capacity": 20,
+            "activity_type": 4,
+            "subject": 2
+        }
+    }
+    ,
+    {
+        "model": "education.Activity",
+        "pk": 7,
+        "fields": {
+            "duration": 2,
+            "capacity": 20,
+            "activity_type": 1,
+            "subject": 3
+        }
+    },
+    {
+        "model": "education.Activity",
+        "pk": 8,
+        "fields": {
+            "duration": 2,
+            "capacity": 20,
+            "activity_type": 3,
+            "subject": 3
+        }
+    },
+    {
+        "model": "education.Activity",
+        "pk": 9,
+        "fields": {
+            "duration": 1,
+            "capacity": 20,
+            "activity_type": 4,
+            "subject": 3
         }
     }
 ]

@@ -1,6 +1,6 @@
 from rest_framework import serializers
 from authorization.models import Permission, User
-from education.models import Activity, Room, Subject
+from education.models import Activity, ActivityType, Room, Subject
 from django.core.validators import MinValueValidator, MaxValueValidator
 
 
@@ -84,6 +84,7 @@ class UpdateRoomSerializer(serializers.Serializer):
 
 
 class ReadSubjectSerializer(serializers.ModelSerializer):
+    guarantor = ReadUserSerializer()
     class Meta:
         model = Subject
         fields = "__all__"
@@ -131,8 +132,15 @@ class UpdateSubjectSerializer(serializers.Serializer):
     description = serializers.CharField(required=False)
 
 
+class ReadActivityTypeSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ActivityType
+        fields = "__all__"
+
+
 class ReadActivitySerializer(serializers.ModelSerializer):
     subject = ReadSubjectSerializer()
+    activity_type = ReadActivityTypeSerializer()
     class Meta:
         model = Activity
         fields = "__all__"
