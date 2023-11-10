@@ -2,11 +2,16 @@
     <div class="header">
         <div class="user">
             <img src="../assets/avatar.svg" alt="">
-            <p>Anonymous</p>
+            <div>
+                <p class="username">{{ username }}</p>
+                <p class="status">{{ status }}</p>
+            </div>
         </div>
         <nav>
             <div class="menu">
-                <p>Home</p>
+                <button v-for="button in buttons" :key="button.text" :class=button.class>
+                    {{ button.text }}
+                </button>
             </div>
             <div class="btn-login" @click="Authorization">
                 Login
@@ -17,18 +22,35 @@
 
 <script>
 export default {
-  methods: {
-    Authorization() {
-      this.$router.push('/authorization');
+    props: {
+        buttons: {
+            type: Array,
+            default: () => []
+        },
+        username: {
+            type: String,
+            default: 'Anonymous'
+        },
+        status: {
+            type: String,
+            default: ''
+        }
+    },
+    methods: {
+        Authorization() {
+            this.$router.push('/authorization');
+        },
+        ToHome() {
+            this.$router.push('/');
+        }
     }
-  }
 };
 </script>
 
 <style scoped>
 
 .header {
-    margin: 30px;
+    margin: 20px;
     background-color: white;
     border-radius: 30px;
     padding: 10px 40px;
@@ -47,7 +69,7 @@ export default {
     padding: 10px 20px;
     border-radius: 20px;
     color: rgba(255,255,255,1);
-    font-size: 28px;
+    font-size: 20px;
     text-transform: uppercase;
 }
 
@@ -63,29 +85,48 @@ export default {
     right: 30%;
 }
 
-.menu > * {
-    margin: 5%;
-    font-size: 28px;
-    font-weight: bold;
+.selected {
     text-decoration: underline;
+    color: black;
 }
+
+
+button {
+    border: none;
+    background-color: white;
+    margin: 5%;
+    font-size: 20px;
+    font-weight: bold;
+    color: rgba(0, 0, 0, 0.6);
+}
+
 
 .user {
     display: flex;
+    gap: 20px;
     flex-wrap: nowrap;
     align-items: center;
     margin-right: auto;
 }
 
-.user p {
-    font-size: 28px;
-    font-weight: bold;
-    color: rgba(0, 0, 0, 0.7);
-    margin-left: 20px;
-}
-
 .user img {
     color: rgba(0, 0, 0, 0.6);
+    height: 50px;
+    width: 50px;
+}
+
+.username {
+    margin: 0px;
+    font-size: 20px;
+    font-weight: bold;
+    color: rgba(0, 0, 0, 0.7);
+}
+
+.status {
+    margin: 0px;
+    font-size: 14px;
+    font-weight: bold;
+    color: rgba(0, 0, 0, 0.4);
 }
 
 </style>

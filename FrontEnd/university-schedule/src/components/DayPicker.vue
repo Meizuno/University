@@ -1,5 +1,5 @@
 <template>
-    <div class="custom-select" ref="customSelect" @click="handleCustomSelectClick" :style="containerStyle">
+    <div class="custom-select" ref="customSelect" @click="handleCustomSelectClick">
       {{ selectedOption || 'Day' }}
       <div v-if="isDropdownOpen" class="dropdown" ref="dropdown" @click.stop>
         <div v-for="day in days" :key="day" @click="selectOption(day)">
@@ -11,17 +11,6 @@
   
   <script>
   export default {
-    props: {
-      width: {
-        type: String,
-        default: 'fit-content',
-      },
-    },
-    computed: {
-      containerStyle() {
-        return { width: this.width };
-      },
-    },
     data() {
       return {
         isDropdownOpen: false,
@@ -63,14 +52,18 @@
     position: relative;
     display: flex;
     justify-content: center;
-    padding: 5px;
+    padding: 5px 10px;
     border: 1px solid white;
-    border-radius: 20px;
+    border-radius: 7px;
+    align-items: center;
     cursor: pointer;
     color: white;
+    font-size: 12px;
+    font-weight: 700;
   }
   
   .dropdown {
+    background-color: white;
     position: absolute;
     top: 100%;
     left: auto;
@@ -81,16 +74,18 @@
     border-radius: 5px;
     display: flex;
     flex-direction: column;
-    max-height: 100px;
-    overflow: auto;
+    max-height: 80px;
+    overflow-y: auto;
+    overflow-x: hidden;
     outline: none;
+    z-index: 1;
   }
   
   .dropdown div:not(:last-child) {
     cursor: pointer;
     padding: 7px 0px;
     border-bottom: 1px solid #ccc;
-    color: rgb(0, 0, 0, 0.2);
+    color: rgb(0, 0, 0, 0.5);
   }
   
   .dropdown div:hover {
@@ -100,7 +95,7 @@
   .dropdown div:last-child {
     cursor: pointer;
     padding: 7px 0px;
-    color: rgb(0, 0, 0, 0.2);
+    color: rgb(0, 0, 0, 0.5);
   }
   </style>
   

@@ -1,23 +1,36 @@
 <template>
     <div class="cell" :style="outside">
-        <div :style="inside">
-            <p :style="title">Subject</p>
-            <p class="var">ITU</p>
+      <div class="col-1" :style="inside">
+          <p :style="title">Subject</p>
+          <p class="var">ITU</p>
+      </div>
+      <div class="col-2">
+        <RoomPicker />
+        <div class="sub-col">
+          <DayPicker />
+          <TimePicker />
         </div>
-        <div :style="inside">
-            <p :style="title">Room</p>
-            <p class="var">105</p>
-        </div>
+      </div>
     </div>
 </template>
 
 <script>
+
+import RoomPicker from './RoomPicker.vue';
+import DayPicker from './DayPicker.vue';
+import TimePicker from './TimePicker.vue';
+
 export default {
   props: {
     type: {
       type: String,
       default: 'Lecture'
     }
+  },
+  components: {
+    RoomPicker,
+    DayPicker,
+    TimePicker
   },
   computed: {
     outside() {
@@ -96,22 +109,33 @@ export default {
     border-radius: 20px;
 }
 
-.cell > div {
+.col-1 {
     text-align: center;
     padding: 3px 10px;
     border-radius: 10px;
 }
 
-.cell > div > p:first-child {
+.col-1 > p:first-child {
     font-size: 12px;
 }
 
-.cell > div > p {
+.col-1 > p {
     margin: 0;
 }
 
 .var {
     font-size: 28px;
+}
+
+.col-2{
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.sub-col{
+  display: flex;
+  gap: 5px;
 }
 
 </style>

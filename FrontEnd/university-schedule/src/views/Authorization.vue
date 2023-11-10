@@ -14,7 +14,7 @@
             <label for="">Password</label>
           </div>
           <div class="bttns">
-            <button class="home_bttn" @click="BackToHome"> Home</button>
+            <button class="home_bttn" @click="ToHome"> Home</button>
             <button class="login_bttn" @click="sendGetUser">Log in</button>
           </div>
 
@@ -63,7 +63,7 @@ export default {
       this.username = '';
       this.password = '';
     },
-    BackToHome() {
+    ToHome() {
       this.$router.push('/');
     },
   },

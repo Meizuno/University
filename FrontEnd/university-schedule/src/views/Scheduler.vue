@@ -1,8 +1,6 @@
 <script setup>
 import ScheduleCell from '../components/ScheduleCell.vue'
-import RoomPicker from '../components/RoomPicker.vue'
-import DayPicker from '../components/DayPicker.vue'
-import TimePicker from '../components/TimePicker.vue'
+import NotResolvedCell from '../components/NotResolvedCell.vue'
 </script>
 
 <template>
@@ -11,7 +9,8 @@ import TimePicker from '../components/TimePicker.vue'
     <ScheduleCell type="Laboratory"/>
     <ScheduleCell type="Exam"/>
 
-    <RoomPicker width="100px"/>
-    <DayPicker width="50px"/>
-    <TimePicker width="50px"/>
+    <NotResolvedCell type="Lecture"/>
+    <NotResolvedCell type="Practice"/>
+    <NotResolvedCell type="Laboratory"/>
+    <NotResolvedCell type="Exam"/>
 </template>

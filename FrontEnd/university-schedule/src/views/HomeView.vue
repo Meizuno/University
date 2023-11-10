@@ -1,11 +1,16 @@
 <script setup>
 import Navigation from '../components/Navigation.vue'
 import SubjectCard from '../components/SubjectCard.vue'
+
+const navigationButtons = [
+  { text: 'Home', class: 'selected' },
+];
+
 </script>
 
 <template>
   <header>
-    <Navigation />
+    <Navigation :buttons="navigationButtons"/>
   </header>
   
   <main>

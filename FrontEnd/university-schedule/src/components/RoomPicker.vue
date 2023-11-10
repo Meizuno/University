@@ -11,12 +11,6 @@
 
 <script>
 export default {
-  props: {
-    width: {
-      type: String,
-      default: 'fit-content',
-    },
-  },
   computed: {
     containerStyle() {
       return { width: this.width };
@@ -69,12 +63,15 @@ export default {
   justify-content: center;
   padding: 5px;
   border: 1px solid white;
-  border-radius: 20px;
+  border-radius: 7px;
   cursor: pointer;
   color: white;
+  font-size: 12px;
+  font-weight: 700;
 }
 
 .dropdown {
+  background-color: white;
   position: absolute;
   top: 100%;
   left: auto;
@@ -85,16 +82,18 @@ export default {
   border-radius: 5px;
   display: flex;
   flex-direction: column;
-  max-height: 100px;
-  overflow: auto;
+  max-height: 80px;
   outline: none;
+  overflow-y: auto;
+  overflow-x: hidden;
+  z-index: 1;
 }
 
 .dropdown div:not(:last-child) {
   cursor: pointer;
   padding: 7px 0px;
   border-bottom: 1px solid #ccc;
-  color: rgb(0, 0, 0, 0.2);
+  color: rgb(0, 0, 0, 0.5);
 }
 
 .dropdown div:hover {
@@ -104,6 +103,6 @@ export default {
 .dropdown div:last-child {
   cursor: pointer;
   padding: 7px 0px;
-  color: rgb(0, 0, 0, 0.2);
+  color: rgb(0, 0, 0, 0.5);
 }
 </style>
