@@ -5,22 +5,26 @@
 
     <main>
         <div class="not-resolved-list">
-            <NotResolvedCell v-for="(activityNotResolved, index) in activitiesNotResolved" :key="index" :code="activityNotResolved.code" :type="activityNotResolved.type" />
+            <NotResolvedCell v-for="activity in activitiesNotResolved" :key="activity.id" :code="activity.subject.code" :type="activity.activity_type.description" />
+        </div>
+        <div>
+            <ScheduleCell v-for="(activity, index) in activitiesResolved" :key="index" :activity="activity"/>
         </div>
     </main>
 </template>
 
 
 <script>
-import Navigation from '../components/Navigation.vue'
-import ScheduleCell from '../components/ScheduleCell.vue'
-import NotResolvedCell from '../components/NotResolvedCell.vue'
+import Navigation from '../components/Navigation.vue';
+import ScheduleCell from '../components/ScheduleCell.vue';
+import NotResolvedCell from '../components/NotResolvedCell.vue';
 import axios from 'axios';
 
 export default {
     components: {
         Navigation,
-        NotResolvedCell
+        NotResolvedCell,
+        ScheduleCell
     },
     data() {
         return {
@@ -30,17 +34,22 @@ export default {
             ],
             username: 'USERNAME',
             status : 'Scheduler',
-            activitiesNotResolved: []
+            activitiesNotResolved: [],
+            activitiesResolved: []
         };
     },
     mounted() {
         axios.get('http://127.0.0.1:8000/api/activity')
         .then(response => {
-            this.activities = response.data.data;
-            for (const activity of this.activities) {
-                this.activitiesNotResolved.push({code: activity.subject.code, type: activity.activity_type.description});
+            let activities = response.data.data;
+            for (const activity of activities) {
+                if (!(activity.schedule.length > 0)){
+                    this.activitiesNotResolved.push(activity);
+                }
+                else {
+                    this.activitiesResolved.push(activity);
+                }
             }
-            console.log(this.activitiesNotResolved);
         })
         .catch(error => {
             console.error('Error response: ', error);

@@ -1,5 +1,5 @@
 <template>
-  <div class="custom-select" ref="customSelect" @click="handleCustomSelectClick" :style="containerStyle">
+  <div class="custom-select" ref="customSelect" @click="handleCustomSelectClick">
     {{ selectedOption || 'Room' }}
     <div v-if="isDropdownOpen" class="dropdown" ref="dropdown" @click.stop>
       <div v-for="room in rooms" :key="room" @click="selectOption(room)">
@@ -11,11 +11,6 @@
 
 <script>
 export default {
-  computed: {
-    containerStyle() {
-      return { width: this.width };
-    },
-  },
   data() {
     return {
       isDropdownOpen: false,

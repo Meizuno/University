@@ -265,5 +265,34 @@
             "activity_type": 4,
             "subject": 3
         }
+    },
+
+
+    {
+        "model": "education.Schedule",
+        "pk": 1,
+        "fields": {
+            "scheduler": 4,
+            "activity": 1,
+            "datetime": "2023-09-18T10:00:00Z"
+        }
+    },
+    {
+        "model": "education.Schedule",
+        "pk": 2,
+        "fields": {
+            "scheduler": 4,
+            "activity": 2,
+            "datetime": "2024-10-18T10:00:00Z"
+        }
+    },
+    {
+        "model": "education.Schedule",
+        "pk": 3,
+        "fields": {
+            "scheduler": 4,
+            "activity": 3,
+            "datetime": "2023-01-02T10:00:00Z"
+        }
     }
 ]

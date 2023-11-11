@@ -1,11 +1,11 @@
 <template>
-    <div class="cell" :style="outside">
-        <div :style="inside">
-            <p :style="title">Subject</p>
-            <p class="var">ITU</p>
+    <div class="cell" :style="colors.outside">
+        <div :style="colors.inside">
+            <p :style="colors.title">Subject</p>
+            <p class="var">{{ activity.subject.code }}</p>
         </div>
-        <div :style="inside">
-            <p :style="title">Room</p>
+        <div :style="colors.inside">
+            <p :style="colors.title">Room</p>
             <p class="var">105</p>
         </div>
     </div>
@@ -14,72 +14,56 @@
 <script>
 export default {
   props: {
-    type: {
-      type: String,
-      default: 'Lecture'
+    activity: {
+      type: Object,
+      default: {}
     }
   },
-  computed: {
-    outside() {
-      let backgroundColor;
-      switch (this.type) {
-        case 'Lecture':
-          backgroundColor = '#84D296';
+  data() {
+    return{
+      colors: {
+        outside: { 'background-color': "#84D296" },
+        inside: { 'background-color': "#9DDBAB" },
+        title: { 'color': "#E2F4E6" }
+      }
+    }
+  },
+  mounted() {
+    this.UpdateStyles()
+  },
+  methods: {
+    UpdateStyles() {
+      switch (this.activity.activity_type.description) {
+        case "Lecture":
+          this.colors = {
+            outside: { 'background-color': "#84D296" },
+            inside: { 'background-color': "#9DDBAB" },
+            title: { 'color': "#E2F4E6" }
+          };
           break;
-        case 'Practice':
-          backgroundColor = '#FFBB56';
+        case "Practice":
+          this.colors = {
+            outside: { 'background-color': "#FFBB56" },
+            inside: { 'background-color': "#FFB13B" },
+            title: { 'color': "#FFD89D" }
+          };
           break;
-        case 'Laboratory':
-          backgroundColor = '#45BFFF';
+        case "Laboratory":
+          this.colors = {
+            outside: { 'background-color': "#45BFFF" },
+            inside: { 'background-color': "#41B4F0" },
+            title: { 'color': "#C5CAF6" }
+          };
           break;
-        case 'Exam':
-          backgroundColor = '#717EEE';
+        case "Exam":
+          this.colors = {
+            outside: { 'background-color': "#717EEE" },
+            inside: { 'background-color': "#8993ED" },
+            title: { 'color': "#C5CAF6" }
+          };
           break;
       }
-      return {
-        backgroundColor
-      };
-    },
-    inside() {
-      let backgroundColor;
-      switch (this.type) {
-        case 'Lecture':
-          backgroundColor = '#9DDBAB';
-          break;
-        case 'Practice':
-          backgroundColor = '#FFB13B';
-          break;
-        case 'Laboratory':
-          backgroundColor = '#41B4F0';
-          break;
-        case 'Exam':
-          backgroundColor = '#8993ED';
-          break;
-      }
-      return {
-        backgroundColor
-      };
-    },
-    title() {
-      let color;
-      switch (this.type) {
-        case 'Lecture':
-          color = '#E2F4E6';
-          break;
-        case 'Practice':
-          color = '#FFD89D';
-          break;
-        case 'Laboratory':
-          color = '#C5CAF6';
-          break;
-        case 'Exam':
-          color = '#A2DAF8';
-          break;
-      }
-      return {
-        color
-      };
-    },
+    }
   }
 };
 </script>
