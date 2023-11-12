@@ -270,7 +270,9 @@
         "fields": {
             "duration": 2,
             "activity_type": 1,
-            "subject": 1
+            "subject": 1,
+            "date_time": "2023-09-18T12:30:00Z",
+            "room": 1
         }
     },
     {
@@ -297,7 +299,9 @@
         "fields": {
             "duration": 2,
             "activity_type": 1,
-            "subject": 2
+            "subject": 2,
+            "date_time": "2023-09-19T12:30:00Z",
+            "room": 1
         }
     },
     {
@@ -317,8 +321,7 @@
             "activity_type": 4,
             "subject": 2
         }
-    }
-    ,
+    },
     {
         "model": "education.Activity",
         "pk": 7,

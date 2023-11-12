@@ -5,10 +5,10 @@
 
     <main>
         <div class="not-resolved-list">
-            <NotResolvedCell v-for="activity in activitiesNotResolved" :key="activity.id" :code="activity.subject.code" :type="activity.activity_type.description" />
+            <NotResolvedCell v-for="activity in activitiesNotResolved" :key="activity.id" :activity="activity" :rooms="rooms"/>
         </div>
         <div>
-            <ScheduleCell v-for="(activity, index) in activitiesResolved" :key="index" :activity="activity"/>
+            <ScheduleCell v-for="activity in activitiesResolved" :key="activity.id" :activity="activity" />
         </div>
     </main>
 </template>
@@ -35,7 +35,8 @@ export default {
             username: 'USERNAME',
             status : 'Scheduler',
             activitiesNotResolved: [],
-            activitiesResolved: []
+            activitiesResolved: [],
+            rooms: [],
         };
     },
     mounted() {
@@ -43,7 +44,7 @@ export default {
         .then(response => {
             let activities = response.data.data;
             for (const activity of activities) {
-                if (!(activity.schedule.length > 0)){
+                if (activity.date_time === null){
                     this.activitiesNotResolved.push(activity);
                 }
                 else {
@@ -52,7 +53,15 @@ export default {
             }
         })
         .catch(error => {
-            console.error('Error response: ', error);
+            console.error('Error response for activity: ', error);
+        });
+
+        axios.get('http://127.0.0.1:8000/api/room')
+        .then(response => {
+            this.rooms = response.data.data;
+        })
+        .catch(error => {
+            console.error('Error response for rooms: ', error);
         });
     }
 };
