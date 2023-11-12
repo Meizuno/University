@@ -200,7 +200,7 @@
         "pk": 1,
         "fields": {
             "notation": "Lec",
-            "description": "Lecture"
+            "name": "Lecture"
         }
     },
     {
@@ -208,7 +208,7 @@
         "pk": 2,
         "fields": {
             "notation": "P",
-            "description": "Practice"
+            "name": "Practice"
         }
     },
     {
@@ -216,7 +216,7 @@
         "pk": 3,
         "fields": {
             "notation": "Lab",
-            "description": "Laboratory"
+            "name": "Laboratory"
         }
     },
     {
@@ -224,7 +224,36 @@
         "pk": 4,
         "fields": {
             "notation": "E",
-            "description": "Exam"
+            "name": "Exam"
+        }
+    },
+
+    {
+        "model": "education.ActivityRepetition",
+        "pk": 1,
+        "fields": {
+            "name": "Every week"
+        }
+    },
+    {
+        "model": "education.ActivityRepetition",
+        "pk": 2,
+        "fields": {
+            "name": "Even week"
+        }
+    },
+    {
+        "model": "education.ActivityRepetition",
+        "pk": 3,
+        "fields": {
+            "name": "Odd week"
+        }
+    },
+    {
+        "model": "education.ActivityRepetition",
+        "pk": 4,
+        "fields": {
+            "name": "One time"
         }
     },
     
@@ -235,7 +264,6 @@
         "fields": {
             "code": "IIS",
             "name": "Information Systems",
-            "credits": 4,
             "guarantor": 2,
             "description": "In publishing and graphic design, lorem ipsum is common placeholder text used to demonstrate the graphic elements of a document or visual presentation, such as web pages, typography, and graphical layout"
         }
@@ -246,7 +274,6 @@
         "fields": {
             "code": "ITU",
             "name": "User Interface Programming",
-            "credits": 5,
             "guarantor": 3,
             "description": "In publishing and graphic design, lorem ipsum is common placeholder text used to demonstrate the graphic elements of a document or visual presentation, such as web pages, typography, and graphical layout"
         }
@@ -257,7 +284,6 @@
         "fields": {
             "code": "ISA",
             "name": "Network Applications and Network Administration",
-            "credits": 5,
             "guarantor": 4,
             "description": "In publishing and graphic design, lorem ipsum is common placeholder text used to demonstrate the graphic elements of a document or visual presentation, such as web pages, typography, and graphical layout"
         }
@@ -270,6 +296,7 @@
         "fields": {
             "duration": 2,
             "activity_type": 1,
+            "activity_repetition": 1,
             "subject": 1,
             "date_time": "2023-09-18T12:30:00Z",
             "room": 1
@@ -281,6 +308,7 @@
         "fields": {
             "duration": 2,
             "activity_type": 2,
+            "activity_repetition": 2,
             "subject": 1
         }
     },
@@ -290,6 +318,7 @@
         "fields": {
             "duration": 1,
             "activity_type": 4,
+            "activity_repetition": 4,
             "subject": 1
         }
     },
@@ -299,6 +328,7 @@
         "fields": {
             "duration": 2,
             "activity_type": 1,
+            "activity_repetition": 1,
             "subject": 2,
             "date_time": "2023-09-19T12:30:00Z",
             "room": 1
@@ -310,6 +340,7 @@
         "fields": {
             "duration": 2,
             "activity_type": 2,
+            "activity_repetition": 3,
             "subject": 2
         }
     },
@@ -319,6 +350,7 @@
         "fields": {
             "duration": 1,
             "activity_type": 4,
+            "activity_repetition": 4,
             "subject": 2
         }
     },
@@ -328,6 +360,7 @@
         "fields": {
             "duration": 2,
             "activity_type": 1,
+            "activity_repetition": 1,
             "subject": 3
         }
     },
@@ -337,6 +370,7 @@
         "fields": {
             "duration": 2,
             "activity_type": 3,
+            "activity_repetition": 3,
             "subject": 3
         }
     },
@@ -346,6 +380,7 @@
         "fields": {
             "duration": 1,
             "activity_type": 4,
+            "activity_repetition": 4,
             "subject": 3
         }
     }

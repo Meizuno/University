@@ -5,16 +5,20 @@ from authorization.models import User
 class Subject(models.Model):
     code = models.CharField(max_length=3, unique=True)
     name = models.CharField(max_length=50)
-    credits = models.IntegerField()
     students = models.ManyToManyField(
         User,
         through="StudentSubject",
-        related_name="subjects",
+        related_name="student_subjects",
     )
     guarantor = models.ForeignKey(
         User,
         on_delete=models.PROTECT,
-        related_name="subject",
+        related_name="guarantor_subject",
+    )
+    instructors = models.ManyToManyField(
+        User,
+        through="InstructorSubject",
+        related_name="instruktors_subjects",
     )
     description = models.CharField(max_length=255)
 
@@ -32,20 +36,29 @@ class Room(models.Model):
 
 class ActivityType(models.Model):
     notation = models.CharField(max_length=5, unique=True)
-    description = models.CharField(max_length=128, null=True)
+    name = models.CharField(max_length=10)
 
     class Meta:
         db_table = "activity_type"
 
 
+class ActivityRepetition(models.Model):
+    name = models.CharField(max_length=20, unique=True)
+
+    class Meta:
+        db_table = "activity_repetition"
+
+
 class Activity(models.Model):
-    annotation = models.CharField(max_length=255, null=True)
-    duration = models.IntegerField()
     activity_type = models.ForeignKey(ActivityType, on_delete=models.PROTECT)
+    activity_repetition = models.ForeignKey(ActivityRepetition, on_delete=models.PROTECT)
+    guarantor_notes = models.CharField(max_length=255, null=True)
+    instructor_notes = models.CharField(max_length=255, null=True)
+    duration = models.IntegerField()
     students = models.ManyToManyField(
         User,
         through="StudentActivity",
-        related_name="activities",
+        related_name="student_activity",
     )
     subject = models.ForeignKey(
         Subject,
@@ -77,3 +90,12 @@ class StudentSubject(models.Model):
     class Meta:
         db_table = "student_subject"
         unique_together = ("student", "subject")
+
+
+class InstructorSubject(models.Model):
+    instructor = models.ForeignKey(User, on_delete=models.CASCADE)
+    subject = models.ForeignKey(Subject, on_delete=models.PROTECT)
+
+    class Meta:
+        db_table = "instructor_subject"
+        unique_together = ("instructor", "subject")
