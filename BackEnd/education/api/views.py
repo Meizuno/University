@@ -439,7 +439,7 @@ def get_activity_or_create(request):
         serializator = ReadActivitySerializer(activity, many=True)
         return Response({"data": serializator.data})
     elif request.method == "POST":
-        serializator = CreateActivitySerializer(data=request.data)
+        serializator = ActivityGuatantorSerializer(data=request.data)
         if serializator.is_valid():
             Activity.objects.create(**serializator.data)
             return Response({"success": True, "errors": None})

@@ -101,5 +101,14 @@ class ActivityGuatantorSerializer(serializers.Serializer):
            Get enum on 'api/auth/activity-type/'"
    )
     subject_id = serializers.IntegerField(
-        help_text="ID of activity's type."
+        help_text="ID of subject's type."
     )
+
+
+class ActivityInstructorSerializer(serializers.Serializer):
+    instructor_id = serializers.IntegerField()
+
+
+class ActivitySchedulerSerializer(serializers.Serializer):
+    room_id = serializers.IntegerField()
+    date_time = serializers.DateTimeField()
