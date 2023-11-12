@@ -50,7 +50,7 @@ def my_info(request):
 )
 @swagger_auto_schema(
     method="post",
-    request_body=CreateUserSerializer,
+    request_body=UserSerializer,
     responses={
         200: OK_200_RESPONSE_DEFAULT,
         403: ERROR_403_RESPONSE_DEFAULT,
@@ -67,7 +67,7 @@ def get_users_or_create(request):
         serializator = ReadUserSerializer(users, many=True)
         return Response({"data": serializator.data})
     elif request.method == "POST":
-        serializator = CreateUserSerializer(data=request.data)
+        serializator = UserSerializer(data=request.data)
         if serializator.is_valid():
             User.objects.create_user(**serializator.data)
             return Response({"success": True, "errors": None})
@@ -87,7 +87,7 @@ def get_users_or_create(request):
 )
 @swagger_auto_schema(
     method="put",
-    request_body=UpdateUserSerializer,
+    request_body=UserSerializer,
     responses={
         200: OK_200_RESPONSE_DEFAULT,
         403: ERROR_403_RESPONSE_DEFAULT,
@@ -112,7 +112,7 @@ def rud_user(request, user_id):
         serializator = ReadUserSerializer(user)
         return Response({"data": serializator.data})
     elif request.method == "PUT":
-        serializator = UpdateUserSerializer(data=request.data)
+        serializator = UserSerializer(data=request.data)
         if serializator.is_valid():
             user = User.objects.filter(id=user_id)
             if not user.exists():
@@ -148,7 +148,7 @@ def rud_user(request, user_id):
 )
 @swagger_auto_schema(
     method="post",
-    request_body=CreateRoomSerializer,
+    request_body=RoomSerializer,
     responses={
         200: OK_200_RESPONSE_DEFAULT,
         403: ERROR_403_RESPONSE_DEFAULT,
@@ -165,7 +165,7 @@ def get_rooms_or_create(request):
         serializator = ReadRoomSerializer(rooms, many=True)
         return Response({"data": serializator.data})
     elif request.method == "POST":
-        serializator = CreateRoomSerializer(data=request.data)
+        serializator = RoomSerializer(data=request.data)
         if serializator.is_valid():
             Room.objects.create(**serializator.data)
             return Response({"success": True, "errors": None})
@@ -185,7 +185,7 @@ def get_rooms_or_create(request):
 )
 @swagger_auto_schema(
     method="put",
-    request_body=UpdateRoomSerializer,
+    request_body=RoomSerializer,
     responses={
         200: OK_200_RESPONSE_DEFAULT,
         403: ERROR_403_RESPONSE_DEFAULT,
@@ -210,7 +210,7 @@ def rud_room(request, room_id):
         serializator = ReadRoomSerializer(room)
         return Response({"data": serializator.data})
     elif request.method == "PUT":
-        serializator = UpdateRoomSerializer(data=request.data)
+        serializator = SubjectSerializer(data=request.data)
         if serializator.is_valid():
             room = Room.objects.filter(id=room_id)
             if not room.exists():
@@ -247,7 +247,7 @@ def rud_room(request, room_id):
 )
 @swagger_auto_schema(
     method="post",
-    request_body=CreateSubjectSerializer,
+    request_body=SubjectSerializer,
     responses={
         200: OK_200_RESPONSE_DEFAULT,
         403: ERROR_403_RESPONSE_DEFAULT,
@@ -265,7 +265,7 @@ def get_subjects_or_create(request):
         serializator = ReadSubjectSerializer(subjects, many=True)
         return Response({"data": serializator.data})
     elif request.method == "POST":
-        serializator = CreateSubjectSerializer(data=request.data)
+        serializator = SubjectSerializer(data=request.data)
         if serializator.is_valid():
             Subject.objects.create(**serializator.data)
             return Response({"success": True, "errors": None})
@@ -285,7 +285,7 @@ def get_subjects_or_create(request):
 )
 @swagger_auto_schema(
     method="put",
-    request_body=UpdateSubjectSerializer,
+    request_body=SubjectSerializer,
     responses={
         200: OK_200_RESPONSE_DEFAULT,
         403: ERROR_403_RESPONSE_DEFAULT,
@@ -310,7 +310,7 @@ def rud_subject(request, subject_id):
         serializator = ReadSubjectSerializer(subject)
         return Response({"data": serializator.data})
     elif request.method == "PUT":
-        serializator = UpdateSubjectSerializer(data=request.data)
+        serializator = SubjectSerializer(data=request.data)
         if serializator.is_valid():
             subject = Subject.objects.filter(id=subject_id)
             if not subject.exists():

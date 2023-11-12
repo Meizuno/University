@@ -98,7 +98,99 @@
             "password": "xroman00",
             "first_name": "Oleh",
             "last_name": "Romaniuk",
+            "permission": 3
+        }
+    },
+    {
+        "model": "authorization.User",
+        "pk": 6,
+        "fields": {
+            "username": "xmiller89",
+            "email": "xmiller89@vutbr.cz",
+            "password": "xmiller89",
+            "first_name": "Emma",
+            "last_name": "Miller",
+            "permission": 3
+        }
+    },
+    {
+        "model": "authorization.User",
+        "pk": 7,
+        "fields": {
+            "username": "xsmith72",
+            "email": "xsmith72@vutbr.cz",
+            "password": "xsmith72",
+            "first_name": "John",
+            "last_name": "Smith",
+            "permission": 3
+        }
+    },
+    {
+        "model": "authorization.User",
+        "pk": 8,
+        "fields": {
+            "username": "xjones45",
+            "email": "xjones45@vutbr.cz",
+            "password": "xjones45",
+            "first_name": "Jennifer",
+            "last_name": "Jones",
+            "permission": 3
+        }
+    },
+    {
+        "model": "authorization.User",
+        "pk": 9,
+        "fields": {
+            "username": "xcooper21",
+            "email": "xcooper21@vutbr.cz",
+            "password": "xcooper21",
+            "first_name": "Michael",
+            "last_name": "Cooper",
             "permission": 4
+        }
+    },
+
+
+    {
+        "model": "education.Room",
+        "pk": 1,
+        "fields": {
+            "number": 100
+        }
+    },
+    {
+        "model": "education.Room",
+        "pk": 2,
+        "fields": {
+            "number": 101
+        }
+    },
+    {
+        "model": "education.Room",
+        "pk": 3,
+        "fields": {
+            "number": 102
+        }
+    },
+    {
+        "model": "education.Room",
+        "pk": 4,
+        "fields": {
+            "number": 200
+        }
+    },
+    {
+        "model": "education.Room",
+        "pk": 5,
+        "fields": {
+            "number": 201
+        }
+    },
+    {
+        "model": "education.Room",
+        "pk": 6,
+        "fields": {
+            "number": 202
         }
     },
 
@@ -144,7 +236,6 @@
             "code": "IIS",
             "name": "Information Systems",
             "credits": 4,
-            "capacity": 200,
             "guarantor": 2,
             "description": "In publishing and graphic design, lorem ipsum is common placeholder text used to demonstrate the graphic elements of a document or visual presentation, such as web pages, typography, and graphical layout"
         }
@@ -156,7 +247,6 @@
             "code": "ITU",
             "name": "User Interface Programming",
             "credits": 5,
-            "capacity": 200,
             "guarantor": 3,
             "description": "In publishing and graphic design, lorem ipsum is common placeholder text used to demonstrate the graphic elements of a document or visual presentation, such as web pages, typography, and graphical layout"
         }
@@ -168,7 +258,6 @@
             "code": "ISA",
             "name": "Network Applications and Network Administration",
             "credits": 5,
-            "capacity": 200,
             "guarantor": 4,
             "description": "In publishing and graphic design, lorem ipsum is common placeholder text used to demonstrate the graphic elements of a document or visual presentation, such as web pages, typography, and graphical layout"
         }
@@ -180,7 +269,6 @@
         "pk": 1,
         "fields": {
             "duration": 2,
-            "capacity": 20,
             "activity_type": 1,
             "subject": 1
         }
@@ -190,7 +278,6 @@
         "pk": 2,
         "fields": {
             "duration": 2,
-            "capacity": 20,
             "activity_type": 2,
             "subject": 1
         }
@@ -200,7 +287,6 @@
         "pk": 3,
         "fields": {
             "duration": 1,
-            "capacity": 20,
             "activity_type": 4,
             "subject": 1
         }
@@ -210,7 +296,6 @@
         "pk": 4,
         "fields": {
             "duration": 2,
-            "capacity": 20,
             "activity_type": 1,
             "subject": 2
         }
@@ -220,7 +305,6 @@
         "pk": 5,
         "fields": {
             "duration": 2,
-            "capacity": 20,
             "activity_type": 2,
             "subject": 2
         }
@@ -230,7 +314,6 @@
         "pk": 6,
         "fields": {
             "duration": 1,
-            "capacity": 20,
             "activity_type": 4,
             "subject": 2
         }
@@ -241,7 +324,6 @@
         "pk": 7,
         "fields": {
             "duration": 2,
-            "capacity": 20,
             "activity_type": 1,
             "subject": 3
         }
@@ -251,7 +333,6 @@
         "pk": 8,
         "fields": {
             "duration": 2,
-            "capacity": 20,
             "activity_type": 3,
             "subject": 3
         }
@@ -261,38 +342,8 @@
         "pk": 9,
         "fields": {
             "duration": 1,
-            "capacity": 20,
             "activity_type": 4,
             "subject": 3
-        }
-    },
-
-
-    {
-        "model": "education.Schedule",
-        "pk": 1,
-        "fields": {
-            "scheduler": 4,
-            "activity": 1,
-            "datetime": "2023-09-18T10:00:00Z"
-        }
-    },
-    {
-        "model": "education.Schedule",
-        "pk": 2,
-        "fields": {
-            "scheduler": 4,
-            "activity": 2,
-            "datetime": "2024-10-18T10:00:00Z"
-        }
-    },
-    {
-        "model": "education.Schedule",
-        "pk": 3,
-        "fields": {
-            "scheduler": 4,
-            "activity": 3,
-            "datetime": "2023-01-02T10:00:00Z"
         }
     }
 ]
