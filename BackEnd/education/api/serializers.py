@@ -110,5 +110,5 @@ class ActivityInstructorSerializer(serializers.Serializer):
 
 
 class ActivitySchedulerSerializer(serializers.Serializer):
-    room_id = serializers.IntegerField()
+    room_id = serializers.IntegerField(validators=[MinValueValidator(1)])
     date_time = serializers.DateTimeField()
