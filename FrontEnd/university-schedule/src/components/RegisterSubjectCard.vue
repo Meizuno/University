@@ -1,11 +1,10 @@
 <template>
   <div class="card">
-    <div class="code">{{ this.code }}</div>
+    <div class="code">{{ this.subject.code }}</div>
     <div class="subject-info">
-      <div class="subject-name">{{ this.sName }}</div>
-      <div class="subject-capacity">({{ this.sCapacity }})</div>
+      <div class="subject-name">{{ this.subject.name }}</div>
     </div>
-    <div class="register" @click="registerSubject(this.user_id, this.sId)">
+    <div class="register" @click="registerSubject(this.user_id, this.subject.id)">
       <checkmark></checkmark>
     </div>
   </div>
@@ -42,22 +41,10 @@ export default {
     }
   },
   props: {
-    code: {
-      type: String,
+    subject:{
+      type: Object,
       required: true,
     },
-    sName: {
-      type: String,
-      required: true,
-    },
-    sCapacity: {
-      type: String,
-      required: true,
-    },
-    sId:{
-      type: Number,
-      required: true,
-    }
   },
 
 }
@@ -69,7 +56,7 @@ export default {
   display: flex;
   border: 3px solid black;
   width: 550px;
-  height: 53px;
+  height: 57px;
   font-size: 22px;
   align-items: center;
   margin-bottom: 10px;
@@ -107,8 +94,5 @@ export default {
   padding-right: 3px;
   cursor: pointer;
 }
-.subject-capacity{
-  margin-left: auto;
-  margin-right: 10px;
-}
+
 </style>

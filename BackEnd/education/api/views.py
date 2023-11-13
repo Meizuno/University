@@ -508,6 +508,6 @@ def get_activity(request, activity_id):
 @handle_error
 def get_student_subjects(request, student_id):
     student = User.objects.get(id=student_id)
-    subjects = student.subjects
+    subjects = student.student_subjects
     serializer = ReadSubjectSerializer(subjects, many=True)
     return Response({"data": serializer.data})
