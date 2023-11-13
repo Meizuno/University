@@ -44,10 +44,22 @@
       </div>
 
       <div class="Monday">
-        <div class="lecture_two_hours" style="grid-column-start: 2">
-          IIS Lecture
+
+        <div class="lecture_two_hours" style="grid-column-start: 2;">
+          <schedule-cell></schedule-cell>
         </div>
-        <div class="lecture_two_hours" style="grid-column-start: 6">
+        <div class="lecture_two_hours" style="grid-column-start: 4;">
+          <schedule-cell :type="'Lecture'"></schedule-cell>
+        </div>
+
+        <div class="lecture_two_hours" style="grid-column-start: 3;">
+          <schedule-cell></schedule-cell>
+        </div>
+
+
+
+
+        <div class="lecture_two_hours" style="grid-column-start: 6;">
           IMS Lecture
         </div>
       </div>
@@ -70,9 +82,10 @@
 <script>
 import Navigation from "@/components/Navigation.vue";
 import axios from "axios";
+import ScheduleCell from "@/components/ScheduleCell.vue";
 
 export default {
-  components: {Navigation},
+  components: {ScheduleCell, Navigation},
   data(){
     return{
       user: {},
@@ -133,9 +146,10 @@ export default {
   margin-top: 10px;
   display: grid;
   grid-template-columns: repeat(10, 1fr);
-  grid-template-rows: repeat(6, 1fr);
+  grid-auto-rows: minmax(100px, auto);
   width: 95%;
-  height: 90%;
+  min-height: 90%;
+  height: fit-content;
   border: 4px solid #151832;
   background: white;
   border-radius: 10px;
@@ -143,9 +157,10 @@ export default {
 }
 .time-div{
   font-weight: bold;
-  display: flex;
-  justify-content: space-around;
+  display: grid;
+  grid-template-columns: repeat(9,1fr);
   align-items: center;
+  justify-items: center;
   grid-column-start: 2;
   grid-column-end: 11;
   border-bottom: 2px solid rgba(0, 0, 0, 0.1);
@@ -173,19 +188,23 @@ export default {
 .Monday{
   display: grid;
   grid-template-columns: repeat(9,1fr);
+
   grid-column-start: 2;
   grid-column-end: 11;
+
   border-bottom: 2px solid rgba(0, 0, 0, 0.1);
   align-items: center;
+
 }
 
 .lecture_two_hours{
   display: flex;
   justify-content: center;
+  min-height: 90px;
   align-items: center;
   background: #84D296;
   border-radius: 20px;
   grid-column-end: span 2;
-  height: 90%;
 }
+
 </style>
