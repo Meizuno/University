@@ -18,7 +18,7 @@ class Subject(models.Model):
     instructors = models.ManyToManyField(
         User,
         through="InstructorSubject",
-        related_name="instruktors_subjects",
+        related_name="instructors_subjects",
     )
     description = models.CharField(max_length=255)
 
@@ -59,6 +59,7 @@ class Activity(models.Model):
         User,
         through="StudentActivity",
         related_name="student_activity",
+        null=True
     )
     subject = models.ForeignKey(
         Subject,

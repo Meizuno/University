@@ -11,7 +11,6 @@ class PermissionSerializer(serializers.ModelSerializer):
         fields = "__all__"
 
 
-
 class ReadUserSerializer(serializers.ModelSerializer):
     permission = PermissionSerializer()
     class Meta:
@@ -93,7 +92,7 @@ class ReadActivitySerializer(serializers.ModelSerializer):
         fields = "__all__"
 
 
-class ActivityGuatantorSerializer(serializers.Serializer):
+class ActivityGuarantorSerializer(serializers.Serializer):
     annotation = serializers.CharField(max_length=255)
     duration = serializers.IntegerField(validators=[MinValueValidator(1)])
     activity_type_id = serializers.IntegerField(
@@ -112,3 +111,9 @@ class ActivityInstructorSerializer(serializers.Serializer):
 class ActivitySchedulerSerializer(serializers.Serializer):
     room_id = serializers.IntegerField(validators=[MinValueValidator(1)])
     date_time = serializers.DateTimeField()
+
+
+class RegisterInstructorSerializer(serializers.Serializer):
+    instructor = serializers.IntegerField(validators=[MinValueValidator(1)])
+    subject = serializers.IntegerField(validators=[MinValueValidator(1)])
+

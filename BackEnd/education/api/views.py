@@ -7,6 +7,7 @@ from rest_framework import status
 from education.models import *
 from education.api.serializers import *
 from education.api.doc_responses import *
+from django.db.models import Q
 
 
 @swagger_auto_schema(
@@ -560,3 +561,105 @@ def add_activity_to_schedule(request, activity_id):
             )
         activity.update(room=None, date_time=None)
         return Response({"success": True, "errors": None})
+
+
+@swagger_auto_schema(
+    method="post",
+    responses={
+        200: OK_200_RESPONSE_DEFAULT,
+        403: ERROR_403_RESPONSE_DEFAULT,
+        404: ERROR_404_RESPONSE_DEFAULT,
+    },
+)
+@swagger_auto_schema(
+    method="delete",
+    responses={
+        200: OK_200_RESPONSE_DEFAULT,
+        403: ERROR_403_RESPONSE_DEFAULT,
+        404: ERROR_404_RESPONSE_DEFAULT,
+    },
+)
+@api_view(["POST", "DELETE"])
+@handle_error
+def register_instructor(request, instructor_id, subject_id):
+    # add check if its instructor
+    if request.method == "POST":
+        try:
+            User.objects.get(id=instructor_id)
+            Subject.objects.get(id=subject_id)
+
+        except User.DoesNotExist or Subject.DoesNotExist:
+            return Response(
+                {
+                    "success": False,
+                    "error": "Instructor or Subject does not exist.",
+
+                }, status=status.HTTP_400_BAD_REQUEST
+            )
+
+        InstructorSubject.objects.create(
+            instructor_id=instructor_id,
+            subject_id=subject_id,
+        )
+
+        return Response({"success": True, "errors": None})
+
+    elif request.method == "DELETE":
+
+        instructor_subject = InstructorSubject.objects.filter(
+            instructor_id=instructor_id,
+            subject_id=subject_id,
+        )
+
+        if not instructor_subject.exists():
+            return Response(
+                {
+                    "success": False,
+                    "errors": "Instructor didn't registered on the subject.",
+                }
+            )
+
+        instructor_subject.delete()
+        return Response(
+            {
+                "success": True,
+                "errors": None,
+            }
+        )
+
+
+@swagger_auto_schema(
+    method="post",
+    responses={
+        200: OK_200_RESPONSE_DEFAULT,
+        403: ERROR_403_RESPONSE_DEFAULT,
+        404: ERROR_404_RESPONSE_DEFAULT,
+    },
+)
+@api_view(["POST"])
+@handle_error
+def get_instructor_subject(request, instructor_id):
+    instructor = User.objects.get(id=instructor_id)
+    subjects = instructor.instructors_subjects
+    serializer = ReadSubjectSerializer(subjects, many=True)
+    return Response({"data": serializer.data})
+
+
+@swagger_auto_schema(
+    method="get",
+    responses={
+        200: OK_200_RESPONSE_DEFAULT,
+        403: ERROR_403_RESPONSE_DEFAULT,
+        404: ERROR_404_RESPONSE_DEFAULT,
+    },
+)
+@api_view(["GET"])
+@handle_error
+def get_all_instructors(request):
+
+    instructors = User.objects.filter(
+        Q(permission__id=3)
+    )
+
+    serializer = ReadUserSerializer(instructors, many=True)
+    return Response({"data": serializer.data})
