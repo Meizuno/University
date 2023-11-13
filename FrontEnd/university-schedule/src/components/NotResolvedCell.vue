@@ -1,30 +1,30 @@
 <template>
-    <div class="cell" :style="colors.outside">
+    <div class="cell" :style="colors.outside" @click="handleClick" :class="{ clickable: isClickable }">
       <div class="col-1" :style="colors.inside">
           <p :style="colors.title">Subject</p>
           <p class="var">{{ activity.subject.code }}</p>
       </div>
       <div class="col-2">
-        <div class="custom-select" ref="customSelectRoom" @click="toggleDropdownRoom">
+        <div class="custom-select" ref="customSelectRoom" @click.stop="toggleDropdownRoom">
           {{ selectedRoom || 'Room' }}
-          <div v-if="isRoomOpen" class="dropdown" @click.stop>
+          <div v-if="isRoomOpen" class="dropdown" ref="dropdown" @click.stop>
             <div v-for="room in rooms" :key="room" @click="selectValue('room', room.number)">
               {{ room.number }}
             </div>
           </div>
         </div>
         <div class="sub-col">
-          <div class="custom-select" @click="toggleDropdownDay">
+          <div class="custom-select" @click.stop="toggleDropdownDay">
             {{ selectedDay || 'Day' }}
-            <div v-if="isDayOpen" class="dropdown" @click.stop>
+            <div v-if="isDayOpen" class="dropdown" ref="dropdown" @click.stop>
               <div v-for="day in days" :key="day" @click="selectValue('day', day)">
                 {{ day }}
               </div>
             </div>
           </div>
-          <div class="custom-select" @click="toggleDropdownTime">
+          <div class="custom-select" @click.stop="toggleDropdownTime">
             {{ selectedTime || 'Time' }}
-            <div v-if="isTimeOpen" class="dropdown" @click.stop>
+            <div v-if="isTimeOpen" class="dropdown" ref="dropdown" @click.stop>
               <div v-for="time in times" :key="time" @click="selectValue('time', time)">
                 {{ time }}
               </div>
@@ -33,11 +33,23 @@
         </div>
       </div>
     </div>
+
+    <div v-if="isDialogOpen" class="custom-dialog">
+      <p>Do you want to add activity to schudule?</p>
+      <div>
+        <button @click="handleConfirm">Add</button>
+        <button @click="closeDialog">Cancel</button>
+      </div>
+    </div>
+
+    <div v-if="isDialogOpen" class="overlay"></div>
 </template>
 
 <script>
+import axios from 'axios';
 
 export default {
+  emits: ['update-activity', 'delete-activity'],
   props: {
     activity: {
       type: Object,
@@ -48,6 +60,7 @@ export default {
       default: {}
     }
   },
+
   data() {
     return {
       isRoomOpen: false,
@@ -66,10 +79,27 @@ export default {
         inside: { 'background-color': "#9DDBAB" },
         title: { 'color': "#E2F4E6" }
       },
+
+      isClickable: false,
+
+      isDialogOpen: false,
     };
   },
+
+  watch: {
+    selectedRoom(newValue) {
+      this.checkClickable();
+    },
+    selectedDay(newValue) {
+      this.checkClickable();
+    },
+    selectedTime(newValue) {
+      this.checkClickable();
+    },
+  },
+
   created() {
-    switch (this.activity.activity_type.description) {
+    switch (this.activity.activity_type.name) {
       case "Lecture":
         this.colors = {
           outside: { 'background-color': "#84D296" },
@@ -100,6 +130,7 @@ export default {
         break;
     };
   },
+
   methods: {
     selectValue(option, value) {
       switch (option) {
@@ -146,6 +177,37 @@ export default {
           this.$refs.dropdown.focus();
         });
       }
+    },
+    checkClickable() {
+      this.isClickable = this.selectedRoom !== null && this.selectedDay !== null && this.selectedTime !== null;
+    },
+
+    handleClick() {
+      if (this.isClickable) {
+        this.isDialogOpen = true;
+      }
+    },
+
+    handleConfirm() {
+      const room = this.rooms.find(room => room.number === this.selectedRoom);
+      let day = 18 + this.days.indexOf(this.selectedDay);
+      let hours = parseInt(this.selectedTime.split(':')[0]) + 2;
+      const data = {
+        room_id: room.id,
+        date_time: new Date(2023, 8, day, hours, 0, 0, 0)
+      };
+      axios.post(`http://127.0.0.1:8000/api/scheduler-activity/${this.activity.id}`, data)
+        .then(response => {
+          this.$emit('update-activity');
+          this.closeDialog();
+        })
+        .catch(error => {
+          console.error(error);
+        });
+    },
+
+    closeDialog() {
+      this.isDialogOpen = false;
     },
   },
 };
@@ -240,6 +302,78 @@ export default {
   cursor: pointer;
   padding: 7px 0px;
   color: rgb(0, 0, 0, 0.5);
+}
+
+.clickable {
+  cursor: pointer;
+}
+
+.clickable:hover {
+  filter: invert(10%);
+}
+
+.custom-dialog {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  border-radius: 10px;
+  background-color: #fff;
+  padding: 30px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+  z-index: 1000;
+}
+
+.custom-dialog > p {
+  font-size: 20px;
+  margin: 0;
+  color: rgba(0, 0, 0, 0.7);
+}
+
+.custom-dialog > div {
+  display: flex;
+  gap: 10px;
+  padding-top: 20px;
+  justify-content: end;
+}
+
+.custom-dialog > div > button {
+  font-size: 16px;
+  padding: 7px 20px;
+  border-radius: 5px;
+}
+
+.custom-dialog > div > button:first-child {
+  background-color: #84D296;
+  border: none;
+  color: white;
+}
+
+.custom-dialog > div > button:first-child:hover {
+  background-color: #9DDBAB;
+  cursor: pointer;
+}
+
+.custom-dialog > div > button:last-child {
+  background-color: white;
+  border: 1px solid gray;
+  color: rgba(0, 0, 0, 0.5);
+}
+
+.custom-dialog > div > button:last-child:hover {
+  background-color: #ebebeb;
+  cursor: pointer;
+}
+
+
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 999;
 }
 
 </style>

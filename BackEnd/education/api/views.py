@@ -511,3 +511,52 @@ def get_student_subjects(request, student_id):
     subjects = student.subjects
     serializer = ReadSubjectSerializer(subjects, many=True)
     return Response({"data": serializer.data})
+
+
+@swagger_auto_schema(
+    method="post",
+    request_body=ActivitySchedulerSerializer,
+    responses={
+        200: OK_200_RESPONSE_DEFAULT,
+        403: ERROR_403_RESPONSE_DEFAULT,
+        404: ERROR_404_RESPONSE_ACTIVITY,
+    },
+)
+@swagger_auto_schema(
+    method="delete",
+    request_body=ActivitySchedulerSerializer,
+    responses={
+        200: OK_200_RESPONSE_DEFAULT,
+        403: ERROR_403_RESPONSE_DEFAULT,
+        404: ERROR_404_RESPONSE_ACTIVITY,
+    },
+)
+@api_view(["POST", "DELETE"])
+@handle_error
+def add_activity_to_schedule(request, activity_id):
+    if request.method == "POST":
+        serializator = ActivitySchedulerSerializer(data=request.data)
+        if serializator.is_valid():
+            activity = Activity.objects.filter(id=activity_id)
+            if not activity.exists():
+                return Response(
+                    {
+                        "success": True,
+                        "errors": "Activity does not exist.",
+                    },
+                    status=status.HTTP_400_BAD_REQUEST,
+                )
+            activity.update(**serializator.validated_data)
+            return Response({"success": True, "errors": None})
+    elif request.method == "DELETE":
+        activity = Activity.objects.filter(id=activity_id)
+        if not activity.exists():
+            return Response(
+                {
+                    "success": True,
+                    "errors": "Activity does not exist.",
+                },
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+        activity.update(room=None, date_time=None)
+        return Response({"success": True, "errors": None})
