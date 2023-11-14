@@ -66,15 +66,18 @@
 
     </div>
   </div>
+  <guarant-request></guarant-request>
 </template>
 
 <script>
 import Navigation from "@/components/Navigation.vue";
 import axios from "axios";
 import ScheduleCell from "@/components/ScheduleCell.vue";
+import RegisterInstructorCard from "@/components/RegisterInstructorCard.vue";
+import GuarantRequest from "@/components/GuarantRequest.vue";
 
 export default {
-  components: {ScheduleCell, Navigation},
+  components: {GuarantRequest, RegisterInstructorCard, ScheduleCell, Navigation},
   data(){
     return{
       user: {},

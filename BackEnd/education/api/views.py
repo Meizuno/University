@@ -663,3 +663,7 @@ def get_all_instructors(request):
 
     serializer = ReadUserSerializer(instructors, many=True)
     return Response({"data": serializer.data})
+
+
+
+

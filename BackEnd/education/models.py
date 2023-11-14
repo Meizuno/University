@@ -59,7 +59,6 @@ class Activity(models.Model):
         User,
         through="StudentActivity",
         related_name="student_activity",
-        null=True
     )
     subject = models.ForeignKey(
         Subject,

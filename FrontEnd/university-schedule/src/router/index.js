@@ -4,6 +4,8 @@ import Authorization from "@/views/Authorization.vue";
 import StudentView from "@/views/StudentView.vue";
 import Scheduler from "@/views/Scheduler.vue";
 import StudentSubjects from "@/views/StudentSubjects.vue";
+import GuarantorView from "@/views/GuarantorView.vue";
+import GuarantorInstructors from "@/views/GuarantorInstructors.vue";
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -28,6 +30,14 @@ const router = createRouter({
     {
       path: '/student/subjects',
       component: StudentSubjects,
+    },
+    {
+      path: '/guarantor',
+      component: GuarantorView,
+    },
+    {
+      path: '/guarantor/instructors',
+      component: GuarantorInstructors,
     },
 
 

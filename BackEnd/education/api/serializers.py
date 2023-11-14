@@ -65,12 +65,6 @@ class ReadSubjectSerializer(serializers.ModelSerializer):
 class SubjectSerializer(serializers.Serializer):
     code = serializers.CharField(max_length=3)
     name = serializers.CharField(max_length=20)
-    credits = serializers.IntegerField(
-        validators=[
-            MinValueValidator(1),
-            MaxValueValidator(7),
-        ]
-    )
     guarantor_id = serializers.IntegerField()
     description = serializers.CharField(required=False)
 
