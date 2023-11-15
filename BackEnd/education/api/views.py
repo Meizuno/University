@@ -426,6 +426,7 @@ def register_subject(request, user_id, subject_id):
 )
 @swagger_auto_schema(
     method="post",
+    request_body=ActivityGuarantorSerializer,
     responses={
         200: OK_200_RESPONSE_DEFAULT,
         404: ERROR_404_RESPONSE_STUDENT_SUBJECT,
@@ -440,7 +441,7 @@ def get_activity_or_create(request):
         serializator = ReadActivitySerializer(activity, many=True)
         return Response({"data": serializator.data})
     elif request.method == "POST":
-        serializator = ActivityGuatantorSerializer(data=request.data)
+        serializator = ActivityGuarantorSerializer(data=request.data)
         if serializator.is_valid():
             Activity.objects.create(**serializator.data)
             return Response({"success": True, "errors": None})
@@ -662,6 +663,24 @@ def get_all_instructors(request):
     )
 
     serializer = ReadUserSerializer(instructors, many=True)
+    return Response({"data": serializer.data})
+
+
+@swagger_auto_schema(
+    method="get",
+    responses={
+        200: OK_200_RESPONSE_DEFAULT,
+        403: ERROR_403_RESPONSE_DEFAULT,
+        404: ERROR_404_RESPONSE_DEFAULT,
+    },
+)
+@api_view(["GET"])
+@handle_error
+def get_guarantor_requests(request, subject_id):
+    activities = Activity.objects.filter(
+        Q(subject__id=subject_id) & Q(date_time__isnull=True)
+    )
+    serializer = ReadActivitySerializer(activities, many=True)
     return Response({"data": serializer.data})
 
 

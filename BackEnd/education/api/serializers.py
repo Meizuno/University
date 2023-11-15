@@ -87,14 +87,17 @@ class ReadActivitySerializer(serializers.ModelSerializer):
 
 
 class ActivityGuarantorSerializer(serializers.Serializer):
-    annotation = serializers.CharField(max_length=255)
+    guarantor_notes = serializers.CharField(max_length=255)
     duration = serializers.IntegerField(validators=[MinValueValidator(1)])
     activity_type_id = serializers.IntegerField(
        help_text="ID of activity's type. \
            Get enum on 'api/auth/activity-type/'"
-   )
+    )
     subject_id = serializers.IntegerField(
         help_text="ID of subject's type."
+    )
+    activity_repetition_id = serializers.IntegerField(
+        help_text="ID of activity's repetition."
     )
 
 

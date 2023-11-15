@@ -24,7 +24,7 @@ export default {
         {text:'Home', class:'not-selected', route: '/'},
         {text:'Schedule', class:'selected', route:'/guarantor'},
         {text:'Instructors', class:'not-selected', route: '/guarantor/instructors'},
-        {text:'Activities', class:'not-selected'},
+        {text:'Activities', class:'not-selected', route: '/guarantor/activities'},
       ],
       user : {
 
