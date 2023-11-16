@@ -62,6 +62,33 @@
               </option>
             </select>
           </div>
+          <div class="select-date">
+            <div class="input-date"> Date:
+              <VDatePicker
+                  v-model="range"
+                  is-range
+                  :masks="masks"
+                  v-model.string="customer.birthday"
+              >
+                <template #default="{ inputValue, inputEvents }">
+                  <div class="flex justify-center items-center">
+                    <input
+                        :value="inputValue.start"
+                        v-on="inputEvents.start"
+                        class="custom-select custom-date"
+                        placeholder="Date from"
+                    />
+                    <input
+                        :value="inputValue.end"
+                        v-on="inputEvents.end"
+                        class="custom-date custom-select"
+                        placeholder="Date to"
+                    />
+                  </div>
+                </template>
+              </VDatePicker>
+            </div>
+          </div>
 
           <div class="notes">
             <div class="notes-label">Notes:</div>
@@ -74,17 +101,31 @@
       </div>
     </div>
   </div>
+
+
 </template>
 
 <script>
 import Navigation from "@/components/Navigation.vue";
 import GuarantRequest from "@/components/GuarantRequest.vue";
 import axios from "axios";
+import {reactive, ref} from "vue";
+import Cross from "@/components/icons/Cross.vue";
+
 
 export default {
-  components: {GuarantRequest, Navigation},
+  components: {Cross, GuarantRequest, Navigation},
   data(){
     return{
+      masks: ref({
+        modelValue: 'YYYY-MM-DD',
+      }),
+      customer: reactive({
+        name: 'Nathan Reyes',
+        birthday: '1983-01-21',
+      }),
+
+      range: ref(null),
       buttons: [
         {text:'Home', class:'not-selected', route: '/'},
         {text:'Schedule', class:'not-selected', route:'/guarantor'},
@@ -115,17 +156,22 @@ export default {
       notes: '',
       requests: {},
       guarantorSubject: {},
+      selectedDate: null,
     }
   },
   methods:{
+
     sendRequest(){
       const dataToSend = {
         "guarantor_notes": this.notes,
         "duration": this.selectedDuration,
         "activity_type_id": this.selectedType,
         "subject_id": 1, // CHANGE TO DYNAMIC {FOR TEST}
+        "date_from": this.range.start,
+        "date_to": this.range.end,
         "activity_repetition_id": this.selectedRepeating,
       };
+      console.log(dataToSend);
       axios.post("http://127.0.0.1:8000/api/activity", dataToSend)
           .then(response=>{
             console.log(response);
@@ -139,6 +185,7 @@ export default {
       this.selectedDuration = 0;
       this.selectedType = 0;
       this.notes = '';
+      this.range = ref(null);
 
     },
     getRequests(){
@@ -287,6 +334,14 @@ export default {
   font-size: 25px;
   font-weight: bold;
 }
+.select-date{
+  width: 100%;
+  height: 15%;
+  display: flex;
+  align-items: center;
+  font-size: 25px;
+  font-weight: bold;
+}
 .notes{
   flex-grow: 1;
   width: 100%;
@@ -312,7 +367,7 @@ export default {
 }
 .custom-textarea {
   width: 80%;
-  height: 60%;
+  height: 40%;
   border: 3px solid black;
   resize: none;
   font-size: 19px;
@@ -330,5 +385,14 @@ export default {
   margin-top: 3px;
   border-bottom: 2px solid black;
   cursor: pointer;
+}
+.input-date{
+  display: flex;
+  margin-left: 10px;
+  align-items: start;
+}
+.custom-date{
+  margin-left: 15px;
+  height: 25px;
 }
 </style>

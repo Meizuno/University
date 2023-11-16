@@ -678,7 +678,7 @@ def get_all_instructors(request):
 @handle_error
 def get_guarantor_requests(request, subject_id):
     activities = Activity.objects.filter(
-        Q(subject__id=subject_id) & Q(date_time__isnull=True)
+        Q(subject__id=subject_id) & Q(time__isnull=True)
     )
     serializer = ReadActivitySerializer(activities, many=True)
     return Response({"data": serializer.data})
