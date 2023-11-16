@@ -65,13 +65,16 @@ class Activity(models.Model):
         on_delete=models.CASCADE,
         related_name="activity",
     )
-    date_time = models.DateTimeField(null=True)
+    date_from = models.DateField()
+    date_to = models.DateField()
+    time = models.TimeField(null=True)
+    day = models.CharField(max_length=3, null=True)
     room = models.ForeignKey(Room, on_delete=models.SET_NULL, null=True, related_name="activity")
     instructor = models.ForeignKey(User, on_delete=models.PROTECT, null=True, related_name="activity")
 
     class Meta:
         db_table = "activity"
-        unique_together = (("date_time", "room"), ("date_time", "instructor"))
+        unique_together = (("day", "time", "room"), ("day", "time", "instructor"))
 
 
 class StudentActivity(models.Model):

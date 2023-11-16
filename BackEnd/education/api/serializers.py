@@ -103,6 +103,8 @@ class ActivityGuatantorSerializer(serializers.Serializer):
     subject_id = serializers.IntegerField(
         help_text="ID of subject's type."
     )
+    date_from = serializers.DateField()
+    date_to = serializers.DateField()
 
 
 class ActivityInstructorSerializer(serializers.Serializer):

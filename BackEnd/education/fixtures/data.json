@@ -298,7 +298,8 @@
             "activity_type": 1,
             "activity_repetition": 1,
             "subject": 1,
-            "date_time": "2023-09-18T12:30:00Z",
+            "date_from": "2023-09-18",
+            "date_to": "2023-12-17",
             "room": 1
         }
     },
@@ -309,6 +310,8 @@
             "duration": 2,
             "activity_type": 2,
             "activity_repetition": 2,
+            "date_from": "2023-09-20",
+            "date_to": "2023-12-15",
             "subject": 1
         }
     },
@@ -319,6 +322,8 @@
             "duration": 1,
             "activity_type": 4,
             "activity_repetition": 4,
+            "date_from": "2023-11-8",
+            "date_to": "2023-11-8",
             "subject": 1
         }
     },
@@ -330,7 +335,8 @@
             "activity_type": 1,
             "activity_repetition": 1,
             "subject": 2,
-            "date_time": "2023-09-19T12:30:00Z",
+            "date_from": "2023-09-19",
+            "date_to": "2023-12-17",
             "room": 1
         }
     },
@@ -341,6 +347,8 @@
             "duration": 2,
             "activity_type": 2,
             "activity_repetition": 3,
+            "date_from": "2023-09-27",
+            "date_to": "2023-12-8",
             "subject": 2
         }
     },
@@ -351,6 +359,8 @@
             "duration": 1,
             "activity_type": 4,
             "activity_repetition": 4,
+            "date_from": "2023-11-7",
+            "date_to": "2023-11-7",
             "subject": 2
         }
     },
@@ -361,6 +371,8 @@
             "duration": 2,
             "activity_type": 1,
             "activity_repetition": 1,
+            "date_from": "2023-09-21",
+            "date_to": "2023-12-17",
             "subject": 3
         }
     },
@@ -371,6 +383,8 @@
             "duration": 2,
             "activity_type": 3,
             "activity_repetition": 3,
+            "date_from": "2023-10-04",
+            "date_to": "2023-12-8",
             "subject": 3
         }
     },
@@ -381,6 +395,8 @@
             "duration": 1,
             "activity_type": 4,
             "activity_repetition": 4,
+            "date_from": "2023-11-6",
+            "date_to": "2023-11-6",
             "subject": 3
         }
     }
