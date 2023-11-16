@@ -44,20 +44,9 @@
       </div>
 
       <div class="Monday">
-
         <div class="lecture_two_hours" style="grid-column-start: 2;">
-          <schedule-cell></schedule-cell>
+          <!--<schedule-cell></schedule-cell> -->
         </div>
-        <div class="lecture_two_hours" style="grid-column-start: 4;">
-          <schedule-cell :type="'Lecture'"></schedule-cell>
-        </div>
-
-        <div class="lecture_two_hours" style="grid-column-start: 3;">
-          <schedule-cell></schedule-cell>
-        </div>
-
-
-
 
         <div class="lecture_two_hours" style="grid-column-start: 6;">
           IMS Lecture
@@ -77,15 +66,18 @@
 
     </div>
   </div>
+  <guarant-request></guarant-request>
 </template>
 
 <script>
 import Navigation from "@/components/Navigation.vue";
 import axios from "axios";
 import ScheduleCell from "@/components/ScheduleCell.vue";
+import RegisterInstructorCard from "@/components/RegisterInstructorCard.vue";
+import GuarantRequest from "@/components/GuarantRequest.vue";
 
 export default {
-  components: {ScheduleCell, Navigation},
+  components: {GuarantRequest, RegisterInstructorCard, ScheduleCell, Navigation},
   data(){
     return{
       user: {},
@@ -140,7 +132,7 @@ export default {
   justify-content: center;
   display: flex;
   width: 100%;
-  height: 85vh;
+  height: 90vh;
 }
 .schedule{
   margin-top: 10px;

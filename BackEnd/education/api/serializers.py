@@ -11,7 +11,6 @@ class PermissionSerializer(serializers.ModelSerializer):
         fields = "__all__"
 
 
-
 class ReadUserSerializer(serializers.ModelSerializer):
     permission = PermissionSerializer()
     class Meta:
@@ -66,12 +65,6 @@ class ReadSubjectSerializer(serializers.ModelSerializer):
 class SubjectSerializer(serializers.Serializer):
     code = serializers.CharField(max_length=3)
     name = serializers.CharField(max_length=20)
-    credits = serializers.IntegerField(
-        validators=[
-            MinValueValidator(1),
-            MaxValueValidator(7),
-        ]
-    )
     guarantor_id = serializers.IntegerField()
     description = serializers.CharField(required=False)
 
@@ -93,18 +86,22 @@ class ReadActivitySerializer(serializers.ModelSerializer):
         fields = "__all__"
 
 
-class ActivityGuatantorSerializer(serializers.Serializer):
-    annotation = serializers.CharField(max_length=255)
+class ActivityGuarantorSerializer(serializers.Serializer):
+    guarantor_notes = serializers.CharField(max_length=255)
     duration = serializers.IntegerField(validators=[MinValueValidator(1)])
     activity_type_id = serializers.IntegerField(
        help_text="ID of activity's type. \
            Get enum on 'api/auth/activity-type/'"
-   )
+    )
     subject_id = serializers.IntegerField(
-        help_text="ID of subject's type."
+        help_text="ID of subject."
     )
     date_from = serializers.DateField()
     date_to = serializers.DateField()
+    activity_repetition_id = serializers.IntegerField(
+       help_text="ID of activity's repetition. \
+           Get enum on 'api/auth/activity-repetition/'"
+    )
 
 
 class ActivityInstructorSerializer(serializers.Serializer):
@@ -114,3 +111,9 @@ class ActivityInstructorSerializer(serializers.Serializer):
 class ActivitySchedulerSerializer(serializers.Serializer):
     room_id = serializers.IntegerField(validators=[MinValueValidator(1)])
     date_time = serializers.DateTimeField()
+
+
+class RegisterInstructorSerializer(serializers.Serializer):
+    instructor = serializers.IntegerField(validators=[MinValueValidator(1)])
+    subject = serializers.IntegerField(validators=[MinValueValidator(1)])
+

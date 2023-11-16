@@ -23,5 +23,14 @@ urlpatterns = [
     # Scheduler activity
     path("scheduler-activity/<int:activity_id>", add_activity_to_schedule),
     # Student subjects endpoint
-    path("student_subjects/<int:student_id>", get_student_subjects)
+    path("student_subjects/<int:student_id>", get_student_subjects),
+    # Instructor register subject
+    path("register_instructor/<int:instructor_id>/<int:subject_id>", register_instructor),
+    # Instructor subject(s) endpoint
+    path("instructor_subject/<int:instructor_id>", get_instructor_subject),
+    # Get all instructos
+    path("get_all_instructors", get_all_instructors),
+    # Get all guarantor requests on this subject
+    path("get_requests/<int:subject_id>", get_guarantor_requests),
+
 ]

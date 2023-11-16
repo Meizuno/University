@@ -17,9 +17,9 @@
             v-for="subject in getUnregisteredSubjects()"
             @subjectsUpdate="reloadSubjects"
             :key="subject.id"
+            :subject="subject"
             :code="subject.code"
             :s-name="subject.name"
-            :s-capacity="subject.capacity"
             :s-id="subject.id"
         ></RegisterSubjectCard>
       </div>
@@ -31,9 +31,9 @@
             v-for="subject in registeredSubjects"
             @subjectsUpdate="reloadSubjects"
             :key="subject.id"
+            :subject="subject"
             :code="subject.code"
             :s-name="subject.name"
-            :s-capacity="subject.capacity"
             :s-id="subject.id"
         ></registered-subject-card>
       </div>
