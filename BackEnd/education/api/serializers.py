@@ -19,6 +19,7 @@ class ReadUserSerializer(serializers.ModelSerializer):
             "id",
             "username",
             "email",
+            "password",
             "first_name",
             "last_name",
             "permission",
@@ -62,11 +63,10 @@ class ReadSubjectSerializer(serializers.ModelSerializer):
         fields = "__all__"
 
 
-class SubjectSerializer(serializers.Serializer):
-    code = serializers.CharField(max_length=3)
-    name = serializers.CharField(max_length=20)
-    guarantor_id = serializers.IntegerField()
-    description = serializers.CharField(required=False)
+class SubjectSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Subject
+        fields = "__all__"
 
 
 class ReadActivityTypeSerializer(serializers.ModelSerializer):
