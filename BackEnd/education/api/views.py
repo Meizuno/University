@@ -64,7 +64,8 @@ def get_users_or_create(request):
     """Read users or create new"""
 
     if request.method == "GET":
-        users = User.objects.all()
+        params = request.GET.dict()
+        users = User.objects.filter(**params)
         serializator = ReadUserSerializer(users, many=True)
         return Response({"data": serializator.data})
     elif request.method == "POST":
@@ -116,6 +117,7 @@ def rud_user(request, user_id):
         serializator = UserSerializer(data=request.data)
         if serializator.is_valid():
             user = User.objects.filter(id=user_id)
+
             if not user.exists():
                 return Response(
                     {
@@ -211,7 +213,7 @@ def rud_room(request, room_id):
         serializator = ReadRoomSerializer(room)
         return Response({"data": serializator.data})
     elif request.method == "PUT":
-        serializator = SubjectSerializer(data=request.data)
+        serializator = RoomSerializer(data=request.data)
         if serializator.is_valid():
             room = Room.objects.filter(id=room_id)
             if not room.exists():

@@ -36,8 +36,6 @@
 </template>
 
 <script>
-import axios from 'axios';
-
 export default {
   emits: ["remove-shedule-cell"],
   props: {

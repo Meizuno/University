@@ -7,6 +7,7 @@ import StudentSubjects from "@/views/StudentSubjects.vue";
 import GuarantorView from "@/views/GuarantorView.vue";
 import GuarantorInstructors from "@/views/GuarantorInstructors.vue";
 import GuarantorActivities from "@/views/GuarantorActivities.vue";
+import Admin from "@/views/Admin.vue";
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -44,7 +45,10 @@ const router = createRouter({
       path: '/guarantor/activities',
       component: GuarantorActivities,
     },
-
+    {
+      path: '/admin',
+      component: Admin,
+    },
 
   ]
 })
