@@ -1,5 +1,27 @@
 <template>
     <div class="cell" :style="colors.outside" @click="handleClick" :class="{ clickable: isClickable }">
+      <div class="tooltip"> 
+        <div v-if="activity.subject.code">
+          <p>Code:</p>
+          <p>{{ activity.subject.code }}</p>
+        </div>
+        <div v-if="activity.activity_type">
+          <p>Type:</p>
+          <p>{{ activity.activity_type.name }}</p>
+        </div>
+        <div v-if="activity.guarantor_notes">
+          <p>Code:</p>
+          <p>{{ activity.guarantor_notes }}</p>
+        </div>
+        <div v-if="activity.instruktor">
+          <p>Code:</p>
+          <p>{{ activity.instruktor.first_name + activity.instruktor.last_name }}</p>
+        </div>
+        <div v-if="activity.instructor_notes">
+          <p>Code:</p>
+          <p>{{ activity.instructor_notes }}</p>
+        </div>
+      </div>
       <div class="col-1" :style="colors.inside">
           <p :style="colors.title">Subject</p>
           <p class="var">{{ activity.subject.code }}</p>
@@ -49,7 +71,8 @@
 import axios from 'axios';
 
 export default {
-  emits: ['update-activity', 'delete-activity'],
+  emits: ["add-to-calendar"],
+
   props: {
     activity: {
       type: Object,
@@ -190,20 +213,14 @@ export default {
 
     handleConfirm() {
       const room = this.rooms.find(room => room.number === this.selectedRoom);
-      let day = 18 + this.days.indexOf(this.selectedDay);
-      let hours = parseInt(this.selectedTime.split(':')[0]) + 2;
+      const time = `${this.selectedTime}:00`;
       const data = {
         room_id: room.id,
-        date_time: new Date(2023, 8, day, hours, 0, 0, 0)
+        time: time,
+        day: this.selectedDay
       };
-      axios.post(`http://127.0.0.1:8000/api/scheduler-activity/${this.activity.id}`, data)
-        .then(response => {
-          this.$emit('update-activity');
-          this.closeDialog();
-        })
-        .catch(error => {
-          console.error(error);
-        });
+      this.$emit("add-to-calendar", this.activity, data);
+      this.closeDialog();
     },
 
     closeDialog() {
@@ -218,11 +235,46 @@ export default {
 .cell {
     display: flex;
     gap: 10px;
+    position: relative;
     width: fit-content;
     justify-content: center;
     color: white;
     padding: 15px 10px;
     border-radius: 20px;
+}
+
+.tooltip {
+  position: absolute;
+  bottom: 105%;
+  left: 50%;
+  transform: translateX(-50%);
+  padding: 8px;
+  background-color: white;
+  color: black;
+  border: 1px solid rgb(0, 0, 0, 0.2);
+  border-radius: 4px;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  z-index: 3;
+}
+
+.tooltip > div {
+  display: flex;
+  gap: 5px;
+}
+
+
+.tooltip > div > p:first-child {
+  font-weight: 700;
+}
+
+.tooltip > div > p{
+  margin: 0;
+}
+
+
+.cell:hover .tooltip {
+  opacity: 1;
 }
 
 .col-1 {
@@ -264,7 +316,7 @@ export default {
   border-radius: 7px;
   cursor: pointer;
   color: white;
-  font-size: 12px;
+  font-size: 10px;
   font-weight: 700;
 }
 

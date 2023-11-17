@@ -535,7 +535,7 @@ def get_student_subjects(request, student_id):
 )
 @api_view(["POST", "DELETE"])
 @handle_error
-def add_activity_to_schedule(request, activity_id):
+def activity_to_schedule(request, activity_id):
     if request.method == "POST":
         serializator = ActivitySchedulerSerializer(data=request.data)
         if serializator.is_valid():
@@ -560,7 +560,7 @@ def add_activity_to_schedule(request, activity_id):
                 },
                 status=status.HTTP_400_BAD_REQUEST,
             )
-        activity.update(room=None, date_time=None)
+        activity.update(room=None, time=None, day=None)
         return Response({"success": True, "errors": None})
 
 

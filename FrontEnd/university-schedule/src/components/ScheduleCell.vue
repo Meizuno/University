@@ -1,12 +1,26 @@
 <template>
     <div class="cell" :style="colors.outside" @click="handleClick" :class="{ clickable: isScheduler }">
+      <div class="tooltip"> 
+        <div v-if="activity.subject.code">
+          <p>Code:</p>
+          <p>{{ activity.subject.code }}</p>
+        </div>
+        <div v-if="activity.activity_type">
+          <p>Type:</p>
+          <p>{{ activity.activity_type.name }}</p>
+        </div>
+        <div v-if="activity.instruktor">
+          <p>Code:</p>
+          <p>{{ activity.instruktor.first_name + activity.instruktor.last_name }}</p>
+        </div>
+      </div>
         <div :style="colors.inside">
             <p :style="colors.title">Subject</p>
             <p class="var">{{ activity.subject.code }}</p>
         </div>
         <div :style="colors.inside">
             <p :style="colors.title">Room</p>
-            <p class="var">105</p>
+            <p class="var">{{ activity.room.number }}</p>
         </div>
     </div>
 
@@ -25,7 +39,7 @@
 import axios from 'axios';
 
 export default {
-  emits: ['update-activity', 'delete-activity'],
+  emits: ["remove-shedule-cell"],
   props: {
     activity: {
       type: Object,
@@ -89,14 +103,8 @@ export default {
       }
     },
     handleConfirm() {
-      axios.delete(`http://127.0.0.1:8000/api/scheduler-activity/${this.activity.id}`)
-        .then(response => {
-          // this.$emit('delete-activity');
-          this.closeDialog();
-        })
-        .catch(error => {
-          console.error(error);
-        });
+      this.$emit('remove-shedule-cell', this.activity);
+      this.closeDialog();
     },
     closeDialog() {
       this.isDialogOpen = false;
@@ -108,13 +116,47 @@ export default {
 <style scoped>
 
 .cell {
-    display: flex;
-    gap: 10px;
-    width: fit-content;
-    justify-content: center;
-    color: white;
-    padding: 15px 10px;
-    border-radius: 20px;
+  position: relative;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  justify-content: center;
+  color: white;
+  padding: 10px;
+  border-radius: 20px;
+}
+
+.tooltip {
+  position: absolute;
+  bottom: 105%;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: white;
+  color: black;
+  border: 1px solid rgb(0, 0, 0, 0.2);
+  border-radius: 4px;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  z-index: 3;
+}
+
+.tooltip > div {
+  display: flex;
+  gap: 5px;
+}
+
+
+.tooltip > div > p:first-child {
+  font-weight: 700;
+}
+
+.tooltip > div > p{
+  margin: 0;
+}
+
+
+.cell:hover .tooltip {
+  opacity: 1;
 }
 
 .cell > div {
@@ -132,7 +174,7 @@ export default {
 }
 
 .var {
-    font-size: 28px;
+    font-size: 24px;
 }
 
 .custom-dialog {
