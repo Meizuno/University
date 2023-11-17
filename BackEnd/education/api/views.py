@@ -684,5 +684,21 @@ def get_guarantor_requests(request, subject_id):
     return Response({"data": serializer.data})
 
 
+@swagger_auto_schema(
+    method="get",
+    responses={
+        200: OK_200_RESPONSE_DEFAULT,
+        403: ERROR_403_RESPONSE_DEFAULT,
+        404: ERROR_404_RESPONSE_DEFAULT,
+    },
+)
+@api_view(["GET"])
+@handle_error
+def get_subject_activities(request, subject_id):
+    activities = Activity.objects.filter(
+        Q(subject__id=subject_id) & Q(time__isnull=False)
+    )
+    serializer = ReadActivitySerializer(activities, many=True)
+    return Response({"data": serializer.data})
 
 

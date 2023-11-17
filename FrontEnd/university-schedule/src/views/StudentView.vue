@@ -21,7 +21,7 @@
       </div>
     </div>
 
-    <DaysSchedule></DaysSchedule>
+    <Calendar style="margin-top: 10px"></Calendar>
 
   </div>
 
@@ -36,9 +36,10 @@ import ScheduleCell from "@/components/ScheduleCell.vue";
 import RegisterInstructorCard from "@/components/RegisterInstructorCard.vue";
 import GuarantRequest from "@/components/GuarantRequest.vue";
 import DaysSchedule from "@/components/DaysSchedule.vue";
+import Calendar from "@/components/Calendar.vue";
 
 export default {
-  components: {DaysSchedule, GuarantRequest, RegisterInstructorCard, ScheduleCell, Navigation},
+  components: {Calendar, DaysSchedule, GuarantRequest, RegisterInstructorCard, ScheduleCell, Navigation},
   data(){
     return{
       user: {},
@@ -129,7 +130,7 @@ export default {
   display: flex;
   flex-direction: column;
   width: 100%;
-  height: 110vh;
+  height: 90vh;
 }
 .range-picker{
   width: 100%;
@@ -137,7 +138,7 @@ export default {
   display: flex;
   justify-content: end;
   align-items: center;
-  margin-top: 10px;
+  margin-top: 30px;
 }
 .picker-data{
   display: flex;
