@@ -21,7 +21,12 @@
       </div>
     </div>
 
-    <Calendar style="margin-top: 10px"></Calendar>
+    <CalendarTest style="margin-top: 5px"
+                  :activities="activities"
+                  :key="calendarKey"
+                  :is-scheduler="false"
+    >
+    </CalendarTest>
 
   </div>
 
@@ -37,9 +42,10 @@ import RegisterInstructorCard from "@/components/RegisterInstructorCard.vue";
 import GuarantRequest from "@/components/GuarantRequest.vue";
 import DaysSchedule from "@/components/DaysSchedule.vue";
 import Calendar from "@/components/Calendar.vue";
+import CalendarTest from "@/components/CalendarTest.vue";
 
 export default {
-  components: {Calendar, DaysSchedule, GuarantRequest, RegisterInstructorCard, ScheduleCell, Navigation},
+  components: {CalendarTest, Calendar, DaysSchedule, GuarantRequest, RegisterInstructorCard, ScheduleCell, Navigation},
   data(){
     return{
       user: {},
@@ -51,6 +57,8 @@ export default {
       ],
       startDate: '18.09.2023',
       endDate: '24.09.2023',
+      activities: [],
+      calendarKey: 0,
     }
   },
 
@@ -58,26 +66,32 @@ export default {
     Authorization() {
       this.$router.push('/authorization');
     },
-    async getUser(){
+    getUserAndActivities(){
       try{
-        const token = localStorage.getItem('token');
+        const storedUser = localStorage.getItem('user');
+        if(storedUser){
+          this.user = JSON.parse(storedUser);
+          this.getActivities();
+        }
 
-        const headers = {
-          'Authorization': 'Bearer ' + token,
-        };
-        axios.get('http://127.0.0.1:8000/api/my-info', {headers:headers})
-            .then(response => {
-              console.log('Ответ сервера:', response.data);
-              this.user = response.data;
-              localStorage.setItem('user', JSON.stringify(this.user));
-
-            })
-            .catch(error => {
-              console.error('Error send request');
-            });
       }catch (error){
         console.log(error);
       }
+    },
+    updateKey(){
+      this.calendarKey += 1;
+    },
+    getActivities(){
+      const date_from = this.convertDate(this.startDate);
+      const date_to = this.convertDate(this.endDate);
+      axios.get(`http://127.0.0.1:8000/api/student_activities/${this.user.id}?date_from=${date_from}&date_to=${date_to}`)
+          .then(response=>{
+            this.activities = response.data.data;
+            this.updateKey();
+          })
+          .catch(e=>{
+            console.log(e);
+          })
     },
     formatDate(date) {
       const day = date.getDate();
@@ -98,6 +112,7 @@ export default {
 
       this.startDate = this.formatDate(start);
       this.endDate = this.formatDate(end);
+      this.getActivities();
     },
     decreaseDate() {
       const startDateArr = this.startDate.split('.').map(Number);
@@ -111,10 +126,16 @@ export default {
 
       this.startDate = this.formatDate(start);
       this.endDate = this.formatDate(end);
+      this.getActivities();
+    },
+    convertDate(inputDate) {
+      const [day, month, year] = inputDate.split('.');
+      return `${year}-${month.padStart(2, '0')}-${day.padStart(2, '0')}`;
     },
   },
   mounted() {
-    this.getUser();
+    this.getUserAndActivities();
+
   },
 
 }

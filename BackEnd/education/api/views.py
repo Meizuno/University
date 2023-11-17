@@ -8,6 +8,7 @@ from education.models import *
 from education.api.serializers import *
 from education.api.doc_responses import *
 from django.db.models import Q
+from datetime import datetime
 
 
 @swagger_auto_schema(
@@ -408,6 +409,14 @@ def register_subject(request, user_id, subject_id):
             )
 
         student_subject.delete()
+        # Delete registered activities
+        user = User.objects.get(id=user_id)
+        subject = Subject.objects.get(id=subject_id)
+
+        activities = subject.activity.all()
+        student_activities = StudentActivity.objects.filter(student=user, activity__in=activities)
+        student_activities.delete()
+
         return Response(
             {
                 "success": True,
@@ -702,3 +711,124 @@ def get_subject_activities(request, subject_id):
     return Response({"data": serializer.data})
 
 
+@swagger_auto_schema(
+    method="get",
+    responses={
+        200: OK_200_RESPONSE_DEFAULT,
+        403: ERROR_403_RESPONSE_DEFAULT,
+        404: ERROR_404_RESPONSE_DEFAULT,
+    },
+)
+@api_view(["GET"])
+@handle_error
+def get_student_activities_subject(request, student_id, subject_id):
+    student = User.objects.get(id=student_id)
+    activities = student.student_activity.filter(Q(subject__id=subject_id))
+    serializer = ReadActivitySerializer(activities, many=True)
+    return Response({"data": serializer.data})
+
+
+@swagger_auto_schema(
+    method="delete",
+    responses={
+        200: OK_200_RESPONSE_DEFAULT,
+        403: ERROR_403_RESPONSE_DEFAULT,
+        404: ERROR_404_RESPONSE_DEFAULT,
+    },
+)
+@swagger_auto_schema(
+    method="post",
+    responses={
+        200: OK_200_RESPONSE_DEFAULT,
+        403: ERROR_403_RESPONSE_DEFAULT,
+        404: ERROR_404_RESPONSE_DEFAULT,
+    },
+)
+@api_view(["POST", "DELETE"])
+@handle_error
+def student_register_activity(request, student_id, activity_id):
+    if request.method == "POST":
+        try:
+            User.objects.get(id=student_id)
+            Activity.objects.get(id=activity_id)
+
+        except User.DoesNotExist or Activity.DoesNotExist:
+            return Response(
+                {
+                    "success": False,
+                    "error": "Student or Activity does not exist.",
+
+                }, status=status.HTTP_400_BAD_REQUEST
+            )
+
+        StudentActivity.objects.create(
+            student_id=student_id,
+            activity_id=activity_id,
+        )
+
+        return Response({"success": True, "errors": None})
+
+    elif request.method == "DELETE":
+
+        student_activity = StudentActivity.objects.filter(
+            student_id=student_id,
+            activity_id=activity_id,
+        )
+
+        if not student_activity.exists():
+            return Response(
+                {
+                    "success": False,
+                    "errors": "Student didn't register this activity.",
+                }
+            )
+
+        student_activity.delete()
+        return Response(
+            {
+                "success": True,
+                "errors": None,
+            }
+        )
+
+
+@swagger_auto_schema(
+    method="get",
+    responses={
+        200: OK_200_RESPONSE_SUBJECT,
+        403: ERROR_403_RESPONSE_DEFAULT,
+    },
+)
+@api_view(["GET"])
+@handle_error
+def get_student_activities(request, student_id):
+    student = User.objects.get(id=student_id)
+    # params = request.GET.dict()
+    # activities = student.student_activity.filter(**params)
+    date_from = request.GET.get("date_from")
+    date_to = request.GET.get("date_to")
+
+    def get_week_number(date):
+        return datetime.strptime(date, "%Y-%m-%d").isocalendar()[1]
+
+    activities = student.student_activity.all()
+
+    if date_from and date_to:
+        activities = activities.filter(date_from__lte=date_to, date_to__gte=date_from)
+
+        week_number_from = get_week_number(date_from)
+
+        for activity in activities:
+            repetition_name = activity.activity_repetition.name
+
+            if repetition_name in ['Every week', 'One time']:
+                continue
+
+            if (repetition_name == 'Even week' and week_number_from % 2 == 0) or \
+                    (repetition_name == 'Odd week' and week_number_from % 2 != 0):
+                continue
+            else:
+                activities = activities.exclude(id=activity.id)
+
+    serializer = ReadActivitySerializer(activities, many=True)
+    return Response({"data": serializer.data})

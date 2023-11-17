@@ -34,5 +34,11 @@ urlpatterns = [
     path("get_requests/<int:subject_id>", get_guarantor_requests),
     # Get all schedule subject activities
     path("subject_activities/<int:subject_id>", get_subject_activities),
+    # Get all student activities in subject
+    path("student_activities_subject/<int:student_id>/<int:subject_id>", get_student_activities_subject),
+    # Student register activity
+    path("student_register_activity/<int:student_id>/<int:activity_id>", student_register_activity),
+    # Get all student activities
+    path("student_activities/<int:student_id>", get_student_activities),
 
 ]

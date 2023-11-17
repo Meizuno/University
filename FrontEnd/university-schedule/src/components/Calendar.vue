@@ -39,7 +39,8 @@
                     <div v-for="element in sub_mon" :style="{ 'grid-column': element.from + ' / ' + element.to }">
                         <ScheduleCell
                             :activity="element.activity"
-                            :isScheduler="true"
+                            :isScheduler="isScheduler"
+                            :state="'unregistered'"
                             @remove-shedule-cell="handleRemoveScheduleCell"
                         />
                     </div>
@@ -63,6 +64,10 @@ export default {
             type: Array,
             default: [],
         },
+        isScheduler:{
+          type: Boolean,
+          default: false,
+        }
     },
     data() {
         return {

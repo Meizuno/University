@@ -1,45 +1,35 @@
 <template>
-    <div class="cell" :style="colors.outside" @click="handleClick" :class="{ clickable: isScheduler }">
-      <div class="tooltip"> 
-        <div v-if="activity.subject.code">
-          <p>Code:</p>
-          <p>{{ activity.subject.code }}</p>
-        </div>
-        <div v-if="activity.activity_type">
-          <p>Type:</p>
-          <p>{{ activity.activity_type.name }}</p>
-        </div>
-        <div v-if="activity.instruktor">
-          <p>Code:</p>
-          <p>{{ activity.instruktor.first_name + activity.instruktor.last_name }}</p>
-        </div>
+  <div class="cell" :style="colors.outside" @click="changeActivity">
+    <div class="tooltip">
+      <div v-if="activity.subject.code">
+        <p>Code:</p>
+        <p>{{ activity.subject.code }}</p>
       </div>
-        <div :style="colors.inside">
-            <p :style="colors.title">Subject</p>
-            <p class="var">{{ activity.subject.code }}</p>
-        </div>
-        <div :style="colors.inside">
-            <p :style="colors.title">Room</p>
-            <p class="var">{{ activity.room.number }}</p>
-        </div>
-    </div>
-
-    <div v-if="isDialogOpen" class="custom-dialog">
-      <p>Do you want to delete activity from schudule?</p>
-      <div>
-        <button @click="handleConfirm">Delete</button>
-        <button @click="closeDialog">Cancel</button>
+      <div v-if="activity.activity_type">
+        <p>Type:</p>
+        <p>{{ activity.activity_type.name }}</p>
+      </div>
+      <div v-if="activity.instruktor">
+        <p>Code:</p>
+        <p>{{ activity.instruktor.first_name + activity.instruktor.last_name }}</p>
       </div>
     </div>
+    <div :style="colors.inside">
+      <p :style="colors.title">Subject</p>
+      <p class="var">{{ activity.subject.code }}</p>
+    </div>
+    <div :style="colors.inside">
+      <p :style="colors.title">Room</p>
+      <p class="var">{{ activity.room.number }}</p>
+    </div>
+  </div>
 
-    <div v-if="isDialogOpen" class="overlay"></div>
 </template>
 
 <script>
 import axios from 'axios';
 
 export default {
-  emits: ["remove-shedule-cell"],
   props: {
     activity: {
       type: Object,
@@ -107,23 +97,19 @@ export default {
           break;
         case "registered":
           this.colors.outside.opacity = 1;
-          this.colors.outside['border'] = '3px solid green';
+          this.colors.outside['border'] = '4px solid green';
           break;
         default:
           break;
       }
     },
-    handleClick() {
-      if (this.isScheduler) {
-        this.isDialogOpen = true;
+    changeActivity() {
+      if (this.state === 'unregistered') {
+        this.$emit('register_activity', this.activity);
       }
-    },
-    handleConfirm() {
-      this.$emit('remove-shedule-cell', this.activity);
-      this.closeDialog();
-    },
-    closeDialog() {
-      this.isDialogOpen = false;
+      else if(this.state === 'registered'){
+        this.$emit('unregister_activity', this.activity);
+      }
     },
   }
 };
@@ -140,6 +126,7 @@ export default {
   color: white;
   padding: 10px;
   border-radius: 20px;
+  cursor: pointer;
 }
 
 .tooltip {
@@ -176,21 +163,21 @@ export default {
 }
 
 .cell > div {
-    text-align: center;
-    padding: 3px 10px;
-    border-radius: 10px;
+  text-align: center;
+  padding: 3px 10px;
+  border-radius: 10px;
 }
 
 .cell > div > p:first-child {
-    font-size: 12px;
+  font-size: 12px;
 }
 
 .cell > div > p {
-    margin: 0;
+  margin: 0;
 }
 
 .var {
-    font-size: 24px;
+  font-size: 24px;
 }
 
 .custom-dialog {

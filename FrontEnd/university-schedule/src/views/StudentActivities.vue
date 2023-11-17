@@ -23,10 +23,14 @@
       </div>
 
     </div>
-    <Calendar style="margin-top: 5px"
-              :activities="activities"
-              :key="calendarKey">
-    </Calendar>
+    <CalendarTest style="margin-top: 5px"
+                  :activities="activities"
+                  :key="calendarKey"
+                  :is-scheduler="false"
+                  @register_activity="registerActivity"
+                  @unregister_activity="unregisterActivity"
+    >
+    </CalendarTest>
   </div>
 
 </template>
@@ -35,9 +39,10 @@
 import Navigation from "@/components/Navigation.vue";
 import axios from "axios";
 import Calendar from "@/components/Calendar.vue";
+import CalendarTest from "@/components/CalendarTest.vue";
 
 export default {
-  components: {Calendar, Navigation},
+  components: {CalendarTest, Calendar, Navigation},
   data(){
     return{
       user: {},
@@ -51,15 +56,34 @@ export default {
       selectedSubject: 0,
       activities: [],
       calendarKey: 0,
+      registeredActivities: [],
 
     }
   },
   methods: {
+    registerActivity(activity){
+      axios.post(`http://127.0.0.1:8000/api/student_register_activity/${this.user.id}/${activity.id}`)
+          .then(response=>{
+            this.getStudentActivities();
+          })
+          .catch(e=>{
+            console.log(e);
+          })
+    },
+    unregisterActivity(activity){
+      axios.delete(`http://127.0.0.1:8000/api/student_register_activity/${this.user.id}/${activity.id}`)
+          .then(response=>{
+            this.getStudentActivities();
+          })
+          .catch(e=>{
+            console.log(e);
+          })
+    },
     async getScheduleActivities(subjectId){
       await axios.get(`http://127.0.0.1:8000/api/subject_activities/${subjectId}`)
           .then(response=>{
             this.activities = response.data.data;
-            this.updateCalendarKey();
+            this.getStudentActivities();
           })
           .catch(e=>{
             console.log(e);
@@ -67,6 +91,14 @@ export default {
     },
     updateCalendarKey() {
       this.calendarKey += 1;
+    },
+    activityTypes(){
+      this.activities.forEach(activity => {
+        const registeredActivity = this.registeredActivities.find(
+            registered => registered.id === activity.id
+        );
+        activity.regtype = registeredActivity ? 'registered' : 'unregistered';
+      });
     },
     getUserAndSubjects(){
       try{
@@ -89,10 +121,21 @@ export default {
         console.log(error);
       }
     },
+    async getStudentActivities(){
+      await axios.get(`http://127.0.0.1:8000/api/student_activities_subject/${this.user.id}/${this.selectedSubject}`)
+          .then(response=>{
+            this.registeredActivities = response.data.data;
+            this.activityTypes();
+            this.updateCalendarKey();
+          })
+          .catch(e=>{
+            console.log(e);
+          })
+    }
   },
   watch: {
-    selectedSubject(newValue, oldValue) {
-        this.getScheduleActivities(newValue);
+    async selectedSubject(newValue, oldValue) {
+        await this.getScheduleActivities(newValue);
     },
   },
   mounted() {
