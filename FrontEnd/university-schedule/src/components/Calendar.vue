@@ -100,7 +100,8 @@ export default {
 
                     for (const sub_mon of result[activity.day]) {
                         for (const element of sub_mon) {
-                            if ((from > element.from && from < element.to) || (to > element.from && to < element.to)){
+                            push = true;
+                            if ((from >= element.from && from < element.to) || (to > element.from && to <= element.to)){
                                 push = false;
                                 break;
                             }
@@ -117,6 +118,7 @@ export default {
                     }
                 }
             }
+            // console.log(result);
             this.activitiesInCalendar = result;
         },
         handleRemoveScheduleCell(activity){
