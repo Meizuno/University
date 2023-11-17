@@ -7,6 +7,7 @@ import StudentSubjects from "@/views/StudentSubjects.vue";
 import GuarantorView from "@/views/GuarantorView.vue";
 import GuarantorInstructors from "@/views/GuarantorInstructors.vue";
 import GuarantorActivities from "@/views/GuarantorActivities.vue";
+import StudentActivities from "@/views/StudentActivities.vue";
 import Admin from "@/views/Admin.vue";
 
 const router = createRouter({
@@ -32,6 +33,10 @@ const router = createRouter({
     {
       path: '/student/subjects',
       component: StudentSubjects,
+    },
+    {
+      path: '/student/activities',
+      component: StudentActivities,
     },
     {
       path: '/guarantor',
