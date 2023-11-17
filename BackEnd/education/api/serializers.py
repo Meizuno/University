@@ -114,7 +114,10 @@ class ActivityInstructorSerializer(serializers.Serializer):
 
 class ActivitySchedulerSerializer(serializers.Serializer):
     room_id = serializers.IntegerField(validators=[MinValueValidator(1)])
-    date_time = serializers.DateTimeField()
+    time = serializers.TimeField(
+        help_text="Format HH:MM"
+    )
+    day = serializers.CharField(max_length=3)
 
 
 class RegisterInstructorSerializer(serializers.Serializer):

@@ -8,65 +8,25 @@
 
   </navigation>
   <div class="main-container">
-    <div class="schedule">
-      <div class="time-div">
-        <div>8 am</div>
-        <div>9 am</div>
-        <div>10 am</div>
-        <div>11 am</div>
-        <div>12 am</div>
-        <div>13 am</div>
-        <div>14 am</div>
-        <div>15 am</div>
-        <div>16 am</div>
-      </div>
-      <div class="days-div">
-        <div class="day-cell">
-          <div>Monday</div>
-          <div>dd.mm</div>
-        </div>
-        <div class="day-cell">
-          <div >Tuesday</div>
-          <div>dd.mm</div>
-        </div>
-        <div class="day-cell">
-          <div>Wednesday</div>
-          <div>dd.mm</div>
-        </div>
-        <div class="day-cell">
-          <div>Thursday</div>
-          <div>dd.mm</div>
-        </div>
-        <div class="day-cell">
-          <div>Friday</div>
-          <div>dd.mm</div>
-        </div>
-      </div>
 
-      <div class="Monday">
-        <div class="lecture_two_hours" style="grid-column-start: 2;">
-          <!--<schedule-cell></schedule-cell> -->
+    <div class="range-picker">
+      <div class="picker-data">
+        <div class="date-range">
+          {{ startDate }} - {{ endDate }}
         </div>
-
-        <div class="lecture_two_hours" style="grid-column-start: 6;">
-          IMS Lecture
-        </div>
-      </div>
-      <div class="Tuesday">
-        <div class="lecture_two_hours" style="grid-column-start: 3; background: #FFB13B">
-          IMP Exercise
+        <div class="arrow-buttons">
+          <button @click="decreaseDate()" class="bttn">←</button>
+          <button @click="increaseDate()" class="bttn">→</button>
         </div>
       </div>
-      <div class="Wednesday"> </div>
-      <div class="Thursday">
-        <div class="lecture_two_hours" style="grid-column-start: 2; background: #FFB13B">
-          IZP Exercise
-        </div></div>
-      <div class="Friday"> </div>
-
     </div>
+
+    <DaysSchedule></DaysSchedule>
+
   </div>
-  <guarant-request></guarant-request>
+
+
+
 </template>
 
 <script>
@@ -75,9 +35,10 @@ import axios from "axios";
 import ScheduleCell from "@/components/ScheduleCell.vue";
 import RegisterInstructorCard from "@/components/RegisterInstructorCard.vue";
 import GuarantRequest from "@/components/GuarantRequest.vue";
+import DaysSchedule from "@/components/DaysSchedule.vue";
 
 export default {
-  components: {GuarantRequest, RegisterInstructorCard, ScheduleCell, Navigation},
+  components: {DaysSchedule, GuarantRequest, RegisterInstructorCard, ScheduleCell, Navigation},
   data(){
     return{
       user: {},
@@ -86,7 +47,9 @@ export default {
         {text:'Schedule', class:'selected', route:'/student'},
         {text:'Subjects', class:'not-selected', route:'/student/subjects'},
         {text:'Activities', class:'not-selected', route:'/student/activities'},
-      ]
+      ],
+      startDate: '18.09.2023',
+      endDate: '24.09.2023',
     }
   },
 
@@ -115,10 +78,43 @@ export default {
         console.log(error);
       }
     },
+    formatDate(date) {
+      const day = date.getDate();
+      const month = date.getMonth() + 1;
+      const year = date.getFullYear();
+
+      return `${day < 10 ? '0' : ''}${day}.${month < 10 ? '0' : ''}${month}.${year}`;
+    },
+    increaseDate() {
+      const startDateArr = this.startDate.split('.').map(Number);
+      const endDateArr = this.endDate.split('.').map(Number);
+
+      const start = new Date(startDateArr[2], startDateArr[1] - 1, startDateArr[0]);
+      const end = new Date(endDateArr[2], endDateArr[1] - 1, endDateArr[0]);
+
+      start.setDate(start.getDate() + 7);
+      end.setDate(end.getDate() + 7);
+
+      this.startDate = this.formatDate(start);
+      this.endDate = this.formatDate(end);
+    },
+    decreaseDate() {
+      const startDateArr = this.startDate.split('.').map(Number);
+      const endDateArr = this.endDate.split('.').map(Number);
+
+      const start = new Date(startDateArr[2], startDateArr[1] - 1, startDateArr[0]);
+      const end = new Date(endDateArr[2], endDateArr[1] - 1, endDateArr[0]);
+
+      start.setDate(start.getDate() - 7);
+      end.setDate(end.getDate() - 7);
+
+      this.startDate = this.formatDate(start);
+      this.endDate = this.formatDate(end);
+    },
   },
   mounted() {
     this.getUser();
-  }
+  },
 
 }
 </script>
@@ -129,74 +125,49 @@ export default {
   margin-bottom: 0;
 }
 .main-container{
-  justify-content: center;
+  align-items: center;
   display: flex;
+  flex-direction: column;
   width: 100%;
-  height: 90vh;
+  height: 110vh;
 }
-.schedule{
+.range-picker{
+  width: 100%;
+  height: 40px;
+  display: flex;
+  justify-content: end;
+  align-items: center;
   margin-top: 10px;
-  display: grid;
-  grid-template-columns: repeat(10, 1fr);
-  grid-auto-rows: minmax(100px, auto);
-  width: 95%;
-  min-height: 90%;
-  height: fit-content;
-  border: 4px solid #151832;
+}
+.picker-data{
+  display: flex;
   background: white;
+  align-items: center;
+  height: 100%;
+  width: 300px;
+  border: 3px solid black;
   border-radius: 10px;
-  padding-bottom: 10px;
+  margin-right: 40px;
 }
-.time-div{
+.date-range{
+  margin-right: 15px;
+  margin-left: 15px;
+  font-size: 16px;
   font-weight: bold;
-  display: grid;
-  grid-template-columns: repeat(9,1fr);
-  align-items: center;
-  justify-items: center;
-  grid-column-start: 2;
-  grid-column-end: 11;
-  border-bottom: 2px solid rgba(0, 0, 0, 0.1);
 }
-.days-div{
+.arrow-buttons{
+  margin-right: 5px;
   display: flex;
-  justify-content: space-around;
-  align-items: center;
-  flex-direction: column;
-  grid-column-start: 1;
-  grid-row-start: 2;
-  grid-row-end: 7;
-}
-.day-cell{
-  display: flex;
-  flex-direction: column;
-  font-weight: bold;
-  justify-content: center;
-  align-items: center;
-}
-.Thursday,
-.Friday,
-.Wednesday,
-.Tuesday,
-.Monday{
-  display: grid;
-  grid-template-columns: repeat(9,1fr);
-
-  grid-column-start: 2;
-  grid-column-end: 11;
-
-  border-bottom: 2px solid rgba(0, 0, 0, 0.1);
-  align-items: center;
+  justify-content: space-between;
+  margin-left: auto;
 
 }
+.bttn{
+  margin-right: 10px;
+  border: 3px solid darkred;
+  cursor: pointer;
+  height: 25px;
+  width: 32px;
 
-.lecture_two_hours{
-  display: flex;
-  justify-content: center;
-  min-height: 90px;
-  align-items: center;
-  background: #84D296;
-  border-radius: 20px;
-  grid-column-end: span 2;
 }
-
 </style>
