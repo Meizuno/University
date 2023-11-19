@@ -2,12 +2,17 @@
   <navigation
       class="nav-bar"
       :username="'test username'"
-      :status="'guarantor'"
+      :status="`guarantor ${guarantorSubject.code}`"
       :buttons="buttons"
   >
   </navigation>
   <div class="main-container">
-    <DaysSchedule></DaysSchedule>
+    <CalendarTest
+        style="margin-top: 5px"
+        :activities="activities"
+        :key="calendarKey"
+        :is-scheduler="false"
+    ></CalendarTest>
   </div>
 </template>
 
@@ -15,9 +20,10 @@
 import Navigation from "@/components/Navigation.vue";
 import DaysSchedule from "@/components/DaysSchedule.vue";
 import axios from "axios";
+import CalendarTest from "@/components/CalendarTest.vue";
 
 export default {
-  components: {DaysSchedule, Navigation},
+  components: {CalendarTest, DaysSchedule, Navigation},
   data(){
     return{
       buttons: [
@@ -30,17 +36,24 @@ export default {
 
       },
       guarantorSubject : {},
+      activities: [],
+      calendarKey: 0,
     }
   },
 
   methods: {
-    async getGuarantorSubject(){
+    async getGuarantorSubjectAndActivities(){
       try {
         // change to user.id
         axios.get("http://127.0.0.1:8000/api/subject?guarantor_id=2")
             .then(response => {
-              this.guarantorSubject = response.data.data;
+              this.guarantorSubject = response.data.data[0];
               localStorage.setItem('subject', JSON.stringify(this.guarantorSubject));
+              axios.get(`http://127.0.0.1:8000/api/subject_activities/${this.guarantorSubject.id}`)
+                  .then(response=>{
+                    this.activities = response.data.data;
+                    this.updateKey();
+                  })
             })
             .catch(error => {
               console.error('Error response: ', error);
@@ -48,24 +61,23 @@ export default {
       }catch (e) {
         console.log(e);
       }
+    },
+    updateKey(){
+      this.calendarKey += 1;
     }
   },
   mounted() {
-    this.getGuarantorSubject();
+    this.getGuarantorSubjectAndActivities();
   },
 }
 </script>
 
 <style scoped>
 .main-container{
-  justify-content: center;
+  justify-content: start;
+  flex-direction: column;
   display: flex;
   width: 100%;
   height: 90vh;
-}
-.test{
-  height: 100%;
-  width: 100%;
-  background: #3c763d;
 }
 </style>

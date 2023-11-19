@@ -2,7 +2,7 @@
 
   <navigation class="nav-bar"
               :username="user.username"
-              :status="'student'"
+              :status="`instructor`"
               :buttons="buttons"
   ></navigation>
   <div class="main-container">
@@ -48,10 +48,9 @@ export default {
       user: {},
       registeredSubjects: [],
       buttons: [
-        {text:'Home', class:'not-selected', route: '/'},
-        {text:'Schedule', class:'not-selected', route:'/student'},
-        {text:'Subjects', class:'not-selected', route:'/student/subjects'},
-        {text:'Activities', class:'selected', route:'/student/activities'},
+        {text: 'Home', class: 'not-selected', route: '/'},
+        {text: 'Schedule', class: 'not-selected', route: '/instructor'},
+        {text: 'Activities', class: 'selected', route: '/instructor/activities'},
       ],
       selectedSubject: 0,
       activities: [],
@@ -62,28 +61,38 @@ export default {
   },
   methods: {
     registerActivity(activity){
-      axios.post(`http://127.0.0.1:8000/api/student_register_activity/${this.user.id}/${activity.id}`)
+      // set to dynamic user
+      axios.post(`http://127.0.0.1:8000/api/instructor_register_activity/5/${activity.id}`)
           .then(response=>{
-            this.getStudentActivities();
+            this.getInstructorActivities();
           })
           .catch(e=>{
             console.log(e);
           })
     },
     unregisterActivity(activity){
-      axios.delete(`http://127.0.0.1:8000/api/student_register_activity/${this.user.id}/${activity.id}`)
+      axios.delete(`http://127.0.0.1:8000/api/instructor_register_activity/5/${activity.id}`)
           .then(response=>{
-            this.getStudentActivities();
+            this.getInstructorActivities();
           })
           .catch(e=>{
             console.log(e);
           })
     },
     async getScheduleActivities(subjectId){
-      await axios.get(`http://127.0.0.1:8000/api/subject_activities/${subjectId}`)
+      // instructor should be NULL
+      // await axios.get(`http://127.0.0.1:8000/api/subject_activities/${subjectId}`)
+      //     .then(response=>{
+      //       this.activities = response.data.data;
+      //       this.getInstructorActivities();
+      //     })
+      //     .catch(e=>{
+      //       console.log(e);
+      //     })
+      await axios.get(`http://127.0.0.1:8000/api/instructor_free_activities/${subjectId}`)
           .then(response=>{
             this.activities = response.data.data;
-            this.getStudentActivities();
+            this.getInstructorActivities();
           })
           .catch(e=>{
             console.log(e);
@@ -102,41 +111,52 @@ export default {
     },
     getUserAndSubjects(){
       try{
-        const storedUser = localStorage.getItem('user');
-        if(storedUser){
-          this.user = JSON.parse(storedUser);
-          try{
-            axios.get(`http://127.0.0.1:8000/api/student_subjects/${this.user.id}`)
-                .then(response => {
-                  this.registeredSubjects = response.data.data;
-                })
-                .catch(error => {
-                  console.error('Error response: ', error);
-                });
-          }catch (e) {
-            console.log(e);
-          }
+        // const storedUser = localStorage.getItem('user');
+        // if(storedUser){
+        //   this.user = JSON.parse(storedUser);
+        try{
+          // set to dynamic
+          axios.get('http://127.0.0.1:8000/api/subject?instructors=5')
+              .then(response => {
+                this.registeredSubjects = response.data.data;
+              })
+              .catch(error => {
+                console.error('Error response: ', error);
+              });
+        }catch (e) {
+          console.log(e);
         }
+
       } catch (error){
         console.log(error);
       }
     },
-    async getStudentActivities(){
-      // http://127.0.0.1:8000/api/activity?students=10&subject=3
-      await axios.get(`http://127.0.0.1:8000/api/student_activities_subject/${this.user.id}/${this.selectedSubject}`)
+    async getInstructorActivities(){
+      await axios.get(`http://127.0.0.1:8000/api/activity?instructor=5&subject=${this.selectedSubject}`)
           .then(response=>{
             this.registeredActivities = response.data.data;
+            this.registeredActivities.forEach(activity => {
+              if (!this.activities.some(item => item.id === activity.id)) {
+                this.activities.push(activity);
+              }
+            });
             this.activityTypes();
             this.updateCalendarKey();
           })
-          .catch(e=>{
-            console.log(e);
-          })
+      // await axios.get(`http://127.0.0.1:8000/api/student_activities_subject/${this.user.id}/${this.selectedSubject}`)
+      //     .then(response=>{
+      //       this.registeredActivities = response.data.data;
+      //       this.activityTypes();
+      //       this.updateCalendarKey();
+      //     })
+      //     .catch(e=>{
+      //       console.log(e);
+      //     })
     }
   },
   watch: {
     async selectedSubject(newValue, oldValue) {
-        await this.getScheduleActivities(newValue);
+      await this.getScheduleActivities(newValue);
     },
   },
   mounted() {
