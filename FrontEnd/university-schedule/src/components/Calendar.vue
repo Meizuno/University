@@ -40,7 +40,6 @@
                         <ScheduleCell
                             :activity="element.activity"
                             :isScheduler="isScheduler"
-                            :state="'unregistered'"
                             @remove-shedule-cell="handleRemoveScheduleCell"
                         />
                     </div>

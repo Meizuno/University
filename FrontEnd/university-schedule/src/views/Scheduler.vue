@@ -18,6 +18,7 @@
             ref="calendarRef"
             v-if="dataForCalendarReceived"
             :activities="activitiesResolved"
+            :is-scheduler="true"
             @remove-from-calendar="HandleRemoveFromCalendar"
         />
     </main>
