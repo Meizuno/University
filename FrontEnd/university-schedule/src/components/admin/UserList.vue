@@ -1,6 +1,7 @@
 <template>
     <div class="list">
-        <p v-for="user in userArray">{{ user.username }}</p>
+        <div v-for="user in userArray" @click="EditUser(user)">{{ user.username }}</div>
+        <div @click="CreateUser">New User</div>
     </div>
 </template>
 
@@ -13,6 +14,14 @@ export default {
             type: Array,
             default: [],
         }
+    },
+    methods: {
+        CreateUser() {
+            this.$emit("new-user");
+        },
+        EditUser(user){
+            this.$emit("edit-user", user);
+        }
     }
 }
 
@@ -23,6 +32,22 @@ export default {
 .list {
     display: flex;
     flex-direction: column;
+}
+
+.list > div {
+    border: 1px solid rgb(0, 0, 0, 0.2);
+    border-radius: 10px;
+    padding: 10px;
+    margin: 5px 10px;
+}
+
+.list > div:last-child {
+    font-weight: 600;
+}
+
+.list > div:hover {
+    cursor: pointer;
+    background-color: rgb(0, 0, 0, 0.05);
 }
 
 </style>
