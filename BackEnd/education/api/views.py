@@ -834,3 +834,137 @@ def get_student_activities(request, student_id):
 
     serializer = ReadActivitySerializer(activities, many=True)
     return Response({"data": serializer.data})
+
+
+@swagger_auto_schema(
+    method="delete",
+    responses={
+        200: OK_200_RESPONSE_DEFAULT,
+        403: ERROR_403_RESPONSE_DEFAULT,
+        404: ERROR_404_RESPONSE_DEFAULT,
+    },
+)
+@swagger_auto_schema(
+    method="post",
+    responses={
+        200: OK_200_RESPONSE_DEFAULT,
+        403: ERROR_403_RESPONSE_DEFAULT,
+        404: ERROR_404_RESPONSE_DEFAULT,
+    },
+)
+@api_view(["POST", "DELETE"])
+@handle_error
+def instructor_register_activity(request, instructor_id, activity_id):
+    if request.method == "POST":
+        try:
+            instructor = User.objects.get(id=instructor_id)
+            activity = Activity.objects.get(id=activity_id)
+
+        except User.DoesNotExist or Activity.DoesNotExist:
+            return Response(
+                {
+                    "success": False,
+                    "error": "Instructor or Activity does not exist.",
+
+                }, status=status.HTTP_400_BAD_REQUEST
+            )
+
+        activity.instructor = instructor
+        activity.save()
+
+        return Response({"success": True, "errors": None})
+
+    elif request.method == "DELETE":
+        try:
+            activity = Activity.objects.get(id=activity_id)
+            instructor = User.objects.get(id=instructor_id)
+
+        except User.DoesNotExist or Activity.DoesNotExist:
+            return Response(
+                {
+                    "success": False,
+                    "error": "Instructor or Activity does not exist.",
+
+                }, status=status.HTTP_400_BAD_REQUEST
+
+            )
+
+        if activity.instructor == instructor:
+            activity.instructor = None
+            activity.save()
+            return Response(
+                {
+                    "success": True,
+                    "errors": None,
+                }
+            )
+        else:
+            return Response(
+                {
+                    "success": False,
+                    "error": "Instructor does not match.",
+                },
+                status=status.HTTP_400_BAD_REQUEST
+            )
+
+
+@swagger_auto_schema(
+    method="get",
+    responses={
+        200: OK_200_RESPONSE_SUBJECT,
+        403: ERROR_403_RESPONSE_DEFAULT,
+    },
+)
+@api_view(["GET"])
+@handle_error
+def get_instructor_free_activities(request, subject_id):
+    activities = Activity.objects.filter(
+        Q(subject__id=subject_id) &
+        Q(instructor__isnull=True) &
+        Q(time__isnull=False)
+    )
+
+    serializer = ReadActivitySerializer(activities, many=True)
+    return Response({"data": serializer.data})
+
+
+@swagger_auto_schema(
+    method="get",
+    responses={
+        200: OK_200_RESPONSE_SUBJECT,
+        403: ERROR_403_RESPONSE_DEFAULT,
+    },
+)
+@api_view(["GET"])
+@handle_error
+def get_instructor_activities(request, instructor_id):
+    instructor = User.objects.get(id=instructor_id)
+
+    date_from = request.GET.get("date_from")
+    date_to = request.GET.get("date_to")
+
+    def get_week_number(date):
+        return datetime.strptime(date, "%Y-%m-%d").isocalendar()[1]
+
+    activities = instructor.activity
+
+    if date_from and date_to:
+        activities = activities.filter(date_from__lte=date_to, date_to__gte=date_from)
+
+        week_number_from = get_week_number(date_from)
+
+        for activity in activities:
+            repetition_name = activity.activity_repetition.name
+
+            if repetition_name in ['Every week', 'One time']:
+                continue
+
+            if (repetition_name == 'Even week' and week_number_from % 2 == 0) or \
+                    (repetition_name == 'Odd week' and week_number_from % 2 != 0):
+                continue
+            else:
+                activities = activities.exclude(id=activity.id)
+
+    serializer = ReadActivitySerializer(activities, many=True)
+    return Response({"data": serializer.data})
+

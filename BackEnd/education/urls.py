@@ -40,5 +40,11 @@ urlpatterns = [
     path("student_register_activity/<int:student_id>/<int:activity_id>", student_register_activity),
     # Get all student activities
     path("student_activities/<int:student_id>", get_student_activities),
+    # Instructor register activity
+    path("instructor_register_activity/<int:instructor_id>/<int:activity_id>", instructor_register_activity),
+    # Instructor get free activities
+    path("instructor_free_activities/<int:subject_id>", get_instructor_free_activities),
+    # Instructor activities
+    path("instructor_activities/<int:instructor_id>", get_instructor_activities),
 
 ]
