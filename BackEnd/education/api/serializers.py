@@ -13,6 +13,7 @@ class PermissionSerializer(serializers.ModelSerializer):
 
 class ReadUserSerializer(serializers.ModelSerializer):
     permission = PermissionSerializer()
+
     class Meta:
         model = User
         fields = (
@@ -58,15 +59,17 @@ class RoomSerializer(serializers.Serializer):
 
 class ReadSubjectSerializer(serializers.ModelSerializer):
     guarantor = ReadUserSerializer()
+
     class Meta:
         model = Subject
-        fields = "__all__"
+        fields = ("id", "code", "name", "description", "guarantor")
 
 
-class SubjectSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Subject
-        fields = "__all__"
+class SubjectSerializer(serializers.Serializer):
+    code = serializers.CharField()
+    name = serializers.CharField()
+    description = serializers.CharField()
+    guarantor_id = serializers.IntegerField()
 
 
 class ReadActivityTypeSerializer(serializers.ModelSerializer):

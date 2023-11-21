@@ -8,13 +8,11 @@
             <p>Email:</p>
             <input type="email" v-model="user.email" />
         </div>
-        <div>
+        <div class="password">
             <p>Password:</p>
-            <div class="password-input">
-                <input :type="showPassword ? 'text' : 'password'" v-model="user.password" />
-                <img v-if="showPassword" @click="togglePasswordVisibility" src="../../assets/Eye.svg" alt="Hide Password" />
-                <img v-else @click="togglePasswordVisibility" src="../../assets/EyeOff.svg" alt="Show Password" />
-            </div>
+            <input class="password-input" :type="showPassword ? 'text' : 'password'" v-model="user.password" />
+            <img v-if="showPassword" @click="togglePasswordVisibility" src="../../assets/Eye.svg" alt="Hide Password" />
+            <img v-else @click="togglePasswordVisibility" src="../../assets/EyeOff.svg" alt="Show Password" />
         </div>
         <div>
             <p>First name:</p>
@@ -189,6 +187,10 @@ form > div > input {
   color: rgb(0, 0, 0, 0.5);
 }
 
+.password {
+    position: relative;
+}
+
 .password-input {
     display: flex;
     justify-content: space-between;
@@ -198,10 +200,12 @@ form > div > input {
     border-radius: 5px;
 }
 
-.password-input > input {
-    border: none;
-    font-size: 16px;
-    outline: none;
+.password > img {
+    position: absolute;
+    right: 0;
+    top: 50%;
+    transform: translateY(20%);
 }
+
 
 </style>

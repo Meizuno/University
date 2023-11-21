@@ -16,28 +16,39 @@
                 <CreateUser
                     v-if="permissions.length > 0 && isCerateUserOpen"
                     :permissions="permissions"
-                    @back="Back"
+                    @back="UserBack"
                     @create-user="CreateUser"
                 />
                 <UserUpdateDelete
                     v-if="Object.keys(user).length > 0 && permissions.length > 0 && isUpdateDeleteUserOpen"
                     :user="user"
                     :permissions="permissions"
-                    @back="Back"
+                    @back="UserBack"
                     @update-user="UpdateUser"
                     @delete-user="DeleteUser"
                 />
             </div>
             <div>
+                <h2>Subject</h2>
                 <SubjectList 
-                    v-if="subjectArray.length > 0"
+                    v-if="subjectArray.length > 0 && isSubjectListOpen"
                     :subjectArray="subjectArray"
+                    @new-subject="NewSubject"
+                    @edit-subject="EditSubject"
                 />
                 <CreateSubject
+                    v-if="Object.keys(subject).length > 0 && permissions.length > 0 && isCerateSubjectOpen"
+                    :guarantors="guarantors"
+                    @back="SubjectBack"
+                    @create-subject="CreateSubject"
                 />
                 <SubjectUpdateDelete
-                    v-if="Object.keys(user).length > 0 && permissions.length > 0"
+                    v-if="Object.keys(subject).length > 0 && permissions.length > 0 && isUpdateDeleteSubjectOpen"
                     :subject="subject"
+                    :guarantors="guarantors"
+                    @back="SubjectBack"
+                    @update-subject="UpdateSubject"
+                    @delete-subject="DeleteSubject"
                 />
             </div>
         </div>
@@ -59,7 +70,8 @@ import axios from 'axios';
 
 export default {
     emits: [
-        "new-user", "edit-user", "back", "create-user", "update-user", "delete-user"
+        "new-user", "edit-user", "back", "create-user", "update-user", "delete-user",
+        "new-subject", "edit-subject", "create-subject", "update-subject", "delete-subject"
     ],
     data() {
         return{
@@ -73,12 +85,18 @@ export default {
             user: {},
             permissions: [],
             userArray: [],
+            guarantors: [],
+
             isUserListOpen: true,
             isCerateUserOpen: false,
             isUpdateDeleteUserOpen: false,
 
             subjectArray: [],
             subject: {},
+
+            isSubjectListOpen: true,
+            isCerateSubjectOpen: false,
+            isUpdateDeleteSubjectOpen: false,
         }
     },
     components: {
@@ -103,13 +121,7 @@ export default {
             console.error(error);
         });
 
-        axios.get('http://127.0.0.1:8000/api/subject')
-        .then(response => {
-            this.subjectArray = response.data.data;
-        })
-        .catch(error => {
-            console.error(error);
-        });
+        this.GetSubjectList();
 
         axios.get('http://127.0.0.1:8000/api/subject/1')
         .then(response => {
@@ -124,12 +136,13 @@ export default {
             axios.get('http://127.0.0.1:8000/api/user')
             .then(response => {
                 this.userArray = response.data.data;
+                this.guarantors = this.userArray.filter(user => user.permission.level === 2);
             })
             .catch(error => {
                 console.error(error);
             });
         },
-        Back() {
+        UserBack() {
             this.isUserListOpen = true;
             this.isCerateUserOpen = false;
             this.isUpdateDeleteUserOpen = false;
@@ -177,7 +190,70 @@ export default {
             .catch(error => {
                 console.error(error);
             });
-        }
+        },
+
+        GetSubjectList() {
+            axios.get('http://127.0.0.1:8000/api/subject')
+            .then(response => {
+                this.subjectArray = response.data.data;
+            })
+            .catch(error => {
+                console.error(error);
+            });
+        },
+        SubjectBack() {
+            this.isSubjectListOpen = true;
+            this.isCerateSubjectOpen = false;
+            this.isUpdateDeleteSubjectOpen = false;
+        },
+        NewSubject() {
+            this.isSubjectListOpen = false;
+            this.isCerateSubjectOpen = true;
+            this.isUpdateDeleteSubjectOpen = false;
+        },
+        CreateSubject(subject) {
+            axios.post(`http://127.0.0.1:8000/api/subject`, subject)
+            .then(response => {
+                this.GetSubjectList();
+                this.isSubjectListOpen = true;
+                this.isCerateSubjectOpen = false;
+                this.isUpdateDeleteSubjectOpen = false;
+            })
+            .catch(error => {
+                console.error(error);
+            });
+        },
+        EditSubject(subject) {
+            this.subject = subject;
+            this.isSubjectListOpen = false;
+            this.isCerateSubjectOpen = false;
+            this.isUpdateDeleteSubjectOpen = true;
+        },
+        UpdateSubject(id, subject) {
+            axios.put(`http://127.0.0.1:8000/api/subject/${id}`, subject)
+            .then(response => {
+                this.GetSubjectList();
+                this.isSubjectListOpen = true;
+                this.isCerateSubjectOpen = false;
+                this.isUpdateDeleteSubjectOpen = false;
+            })
+            .catch(error => {
+                console.error(error);
+            });
+        },
+        DeleteSubject(id){
+            axios.delete(`http://127.0.0.1:8000/api/subject/${id}`)
+            .then(response => {
+                this.GetSubjectList();
+                this.isSubjectListOpen = true;
+                this.isCerateSubjectOpen = false;
+                this.isUpdateDeleteSubjectOpen = false;
+            })
+            .catch(error => {
+                console.error(error);
+            });
+        },
+
     }
 };
 </script>

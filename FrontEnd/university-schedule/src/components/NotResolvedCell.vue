@@ -68,7 +68,6 @@
 </template>
 
 <script>
-import axios from 'axios';
 
 export default {
   emits: ["add-to-calendar"],
