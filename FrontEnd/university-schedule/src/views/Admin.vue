@@ -37,18 +37,39 @@
                     @edit-subject="EditSubject"
                 />
                 <CreateSubject
-                    v-if="Object.keys(subject).length > 0 && permissions.length > 0 && isCerateSubjectOpen"
+                    v-if="Object.keys(subject).length > 0 && isCerateSubjectOpen"
                     :guarantors="guarantors"
                     @back="SubjectBack"
                     @create-subject="CreateSubject"
                 />
                 <SubjectUpdateDelete
-                    v-if="Object.keys(subject).length > 0 && permissions.length > 0 && isUpdateDeleteSubjectOpen"
+                    v-if="Object.keys(subject).length > 0 && isUpdateDeleteSubjectOpen"
                     :subject="subject"
                     :guarantors="guarantors"
                     @back="SubjectBack"
                     @update-subject="UpdateSubject"
                     @delete-subject="DeleteSubject"
+                />
+            </div>
+            <div>
+                <h2>Room</h2>
+                <RoomList 
+                    v-if="roomArray.length > 0 && isRoomListOpen"
+                    :roomArray="roomArray"
+                    @new-room="NewRoom"
+                    @edit-room="EditRoom"
+                />
+                <CreateRoom
+                    v-if="Object.keys(room).length > 0 && isCerateRoomOpen"
+                    @back="RoomBack"
+                    @create-room="CreateRoom"
+                />
+                <RoomUpdateDelete
+                    v-if="Object.keys(room).length > 0 && isUpdateDeleteRoomOpen"
+                    :room="room"
+                    @back="RoomBack"
+                    @update-room="UpdateRoom"
+                    @delete-room="DeleteRoom"
                 />
             </div>
         </div>
@@ -66,12 +87,17 @@ import SubjectList from '../components/admin/SubjectList.vue';
 import CreateSubject from '../components/admin/CreateSubject.vue';
 import SubjectUpdateDelete from '../components/admin/SubjectUpdateDelete.vue';
 
+import RoomList from '../components/admin/RoomList.vue';
+import CreateRoom from '../components/admin/CreateRoom.vue';
+import RoomUpdateDelete from '../components/admin/RoomUpdateDelete.vue';
+
 import axios from 'axios';
 
 export default {
     emits: [
         "new-user", "edit-user", "back", "create-user", "update-user", "delete-user",
-        "new-subject", "edit-subject", "create-subject", "update-subject", "delete-subject"
+        "new-subject", "edit-subject", "create-subject", "update-subject", "delete-subject",
+        "new-room", "edit-room", "create-room", "update-room", "delete-room"
     ],
     data() {
         return{
@@ -97,6 +123,13 @@ export default {
             isSubjectListOpen: true,
             isCerateSubjectOpen: false,
             isUpdateDeleteSubjectOpen: false,
+
+            roomArray: [],
+            room: {},
+
+            isRoomListOpen: true,
+            isCerateRoomOpen: false,
+            isUpdateDeleteRoomOpen: false,
         }
     },
     components: {
@@ -109,6 +142,10 @@ export default {
         SubjectList,
         CreateSubject,
         SubjectUpdateDelete,
+
+        RoomList,
+        CreateRoom,
+        RoomUpdateDelete
     },
     mounted() {
         this.GetUserList();
@@ -122,14 +159,7 @@ export default {
         });
 
         this.GetSubjectList();
-
-        axios.get('http://127.0.0.1:8000/api/subject/1')
-        .then(response => {
-            this.subject = response.data.data;
-        })
-        .catch(error => {
-            console.error(error);
-        });
+        this.GetRoomList();
     },
     methods: {
         GetUserList(){
@@ -254,6 +284,67 @@ export default {
             });
         },
 
+        GetRoomList() {
+            axios.get('http://127.0.0.1:8000/api/room')
+            .then(response => {
+                this.roomArray = response.data.data;
+            })
+            .catch(error => {
+                console.error(error);
+            });
+        },
+        RoomBack() {
+            this.isRoomListOpen = true;
+            this.isCerateRoomOpen = false;
+            this.isUpdateDeleteRoomOpen = false;
+        },
+        NewRoom() {
+            this.isRoomListOpen = false;
+            this.isCerateRoomOpen = true;
+            this.isUpdateDeleteRoomOpen = false;
+        },
+        CreateRoom(room) {
+            axios.post(`http://127.0.0.1:8000/api/room`, room)
+            .then(response => {
+                this.GetRoomList();
+                this.isRoomListOpen = true;
+                this.isCerateRoomOpen = false;
+                this.isUpdateDeleteRoomOpen = false;
+            })
+            .catch(error => {
+                console.error(error);
+            });
+        },
+        EditRoom(room) {
+            this.room = room;
+            this.isRoomListOpen = false;
+            this.isCerateRoomOpen = false;
+            this.isUpdateDeleteRoomOpen = true;
+        },
+        UpdateRoom(id, room) {
+            axios.put(`http://127.0.0.1:8000/api/room/${id}`, room)
+            .then(response => {
+                this.GetRoomList();
+                this.isRoomListOpen = true;
+                this.isCerateRoomOpen = false;
+                this.isUpdateDeleteRoomOpen = false;
+            })
+            .catch(error => {
+                console.error(error);
+            });
+        },
+        DeleteRoom(id){
+            axios.delete(`http://127.0.0.1:8000/api/room/${id}`)
+            .then(response => {
+                this.GetRoomList();
+                this.isRoomListOpen = true;
+                this.isCerateRoomOpen = false;
+                this.isUpdateDeleteRoomOpen = false;
+            })
+            .catch(error => {
+                console.error(error);
+            });
+        },
     }
 };
 </script>

@@ -44,16 +44,11 @@ class ReadRoomSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Room
-        fields = "__all__"
+        fields = ("id", "number", "description")
 
 
 class RoomSerializer(serializers.Serializer):
-    number = serializers.IntegerField(
-        validators=[
-            MinValueValidator(100),
-            MaxValueValidator(999),
-        ]
-    )
+    number = serializers.IntegerField()
     description = serializers.CharField(required=False)
 
 
