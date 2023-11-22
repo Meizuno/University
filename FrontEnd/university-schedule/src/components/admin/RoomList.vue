@@ -1,6 +1,6 @@
 <template>
     <div class="list">
-        <div v-for="room in roomArray" @click="EditRoom(room)">{{ room.number }}</div>
+        <div v-for="room in roomArray" @click="EditRoom(room)">Room №{{ room.number }}</div>
         <div @click="CreateRoom">New Room</div>
     </div>
 </template>
@@ -29,14 +29,12 @@ export default {
 
 
 <style scoped>
-.list {
-    display: flex;
-    flex-direction: column;
-}
 
 .list {
     display: flex;
     flex-direction: column;
+    max-height: 470px;
+    overflow: auto;
 }
 
 .list > div {

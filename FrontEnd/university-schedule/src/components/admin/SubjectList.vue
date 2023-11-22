@@ -1,6 +1,6 @@
 <template>
     <div class="list">
-        <div v-for="subject in subjectArray" @click="EditSubject(subject)">{{ subject.code }}</div>
+        <div v-for="subject in subjectArray" @click="EditSubject(subject)">{{ subject.code }} ({{ subject.name }})</div>
         <div @click="CreateSubject">New Subject</div>
     </div>
 </template>
@@ -29,14 +29,12 @@ export default {
 
 
 <style scoped>
-.list {
-    display: flex;
-    flex-direction: column;
-}
 
 .list {
     display: flex;
     flex-direction: column;
+    max-height: 470px;
+    overflow: auto;
 }
 
 .list > div {

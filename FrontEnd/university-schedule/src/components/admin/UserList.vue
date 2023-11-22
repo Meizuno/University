@@ -1,6 +1,6 @@
 <template>
     <div class="list">
-        <div v-for="user in userArray" @click="EditUser(user)">{{ user.username }}</div>
+        <div v-for="user in userArray" @click="EditUser(user)">{{user.first_name }} {{user.last_name }} ({{ user.username }})</div>
         <div @click="CreateUser">New User</div>
     </div>
 </template>
@@ -32,6 +32,8 @@ export default {
 .list {
     display: flex;
     flex-direction: column;
+    max-height: 470px;
+    overflow: auto;
 }
 
 .list > div {

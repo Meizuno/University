@@ -166,6 +166,20 @@ export default {
             axios.get('http://127.0.0.1:8000/api/user')
             .then(response => {
                 this.userArray = response.data.data;
+                this.userArray.sort((a, b) => {
+                    const nameA = a.first_name.toUpperCase();
+                    const nameB = b.first_name.toUpperCase();
+
+                    if (nameA < nameB) {
+                    return -1;
+                    }
+
+                    if (nameA > nameB) {
+                    return 1;
+                    }
+
+                    return 0;
+                });
                 this.guarantors = this.userArray.filter(user => user.permission.level === 2);
             })
             .catch(error => {
@@ -226,6 +240,20 @@ export default {
             axios.get('http://127.0.0.1:8000/api/subject')
             .then(response => {
                 this.subjectArray = response.data.data;
+                this.subjectArray.sort((a, b) => {
+                    const nameA = a.code.toUpperCase();
+                    const nameB = b.code.toUpperCase();
+
+                    if (nameA < nameB) {
+                    return -1;
+                    }
+
+                    if (nameA > nameB) {
+                    return 1;
+                    }
+
+                    return 0;
+                });
             })
             .catch(error => {
                 console.error(error);
@@ -288,6 +316,7 @@ export default {
             axios.get('http://127.0.0.1:8000/api/room')
             .then(response => {
                 this.roomArray = response.data.data;
+                this.roomArray.sort((a, b) => a.number - b.number);
             })
             .catch(error => {
                 console.error(error);
@@ -370,6 +399,7 @@ template {
 
 h2 {
     text-align: center;
+    margin: 10px;
 }
 
 </style>
