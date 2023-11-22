@@ -6,15 +6,15 @@
         <form action="" @submit.prevent>
           <h2 class="login_name">Login</h2>
           <div class="inputbox">
-            <input v-model="username" type="text" >
+            <input v-model="postData.username" type="text" >
             <label for="">Username</label>
           </div>
           <div class="inputbox">
-            <input v-model="password" type="password" >
+            <input v-model="postData.password" type="password" >
             <label for="">Password</label>
           </div>
           <div class="bttns">
-            <button class="home_bttn" @click="ToHome"> Home</button>
+            <button class="home_bttn" @click="ToHome">Home</button>
             <button class="login_bttn" @click="sendGetUser">Log in</button>
           </div>
 
@@ -34,42 +34,54 @@ export default {
 
   data(){
     return{
-      username: '',
-      password: '',
+      postData: {
+        username: '',
+        password: '',
+      }
     }
   },
   methods:{
-    sendGetUser: function () {
-      const postData = {
-        username: this.username,
-        password: this.password,
-      };
-
-      axios.post('http://127.0.0.1:8000/api/auth/token', postData)
+    sendGetUser() {
+      localStorage.clear();
+      axios.post('http://127.0.0.1:8000/api/auth/token', this.postData)
           .then(response => {
-            console.log('Server answer: token - ', response.data.access);
-            localStorage.setItem('token', response.data.access);
+            const token = response.data.access;
+            localStorage.setItem('token', 'Bearer ' + token);
             const headers = {
-              'Authorization': 'Bearer ' + response.data.access,
+              'Authorization': 'Bearer ' + token,
             };
             axios.get('http://127.0.0.1:8000/api/my-info', {headers:headers})
                 .then(response => {
-                  console.log('Ответ сервера:', response.data);
-                  localStorage.setItem('user', JSON.stringify(this.user));
-
+                  const user = response.data;
+                  localStorage.setItem('username', user.username);
+                  localStorage.setItem('status', user.permission.description);
+                  switch (user.permission.description) {
+                    case 'Admin':
+                      this.$router.push('/admin')
+                      break;
+                    case 'Guarantor':
+                      this.$router.push('/guarantor')
+                      break;
+                    case 'Instructor':
+                      this.$router.push('/instructor')
+                      break;
+                    case 'Scheduler':
+                      this.$router.push('/scheduler')
+                      break;
+                    case 'Student':
+                      this.$router.push('/student')
+                      break;
+                    default:
+                      break;
+                  }
                 })
                 .catch(error => {
-                  console.error('Error send request');
+                  console.error('Error get user data.');
                 });
-            this.$router.push('/student')
-
           })
           .catch(error => {
-            console.log("Wrong user or password");
-            console.error('Ошибка при отправке запроса');
+            console.log("Wrong user or password.");
           });
-      this.username = '';
-      this.password = '';
     },
     ToHome() {
       this.$router.push('/');

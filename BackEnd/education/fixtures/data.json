@@ -1,403 +1,194 @@
 [
     {
-        "model": "authorization.Permission",
-        "pk": 1,
-        "fields": {
-            "level": 1,
-            "description": "Admin"
-        }
+      "model": "authorization.permission",
+      "pk": 1,
+      "fields": {
+        "level": 1,
+        "description": "Admin"
+      }
     },
     {
-        "model": "authorization.Permission",
-        "pk": 2,
-        "fields": {
-            "level": 2,
-            "description": "Guarantor"
-        }
+      "model": "authorization.permission",
+      "pk": 2,
+      "fields": {
+        "level": 2,
+        "description": "Guarantor"
+      }
     },
     {
-        "model": "authorization.Permission",
-        "pk": 3,
-        "fields": {
-            "level": 3,
-            "description": "Instructor"
-        }
+      "model": "authorization.permission",
+      "pk": 3,
+      "fields": {
+        "level": 3,
+        "description": "Instructor"
+      }
     },
     {
-        "model": "authorization.Permission",
-        "pk": 4,
-        "fields": {
-            "level": 4,
-            "description": "Scheduler"
-        }
+      "model": "authorization.permission",
+      "pk": 4,
+      "fields": {
+        "level": 4,
+        "description": "Scheduler"
+      }
     },
     {
-        "model": "authorization.Permission",
-        "pk": 5,
-        "fields": {
-            "level": 5,
-            "description": "Student"
-        }
+      "model": "authorization.permission",
+      "pk": 5,
+      "fields": {
+        "level": 5,
+        "description": "Student"
+      }
+    },
+    {
+      "model": "authorization.user",
+      "pk": 1,
+      "fields": {
+        "password": "pbkdf2_sha256$600000$IAwfn3mf7647IQPraIN3Gi$NiAdHYOMJj9G1L93TP2skKn8a7XoOgPcJ4d0PFFm+ss=",
+        "username": "admin",
+        "first_name": "John",
+        "last_name": "Smith",
+        "email": "admin@gmail.com",
+        "permission": 1
+      }
+    },
+    {
+      "model": "authorization.user",
+      "pk": 3,
+      "fields": {
+        "password": "pbkdf2_sha256$600000$ucPXFj3WeIEtauuvAktaM0$XTsfkW26IZI4UK/XHMaoMHiFdkl3sZeTO0wnja0HmXU=",
+        "username": "guarantor",
+        "first_name": "Jan",
+        "last_name": "Novak",
+        "email": "guarantor@gmail.com",
+        "permission": 2
+      }
+    },
+    {
+      "model": "authorization.user",
+      "pk": 4,
+      "fields": {
+        "password": "pbkdf2_sha256$600000$aVGeYEm3q7VQ4fYjRQ98i8$3bmEtJpqXLV7ShEx5caT8Rb1OsZ5kYtP7VIO5xED6QU=",
+        "username": "johnson",
+        "first_name": "Alice",
+        "last_name": "Johnson",
+        "email": "johnson@gmail.com",
+        "permission": 2
+      }
+    },
+    {
+      "model": "authorization.user",
+      "pk": 5,
+      "fields": {
+        "password": "pbkdf2_sha256$600000$IMPvz6ndQZB8xgCZBBbJu5$U4vowTBZQaX0IPiAuBGNxI2tRz/zNKg+7cha8QJ9nv8=",
+        "username": "williams",
+        "first_name": "Bob",
+        "last_name": "Williams",
+        "email": "williams@gmail.com",
+        "permission": 2
+      }
+    },
+    {
+      "model": "authorization.user",
+      "pk": 6,
+      "fields": {
+        "password": "pbkdf2_sha256$600000$qUz8x80PLSJiUNa5n6vAzo$9ViA7tFIWT7n0krtJwNXg6aRkwXcRYrZcOIgD/iGVlM=",
+        "username": "davis",
+        "first_name": "Davis",
+        "last_name": "Davis",
+        "email": "davis@gmail.com",
+        "permission": 2
+      }
+    },
+    {
+      "model": "authorization.user",
+      "pk": 7,
+      "fields": {
+        "password": "pbkdf2_sha256$600000$h7mbJNg4vECrT0ChT4WDup$sKrXrrGArXK8xL8WpInZmIH/9uyJkRAHYfhC+NUmAYs=",
+        "username": "scheduler",
+        "first_name": "Michael",
+        "last_name": "Cooper",
+        "email": "scheduler@gmail.com",
+        "permission": 4
+      }
     },
 
-
     {
-        "model": "authorization.User",
+        "model": "education.subject",
         "pk": 1,
         "fields": {
-            "username": "xmyron00",
-            "email": "xmyron00@vutbr.cz",
-            "password": "xmyron00",
-            "first_name": "Yurii",
-            "last_name": "Myronov",
-            "permission": 1
+          "code": "IIS",
+          "name": "Information Systems",
+          "guarantor": 3,
+          "description": "In publishing and graphic design, lorem ipsum is common placeholder text used to demonstrate the graphic elements of a document or visual presentation, such as web pages, typography, and graphical layout"
         }
-    },
-    {
-        "model": "authorization.User",
+      },
+      {
+        "model": "education.subject",
         "pk": 2,
         "fields": {
-            "username": "xrasst00",
-            "email": "xrasst00@vutbr.cz",
-            "password": "xrasst00",
-            "first_name": "Sergei",
-            "last_name": "Rasstrigin",
-            "permission": 2
+          "code": "ITU",
+          "name": "User Interface Programming",
+          "guarantor": 4,
+          "description": "In publishing and graphic design, lorem ipsum is common placeholder text used to demonstrate the graphic elements of a document or visual presentation, such as web pages, typography, and graphical layout"
         }
-    },
-    {
-        "model": "authorization.User",
+      },
+      {
+        "model": "education.subject",
         "pk": 3,
         "fields": {
-            "username": "xklima34",
-            "email": "xklima34@vutbr.cz",
-            "password": "xklima34",
-            "first_name": "Aliaksei",
-            "last_name": "Klimau",
-            "permission": 2
+          "code": "ISA",
+          "name": "Network Applications and Network Administration",
+          "guarantor": 6,
+          "description": "In publishing and graphic design, lorem ipsum is common placeholder text used to demonstrate the graphic elements of a document or visual presentation, such as web pages, typography, and graphical layout"
         }
-    },
-    {
-        "model": "authorization.User",
+      },
+      {
+        "model": "education.room",
+        "pk": 1,
+        "fields": {
+          "number": 101,
+          "description": ""
+        }
+      },
+      {
+        "model": "education.room",
+        "pk": 2,
+        "fields": {
+          "number": 102,
+          "description": ""
+        }
+      },
+      {
+        "model": "education.room",
+        "pk": 3,
+        "fields": {
+          "number": 103,
+          "description": ""
+        }
+      },
+      {
+        "model": "education.room",
         "pk": 4,
         "fields": {
-            "username": "xnovak00",
-            "email": "xnovak00@vutbr.cz",
-            "password": "xnovak00",
-            "first_name": "Jan",
-            "last_name": "Novak",
-            "permission": 2
+          "number": 201,
+          "description": ""
         }
-    },
-    {
-        "model": "authorization.User",
+      },
+      {
+        "model": "education.room",
         "pk": 5,
         "fields": {
-            "username": "xroman00",
-            "email": "xroman00@vutbr.cz",
-            "password": "xroman00",
-            "first_name": "Oleh",
-            "last_name": "Romaniuk",
-            "permission": 3
+          "number": 203,
+          "description": ""
         }
-    },
-    {
-        "model": "authorization.User",
+      },
+      {
+        "model": "education.room",
         "pk": 6,
         "fields": {
-            "username": "xmiller89",
-            "email": "xmiller89@vutbr.cz",
-            "password": "xmiller89",
-            "first_name": "Emma",
-            "last_name": "Miller",
-            "permission": 3
+          "number": 202,
+          "description": ""
         }
-    },
-    {
-        "model": "authorization.User",
-        "pk": 7,
-        "fields": {
-            "username": "xsmith72",
-            "email": "xsmith72@vutbr.cz",
-            "password": "xsmith72",
-            "first_name": "John",
-            "last_name": "Smith",
-            "permission": 3
-        }
-    },
-    {
-        "model": "authorization.User",
-        "pk": 8,
-        "fields": {
-            "username": "xjones45",
-            "email": "xjones45@vutbr.cz",
-            "password": "xjones45",
-            "first_name": "Jennifer",
-            "last_name": "Jones",
-            "permission": 3
-        }
-    },
-    {
-        "model": "authorization.User",
-        "pk": 9,
-        "fields": {
-            "username": "xcooper21",
-            "email": "xcooper21@vutbr.cz",
-            "password": "xcooper21",
-            "first_name": "Michael",
-            "last_name": "Cooper",
-            "permission": 4
-        }
-    },
-
-
-    {
-        "model": "education.Room",
-        "pk": 1,
-        "fields": {
-            "number": 100
-        }
-    },
-    {
-        "model": "education.Room",
-        "pk": 2,
-        "fields": {
-            "number": 101
-        }
-    },
-    {
-        "model": "education.Room",
-        "pk": 3,
-        "fields": {
-            "number": 102
-        }
-    },
-    {
-        "model": "education.Room",
-        "pk": 4,
-        "fields": {
-            "number": 200
-        }
-    },
-    {
-        "model": "education.Room",
-        "pk": 5,
-        "fields": {
-            "number": 201
-        }
-    },
-    {
-        "model": "education.Room",
-        "pk": 6,
-        "fields": {
-            "number": 202
-        }
-    },
-
-
-    {
-        "model": "education.ActivityType",
-        "pk": 1,
-        "fields": {
-            "notation": "Lec",
-            "name": "Lecture"
-        }
-    },
-    {
-        "model": "education.ActivityType",
-        "pk": 2,
-        "fields": {
-            "notation": "P",
-            "name": "Practice"
-        }
-    },
-    {
-        "model": "education.ActivityType",
-        "pk": 3,
-        "fields": {
-            "notation": "Lab",
-            "name": "Laboratory"
-        }
-    },
-    {
-        "model": "education.ActivityType",
-        "pk": 4,
-        "fields": {
-            "notation": "E",
-            "name": "Exam"
-        }
-    },
-
-    {
-        "model": "education.ActivityRepetition",
-        "pk": 1,
-        "fields": {
-            "name": "Every week"
-        }
-    },
-    {
-        "model": "education.ActivityRepetition",
-        "pk": 2,
-        "fields": {
-            "name": "Even week"
-        }
-    },
-    {
-        "model": "education.ActivityRepetition",
-        "pk": 3,
-        "fields": {
-            "name": "Odd week"
-        }
-    },
-    {
-        "model": "education.ActivityRepetition",
-        "pk": 4,
-        "fields": {
-            "name": "One time"
-        }
-    },
-    
-
-    {
-        "model": "education.Subject",
-        "pk": 1,
-        "fields": {
-            "code": "IIS",
-            "name": "Information Systems",
-            "guarantor": 2,
-            "description": "In publishing and graphic design, lorem ipsum is common placeholder text used to demonstrate the graphic elements of a document or visual presentation, such as web pages, typography, and graphical layout"
-        }
-    },
-    {
-        "model": "education.Subject",
-        "pk": 2,
-        "fields": {
-            "code": "ITU",
-            "name": "User Interface Programming",
-            "guarantor": 3,
-            "description": "In publishing and graphic design, lorem ipsum is common placeholder text used to demonstrate the graphic elements of a document or visual presentation, such as web pages, typography, and graphical layout"
-        }
-    },
-    {
-        "model": "education.Subject",
-        "pk": 3,
-        "fields": {
-            "code": "ISA",
-            "name": "Network Applications and Network Administration",
-            "guarantor": 4,
-            "description": "In publishing and graphic design, lorem ipsum is common placeholder text used to demonstrate the graphic elements of a document or visual presentation, such as web pages, typography, and graphical layout"
-        }
-    },
-
-
-    {
-        "model": "education.Activity",
-        "pk": 1,
-        "fields": {
-            "duration": 2,
-            "activity_type": 1,
-            "activity_repetition": 1,
-            "subject": 1,
-            "date_from": "2023-09-18",
-            "date_to": "2023-12-17",
-            "room": 1
-        }
-    },
-    {
-        "model": "education.Activity",
-        "pk": 2,
-        "fields": {
-            "duration": 2,
-            "activity_type": 2,
-            "activity_repetition": 2,
-            "date_from": "2023-09-20",
-            "date_to": "2023-12-15",
-            "subject": 1
-        }
-    },
-    {
-        "model": "education.Activity",
-        "pk": 3,
-        "fields": {
-            "duration": 1,
-            "activity_type": 4,
-            "activity_repetition": 4,
-            "date_from": "2023-11-8",
-            "date_to": "2023-11-8",
-            "subject": 1
-        }
-    },
-    {
-        "model": "education.Activity",
-        "pk": 4,
-        "fields": {
-            "duration": 2,
-            "activity_type": 1,
-            "activity_repetition": 1,
-            "subject": 2,
-            "date_from": "2023-09-19",
-            "date_to": "2023-12-17",
-            "room": 1
-        }
-    },
-    {
-        "model": "education.Activity",
-        "pk": 5,
-        "fields": {
-            "duration": 2,
-            "activity_type": 2,
-            "activity_repetition": 3,
-            "date_from": "2023-09-27",
-            "date_to": "2023-12-8",
-            "subject": 2
-        }
-    },
-    {
-        "model": "education.Activity",
-        "pk": 6,
-        "fields": {
-            "duration": 1,
-            "activity_type": 4,
-            "activity_repetition": 4,
-            "date_from": "2023-11-7",
-            "date_to": "2023-11-7",
-            "subject": 2
-        }
-    },
-    {
-        "model": "education.Activity",
-        "pk": 7,
-        "fields": {
-            "duration": 2,
-            "activity_type": 1,
-            "activity_repetition": 1,
-            "date_from": "2023-09-21",
-            "date_to": "2023-12-17",
-            "subject": 3
-        }
-    },
-    {
-        "model": "education.Activity",
-        "pk": 8,
-        "fields": {
-            "duration": 2,
-            "activity_type": 3,
-            "activity_repetition": 3,
-            "date_from": "2023-10-04",
-            "date_to": "2023-12-8",
-            "subject": 3
-        }
-    },
-    {
-        "model": "education.Activity",
-        "pk": 9,
-        "fields": {
-            "duration": 1,
-            "activity_type": 4,
-            "activity_repetition": 4,
-            "date_from": "2023-11-6",
-            "date_to": "2023-11-6",
-            "subject": 3
-        }
-    }
+      }
 ]
+    

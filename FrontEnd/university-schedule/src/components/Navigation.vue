@@ -9,12 +9,12 @@
         </div>
         <nav>
             <div class="menu">
-                <button v-for="button in buttons" :key="button.text" :class=button.class @click="handleButtonClick(button.route)">
+                <button v-for="button in buttons" :key="button.text"  :class="{ 'selected': button.text === currentPage }" class="menu-item" @click="handleButtonClick(button.route)">
                     {{ button.text }}
                 </button>
             </div>
-            <div class="btn-login" @click="Authorization">
-                Login
+            <div class="btn-login" @click="Auth">
+                {{ authButton }}
             </div>
         </nav>
     </div>
@@ -22,28 +22,71 @@
 
 <script>
 export default {
-    props: {
-        buttons: {
-            type: Array,
-            default: () => []
-        },
-        username: {
-            type: String,
-            default: 'Anonymous'
-        },
-        status: {
-            type: String,
-            default: ''
+    data() {
+        return {
+            username: 'Anonymous',
+            status: '',
+            buttons: [
+                { text: 'Home', route: '/' },
+            ],
+            authButton: 'login',
+
+            currentPage: '',
+        }
+    },
+    mounted() {
+        this.UpdateUserData();
+        switch(this.$route.path){
+            case "/admin":
+                this.currentPage = "Administration";
+                break;
+            case "/scheduler":
+                this.currentPage = "Schedule";
+                break;
+            case "/":
+                this.currentPage = "Home";
+                break;
         }
     },
     methods: {
+        UpdateUserData() {
+            if (localStorage.getItem("token")){
+                this.username = localStorage.getItem("username");
+                this.status = localStorage.getItem("status");
+                this.authButton = localStorage.getItem("token") ? "logout" : "login";
+            }
+
+            switch(this.status){
+                case "Admin":
+                    this.buttons = [
+                        { text: 'Home', route: '/' },
+                        { text: 'Administration', route: '/admin' }
+                    ];
+                    break;
+                case "Scheduler":
+                    this.buttons = [
+                        { text: 'Home', route: '/' },
+                        { text: 'Schedule', route: '/scheduler' }
+                    ];
+                    break;
+                default:
+                    break;
+            }
+        },
         handleButtonClick(path) {
             if (path) {
                 this.$router.push(path);
             }
         },
-        Authorization() {
-            this.$router.push('/authorization');
+        Auth() {
+            if (localStorage.getItem("token")){
+                localStorage.clear();
+                this.$router.push('/');
+            }
+            else{
+                this.$router.push('/authorization');
+            }
+            
         },
         ToHome() {
             this.$router.push('/');
@@ -90,25 +133,19 @@ export default {
     right: 30%;
 }
 
-.selected {
-    text-decoration: underline;
-    color: black;
-}
-
-.not-selected:hover {
-    text-decoration: underline;
-    color: black;
-    cursor: pointer;
-}
-
-
-button {
+.menu-item{
+    color: rgba(0, 0, 0, 0.6);
     border: none;
     background-color: white;
     margin: 5%;
     font-size: 20px;
     font-weight: bold;
-    color: rgba(0, 0, 0, 0.6);
+}
+
+.menu-item:hover, .selected {
+    text-decoration: underline;
+    cursor: pointer;
+    color: black;
 }
 
 

@@ -8,7 +8,7 @@
             <div>
                 <h2>User</h2>
                 <UserList 
-                    v-if="userArray.length > 0 && isUserListOpen"
+                    v-if="isUserLoad && isUserListOpen"
                     :userArray="userArray"
                     @new-user="NewUser"
                     @edit-user="EditUser"
@@ -20,7 +20,7 @@
                     @create-user="CreateUser"
                 />
                 <UserUpdateDelete
-                    v-if="Object.keys(user).length > 0 && permissions.length > 0 && isUpdateDeleteUserOpen"
+                    v-if="isUserLoad && permissions.length > 0 && isUpdateDeleteUserOpen"
                     :user="user"
                     :permissions="permissions"
                     @back="UserBack"
@@ -31,7 +31,7 @@
             <div>
                 <h2>Subject</h2>
                 <SubjectList 
-                    v-if="subjectArray.length > 0 && isSubjectListOpen"
+                    v-if="isSubjectLoad && isSubjectListOpen"
                     :subjectArray="subjectArray"
                     @new-subject="NewSubject"
                     @edit-subject="EditSubject"
@@ -43,7 +43,7 @@
                     @create-subject="CreateSubject"
                 />
                 <SubjectUpdateDelete
-                    v-if="Object.keys(subject).length > 0 && isUpdateDeleteSubjectOpen"
+                    v-if="isSubjectLoad && isUpdateDeleteSubjectOpen"
                     :subject="subject"
                     :guarantors="guarantors"
                     @back="SubjectBack"
@@ -54,7 +54,7 @@
             <div>
                 <h2>Room</h2>
                 <RoomList 
-                    v-if="roomArray.length > 0 && isRoomListOpen"
+                    v-if="isRoomLoad && isRoomListOpen"
                     :roomArray="roomArray"
                     @new-room="NewRoom"
                     @edit-room="EditRoom"
@@ -65,7 +65,7 @@
                     @create-room="CreateRoom"
                 />
                 <RoomUpdateDelete
-                    v-if="Object.keys(room).length > 0 && isUpdateDeleteRoomOpen"
+                    v-if="isRoomLoad && isUpdateDeleteRoomOpen"
                     :room="room"
                     @back="RoomBack"
                     @update-room="UpdateRoom"
@@ -116,6 +116,7 @@ export default {
             isUserListOpen: true,
             isCerateUserOpen: false,
             isUpdateDeleteUserOpen: false,
+            isUserLoad: false,
 
             subjectArray: [],
             subject: {},
@@ -123,6 +124,7 @@ export default {
             isSubjectListOpen: true,
             isCerateSubjectOpen: false,
             isUpdateDeleteSubjectOpen: false,
+            isSubjectLoad: false,
 
             roomArray: [],
             room: {},
@@ -130,6 +132,7 @@ export default {
             isRoomListOpen: true,
             isCerateRoomOpen: false,
             isUpdateDeleteRoomOpen: false,
+            isRoomLoad: false,
         }
     },
     components: {
@@ -181,6 +184,7 @@ export default {
                     return 0;
                 });
                 this.guarantors = this.userArray.filter(user => user.permission.level === 2);
+                this.isUserLoad = true;
             })
             .catch(error => {
                 console.error(error);
@@ -254,6 +258,7 @@ export default {
 
                     return 0;
                 });
+                this.isSubjectLoad = true;
             })
             .catch(error => {
                 console.error(error);
@@ -317,6 +322,7 @@ export default {
             .then(response => {
                 this.roomArray = response.data.data;
                 this.roomArray.sort((a, b) => a.number - b.number);
+                this.isRoomLoad = true;
             })
             .catch(error => {
                 console.error(error);

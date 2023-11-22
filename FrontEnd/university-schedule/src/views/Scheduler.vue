@@ -1,6 +1,6 @@
 <template>
     <header>
-        <Navigation :buttons="navigationButtons" :username="username" :status="status" />
+        <Navigation/>
     </header>
 
     <main>
@@ -42,12 +42,6 @@ export default {
     },
     data() {
         return {
-            navigationButtons: [
-                { text: 'Home', class: 'not-selected',  route: '/' },
-                { text: 'Schedule', class: 'selected' }
-            ],
-            username: 'USERNAME',
-            status : 'Scheduler',
             activitiesNotResolved: [],
             activitiesResolved: [],
             rooms: [],

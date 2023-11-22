@@ -30,7 +30,15 @@ const router = createRouter({
     },
     {
       path: '/scheduler',
-      component: Scheduler
+      component: Scheduler,
+      beforeEnter: (to, from, next) => {
+        const status = localStorage.getItem('status');
+        if (status !== 'Scheduler') {
+          next('/');
+        } else {
+          next();
+        }
+      }
     },
     {
       path: '/student/subjects',
@@ -55,6 +63,14 @@ const router = createRouter({
     {
       path: '/admin',
       component: Admin,
+      beforeEnter: (to, from, next) => {
+        const status = localStorage.getItem('status');
+        if (status !== 'Admin') {
+          next('/');
+        } else {
+          next();
+        }
+      }
     },
     {
       path: '/instructor',
