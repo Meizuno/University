@@ -49,7 +49,7 @@ class ReadRoomSerializer(serializers.ModelSerializer):
 
 class RoomSerializer(serializers.Serializer):
     number = serializers.IntegerField()
-    description = serializers.CharField(required=False)
+    description = serializers.CharField(allow_blank=True)
 
 
 class ReadSubjectSerializer(serializers.ModelSerializer):
@@ -121,4 +121,3 @@ class ActivitySchedulerSerializer(serializers.Serializer):
 class RegisterInstructorSerializer(serializers.Serializer):
     instructor = serializers.IntegerField(validators=[MinValueValidator(1)])
     subject = serializers.IntegerField(validators=[MinValueValidator(1)])
-

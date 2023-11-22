@@ -37,7 +37,7 @@
                     @edit-subject="EditSubject"
                 />
                 <CreateSubject
-                    v-if="Object.keys(subject).length > 0 && isCerateSubjectOpen"
+                    v-if="isCerateSubjectOpen"
                     :guarantors="guarantors"
                     @back="SubjectBack"
                     @create-subject="CreateSubject"
@@ -60,7 +60,7 @@
                     @edit-room="EditRoom"
                 />
                 <CreateRoom
-                    v-if="Object.keys(room).length > 0 && isCerateRoomOpen"
+                    v-if="isCerateRoomOpen"
                     @back="RoomBack"
                     @create-room="CreateRoom"
                 />
@@ -351,6 +351,10 @@ export default {
 
 <style scoped>
 
+template {
+    max-height: 100%;
+}
+
 .admin {
     margin: 20px;
     display: grid;
@@ -362,7 +366,6 @@ export default {
     background-color: white;
     padding: 20px;
     border-radius: 20px;
-
 }
 
 h2 {

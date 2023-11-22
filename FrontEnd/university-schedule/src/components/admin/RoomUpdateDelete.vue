@@ -31,10 +31,10 @@ export default {
             this.$emit("back");
         },
         UpdateRoom() {
-            console.log(this.room);
+            this.room.number = parseInt(this.room.number, 10);
             const id = this.room["id"];
             delete this.room["id"];
-            this.$emit('update-room', id, this.user);
+            this.$emit('update-room', id, this.room);
         },
         DeleteRoom() {
             this.$emit('delete-room', this.room["id"]);

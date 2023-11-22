@@ -31,7 +31,7 @@ export default {
             this.$emit("back");
         },
         CreateRoom() {
-            console.log(this.room);
+            this.room.number = parseInt(this.room.number, 10);
             this.$emit('create-room', this.room);
         }
     }
