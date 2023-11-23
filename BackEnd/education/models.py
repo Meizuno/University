@@ -1,4 +1,5 @@
 from django.db import models
+from django.forms import ValidationError
 from authorization.models import User
 
 
@@ -10,7 +11,7 @@ class Subject(models.Model):
         through="StudentSubject",
         related_name="student_subjects",
     )
-    guarantor = models.ForeignKey(
+    guarantor = models.OneToOneField(
         User,
         on_delete=models.PROTECT,
         related_name="guarantor_subject",
@@ -71,6 +72,21 @@ class Activity(models.Model):
     day = models.CharField(max_length=3, null=True)
     room = models.ForeignKey(Room, on_delete=models.SET_NULL, null=True, related_name="activity")
     instructor = models.ForeignKey(User, on_delete=models.PROTECT, null=True, related_name="activity")
+
+    def schedule_update(self, day, time, room_id):
+        if day and time and room_id:
+            hours = int(str(time).split(":")[0])
+            if (hours + self.duration) > 17:
+                raise ValidationError("Too late for activity.")
+            time_to = f"{hours + self.duration}:00:00"
+            for activity in Activity.objects.filter(time__lt=time_to, day=day, room_id=room_id):
+                activity_to = int(str(activity.time).split(":")[0]) + activity.duration
+                if activity_to > hours:
+                    raise ValidationError("Collision room and time.")
+        self.day = day
+        self.time = time
+        self.room_id = room_id
+        self.save()
 
     class Meta:
         db_table = "activity"

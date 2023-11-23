@@ -1,20 +1,20 @@
 <template>
     <form>
         <div>
-            <p>Code</p>
+            <p>Code <span style="color: red;">*</span></p>
             <input type="text" v-model="subject.code" />
         </div>
         <div>
-            <p>Name</p>
+            <p>Name <span style="color: red;">*</span></p>
             <input type="email" v-model="subject.name" />
         </div>
         <div>
-            <p>Description</p>
+            <p>Description <span style="color: red;">*</span></p>
             <input type="text" v-model="subject.description" />
         </div>
         <div>
-            <p>Guarantor</p>
-            <div class="custom-select" @click.stop="toggleDropdownGuarantor">
+            <p>Guarantor <span style="color: red;">*</span></p>
+            <div class="custom-select" @click.stop="toggleDropdownGuarantor" :style="{'color': selectedGuarantor ? 'initial' : 'rgb(0,0,0,0.5)'}">
                 {{ selectedGuarantor || 'Guarantor' }}
                 <div v-if="isGuarantorOpen" class="dropdown" ref="dropdown" @click.stop>
                 <div v-for="guarantor in guarantors" :key="guarantor.id" @click="selectValue(guarantor)">
@@ -159,14 +159,16 @@ form > div > input {
   color: rgb(0, 0, 0, 0.5);
 }
 
-.dropdown div:hover {
-  color: rgb(0, 0, 0);
-}
 
 .dropdown div:last-child {
   cursor: pointer;
   padding: 7px 0px;
   color: rgb(0, 0, 0, 0.5);
+}
+
+
+.dropdown div:hover {
+  color: rgb(0, 0, 0);
 }
 
 </style>

@@ -1,194 +1,428 @@
 [
-    {
-      "model": "authorization.permission",
-      "pk": 1,
-      "fields": {
-        "level": 1,
-        "description": "Admin"
-      }
-    },
-    {
-      "model": "authorization.permission",
+  {
+    "model": "authorization.Permission",
+    "pk": 1,
+    "fields": {
+      "level": 1,
+      "description": "Admin"
+    }
+  },
+  {
+    "model": "authorization.Permission",
+    "pk": 2,
+    "fields": {
+      "level": 2,
+      "description": "Guarantor"
+    }
+  },
+  {
+    "model": "authorization.Permission",
+    "pk": 3,
+    "fields": {
+      "level": 3,
+      "description": "Instructor"
+    }
+  },
+  {
+    "model": "authorization.Permission",
+    "pk": 4,
+    "fields": {
+      "level": 4,
+      "description": "Scheduler"
+    }
+  },
+  {
+    "model": "authorization.Permission",
+    "pk": 5,
+    "fields": {
+      "level": 5,
+      "description": "Student"
+    }
+  },
+  {
+    "model": "authorization.User",
+    "pk": 1,
+    "fields": {
+      "password": "pbkdf2_sha256$600000$IAwfn3mf7647IQPraIN3Gi$NiAdHYOMJj9G1L93TP2skKn8a7XoOgPcJ4d0PFFm+ss=",
+      "username": "admin",
+      "first_name": "John",
+      "last_name": "Smith",
+      "email": "admin@gmail.com",
+      "permission": 1
+    }
+  },
+  {
+    "model": "authorization.User",
+    "pk": 3,
+    "fields": {
+      "password": "pbkdf2_sha256$600000$ucPXFj3WeIEtauuvAktaM0$XTsfkW26IZI4UK/XHMaoMHiFdkl3sZeTO0wnja0HmXU=",
+      "username": "guarantor",
+      "first_name": "Jan",
+      "last_name": "Novak",
+      "email": "guarantor@gmail.com",
+      "permission": 2
+    }
+  },
+  {
+    "model": "authorization.User",
+    "pk": 4,
+    "fields": {
+      "password": "pbkdf2_sha256$600000$aVGeYEm3q7VQ4fYjRQ98i8$3bmEtJpqXLV7ShEx5caT8Rb1OsZ5kYtP7VIO5xED6QU=",
+      "username": "johnson",
+      "first_name": "Alice",
+      "last_name": "Johnson",
+      "email": "johnson@gmail.com",
+      "permission": 2
+    }
+  },
+  {
+    "model": "authorization.User",
+    "pk": 5,
+    "fields": {
+      "password": "pbkdf2_sha256$600000$IMPvz6ndQZB8xgCZBBbJu5$U4vowTBZQaX0IPiAuBGNxI2tRz/zNKg+7cha8QJ9nv8=",
+      "username": "williams",
+      "first_name": "Bob",
+      "last_name": "Williams",
+      "email": "williams@gmail.com",
+      "permission": 2
+    }
+  },
+  {
+    "model": "authorization.User",
+    "pk": 6,
+    "fields": {
+      "password": "pbkdf2_sha256$600000$qUz8x80PLSJiUNa5n6vAzo$9ViA7tFIWT7n0krtJwNXg6aRkwXcRYrZcOIgD/iGVlM=",
+      "username": "davis",
+      "first_name": "Davis",
+      "last_name": "Davis",
+      "email": "davis@gmail.com",
+      "permission": 2
+    }
+  },
+  {
+    "model": "authorization.User",
+    "pk": 7,
+    "fields": {
+      "password": "pbkdf2_sha256$600000$h7mbJNg4vECrT0ChT4WDup$sKrXrrGArXK8xL8WpInZmIH/9uyJkRAHYfhC+NUmAYs=",
+      "username": "scheduler",
+      "first_name": "Michael",
+      "last_name": "Cooper",
+      "email": "scheduler@gmail.com",
+      "permission": 4
+    }
+  },
+  {
+    "model": "education.Subject",
+    "pk": 1,
+    "fields": {
+      "code": "IIS",
+      "name": "Information Systems",
+      "guarantor": 3,
+      "description": "In publishing and graphic design, lorem ipsum is common placeholder text used to demonstrate the graphic elements of a document or visual presentation, such as web pages, typography, and graphical layout"
+    }
+  },
+  {
+    "model": "education.Subject",
+    "pk": 2,
+    "fields": {
+      "code": "ITU",
+      "name": "User Interface Programming",
+      "guarantor": 4,
+      "description": "In publishing and graphic design, lorem ipsum is common placeholder text used to demonstrate the graphic elements of a document or visual presentation, such as web pages, typography, and graphical layout"
+    }
+  },
+  {
+    "model": "education.Subject",
+    "pk": 3,
+    "fields": {
+      "code": "ISA",
+      "name": "Network Applications and Network Administration",
+      "guarantor": 6,
+      "description": "In publishing and graphic design, lorem ipsum is common placeholder text used to demonstrate the graphic elements of a document or visual presentation, such as web pages, typography, and graphical layout"
+    }
+  },
+  {
+    "model": "education.Subject",
+    "pk": 4,
+    "fields": {
+      "code": "ISS",
+      "name": "Signals and Systems",
+      "guarantor": 5,
+      "description": "In publishing and graphic design, lorem ipsum is common placeholder text used to demonstrate the graphic elements of a document or visual presentation, such as web pages, typography, and graphical layout"
+    }
+  },
+  {
+    "model": "education.Room",
+    "pk": 1,
+    "fields": {
+      "number": 101,
+      "description": ""
+    }
+  },
+  {
+    "model": "education.Room",
+    "pk": 2,
+    "fields": {
+      "number": 102,
+      "description": ""
+    }
+  },
+  {
+    "model": "education.Room",
+    "pk": 3,
+    "fields": {
+      "number": 103,
+      "description": ""
+    }
+  },
+  {
+    "model": "education.Room",
+    "pk": 4,
+    "fields": {
+      "number": 201,
+      "description": ""
+    }
+  },
+  {
+    "model": "education.Room",
+    "pk": 5,
+    "fields": {
+      "number": 203,
+      "description": ""
+    }
+  },
+  {
+    "model": "education.Room",
+    "pk": 6,
+    "fields": {
+      "number": 202,
+      "description": ""
+    }
+  },
+
+  {
+    "model": "education.ActivityType",
+    "pk": 1,
+    "fields": {
+        "notation": "Lec",
+        "name": "Lecture"
+    }
+  },
+  {
+      "model": "education.ActivityType",
       "pk": 2,
       "fields": {
-        "level": 2,
-        "description": "Guarantor"
+          "notation": "P",
+          "name": "Practice"
       }
-    },
-    {
-      "model": "authorization.permission",
+  },
+  {
+      "model": "education.ActivityType",
       "pk": 3,
       "fields": {
-        "level": 3,
-        "description": "Instructor"
+          "notation": "Lab",
+          "name": "Laboratory"
       }
-    },
-    {
-      "model": "authorization.permission",
+  },
+  {
+      "model": "education.ActivityType",
       "pk": 4,
       "fields": {
-        "level": 4,
-        "description": "Scheduler"
+          "notation": "E",
+          "name": "Exam"
       }
-    },
-    {
-      "model": "authorization.permission",
-      "pk": 5,
-      "fields": {
-        "level": 5,
-        "description": "Student"
-      }
-    },
-    {
-      "model": "authorization.user",
+  },
+
+  {
+      "model": "education.ActivityRepetition",
       "pk": 1,
       "fields": {
-        "password": "pbkdf2_sha256$600000$IAwfn3mf7647IQPraIN3Gi$NiAdHYOMJj9G1L93TP2skKn8a7XoOgPcJ4d0PFFm+ss=",
-        "username": "admin",
-        "first_name": "John",
-        "last_name": "Smith",
-        "email": "admin@gmail.com",
-        "permission": 1
+          "name": "Every week"
       }
-    },
-    {
-      "model": "authorization.user",
+  },
+  {
+      "model": "education.ActivityRepetition",
+      "pk": 2,
+      "fields": {
+          "name": "Even week"
+      }
+  },
+  {
+      "model": "education.ActivityRepetition",
       "pk": 3,
       "fields": {
-        "password": "pbkdf2_sha256$600000$ucPXFj3WeIEtauuvAktaM0$XTsfkW26IZI4UK/XHMaoMHiFdkl3sZeTO0wnja0HmXU=",
-        "username": "guarantor",
-        "first_name": "Jan",
-        "last_name": "Novak",
-        "email": "guarantor@gmail.com",
-        "permission": 2
+          "name": "Odd week"
       }
-    },
-    {
-      "model": "authorization.user",
+  },
+  {
+      "model": "education.ActivityRepetition",
       "pk": 4,
       "fields": {
-        "password": "pbkdf2_sha256$600000$aVGeYEm3q7VQ4fYjRQ98i8$3bmEtJpqXLV7ShEx5caT8Rb1OsZ5kYtP7VIO5xED6QU=",
-        "username": "johnson",
-        "first_name": "Alice",
-        "last_name": "Johnson",
-        "email": "johnson@gmail.com",
-        "permission": 2
+          "name": "One time"
       }
-    },
-    {
-      "model": "authorization.user",
-      "pk": 5,
-      "fields": {
-        "password": "pbkdf2_sha256$600000$IMPvz6ndQZB8xgCZBBbJu5$U4vowTBZQaX0IPiAuBGNxI2tRz/zNKg+7cha8QJ9nv8=",
-        "username": "williams",
-        "first_name": "Bob",
-        "last_name": "Williams",
-        "email": "williams@gmail.com",
-        "permission": 2
-      }
-    },
-    {
-      "model": "authorization.user",
-      "pk": 6,
-      "fields": {
-        "password": "pbkdf2_sha256$600000$qUz8x80PLSJiUNa5n6vAzo$9ViA7tFIWT7n0krtJwNXg6aRkwXcRYrZcOIgD/iGVlM=",
-        "username": "davis",
-        "first_name": "Davis",
-        "last_name": "Davis",
-        "email": "davis@gmail.com",
-        "permission": 2
-      }
-    },
-    {
-      "model": "authorization.user",
-      "pk": 7,
-      "fields": {
-        "password": "pbkdf2_sha256$600000$h7mbJNg4vECrT0ChT4WDup$sKrXrrGArXK8xL8WpInZmIH/9uyJkRAHYfhC+NUmAYs=",
-        "username": "scheduler",
-        "first_name": "Michael",
-        "last_name": "Cooper",
-        "email": "scheduler@gmail.com",
-        "permission": 4
-      }
-    },
+  },
 
-    {
-        "model": "education.subject",
-        "pk": 1,
-        "fields": {
-          "code": "IIS",
-          "name": "Information Systems",
-          "guarantor": 3,
-          "description": "In publishing and graphic design, lorem ipsum is common placeholder text used to demonstrate the graphic elements of a document or visual presentation, such as web pages, typography, and graphical layout"
-        }
-      },
-      {
-        "model": "education.subject",
-        "pk": 2,
-        "fields": {
-          "code": "ITU",
-          "name": "User Interface Programming",
-          "guarantor": 4,
-          "description": "In publishing and graphic design, lorem ipsum is common placeholder text used to demonstrate the graphic elements of a document or visual presentation, such as web pages, typography, and graphical layout"
-        }
-      },
-      {
-        "model": "education.subject",
-        "pk": 3,
-        "fields": {
-          "code": "ISA",
-          "name": "Network Applications and Network Administration",
-          "guarantor": 6,
-          "description": "In publishing and graphic design, lorem ipsum is common placeholder text used to demonstrate the graphic elements of a document or visual presentation, such as web pages, typography, and graphical layout"
-        }
-      },
-      {
-        "model": "education.room",
-        "pk": 1,
-        "fields": {
-          "number": 101,
-          "description": ""
-        }
-      },
-      {
-        "model": "education.room",
-        "pk": 2,
-        "fields": {
-          "number": 102,
-          "description": ""
-        }
-      },
-      {
-        "model": "education.room",
-        "pk": 3,
-        "fields": {
-          "number": 103,
-          "description": ""
-        }
-      },
-      {
-        "model": "education.room",
-        "pk": 4,
-        "fields": {
-          "number": 201,
-          "description": ""
-        }
-      },
-      {
-        "model": "education.room",
-        "pk": 5,
-        "fields": {
-          "number": 203,
-          "description": ""
-        }
-      },
-      {
-        "model": "education.room",
-        "pk": 6,
-        "fields": {
-          "number": 202,
-          "description": ""
-        }
-      }
+  {
+    "model": "education.Activity",
+    "pk": 1,
+    "fields": {
+      "activity_type": 1,
+      "activity_repetition": 1,
+      "guarantor_notes": "",
+      "instructor_notes": null,
+      "duration": 3,
+      "subject": 1,
+      "date_from": "2023-11-20",
+      "date_to": "2023-12-10",
+      "time": null,
+      "day": null,
+      "room": null,
+      "instructor": null
+    }
+  },
+  {
+    "model": "education.Activity",
+    "pk": 2,
+    "fields": {
+      "activity_type": 2,
+      "activity_repetition": 1,
+      "guarantor_notes": "",
+      "instructor_notes": null,
+      "duration": 2,
+      "subject": 1,
+      "date_from": "2023-11-20",
+      "date_to": "2023-12-31",
+      "time": null,
+      "day": null,
+      "room": null,
+      "instructor": null
+    }
+  },
+  {
+    "model": "education.Activity",
+    "pk": 3,
+    "fields": {
+      "activity_type": 4,
+      "activity_repetition": 4,
+      "guarantor_notes": "",
+      "instructor_notes": null,
+      "duration": 1,
+      "subject": 1,
+      "date_from": "2023-11-13",
+      "date_to": "2023-11-19",
+      "time": null,
+      "day": null,
+      "room": null,
+      "instructor": null
+    }
+  },
+  {
+    "model": "education.Activity",
+    "pk": 4,
+    "fields": {
+      "activity_type": 1,
+      "activity_repetition": 1,
+      "guarantor_notes": "",
+      "instructor_notes": null,
+      "duration": 3,
+      "subject": 2,
+      "date_from": "2023-11-20",
+      "date_to": "2023-12-10",
+      "time": null,
+      "day": null,
+      "room": null,
+      "instructor": null
+    }
+  },
+  {
+    "model": "education.Activity",
+    "pk": 5,
+    "fields": {
+      "activity_type": 2,
+      "activity_repetition": 2,
+      "guarantor_notes": "",
+      "instructor_notes": null,
+      "duration": 2,
+      "subject": 2,
+      "date_from": "2023-11-20",
+      "date_to": "2023-12-31",
+      "time": null,
+      "day": null,
+      "room": null,
+      "instructor": null
+    }
+  },
+  {
+    "model": "education.Activity",
+    "pk": 6,
+    "fields": {
+      "activity_type": 4,
+      "activity_repetition": 4,
+      "guarantor_notes": "",
+      "instructor_notes": null,
+      "duration": 1,
+      "subject": 2,
+      "date_from": "2023-11-13",
+      "date_to": "2023-11-19",
+      "time": null,
+      "day": null,
+      "room": null,
+      "instructor": null
+    }
+  },
+  {
+    "model": "education.Activity",
+    "pk": 7,
+    "fields": {
+      "activity_type": 1,
+      "activity_repetition": 1,
+      "guarantor_notes": "",
+      "instructor_notes": null,
+      "duration": 2,
+      "subject": 3,
+      "date_from": "2023-11-20",
+      "date_to": "2023-12-10",
+      "time": null,
+      "day": null,
+      "room": null,
+      "instructor": null
+    }
+  },
+  {
+    "model": "education.Activity",
+    "pk": 8,
+    "fields": {
+      "activity_type": 2,
+      "activity_repetition": 3,
+      "guarantor_notes": "",
+      "instructor_notes": null,
+      "duration": 2,
+      "subject": 3,
+      "date_from": "2023-11-20",
+      "date_to": "2023-12-31",
+      "time": null,
+      "day": null,
+      "room": null,
+      "instructor": null
+    }
+  },
+  {
+    "model": "education.Activity",
+    "pk": 9,
+    "fields": {
+      "activity_type": 4,
+      "activity_repetition": 4,
+      "guarantor_notes": "",
+      "instructor_notes": null,
+      "duration": 2,
+      "subject": 3,
+      "date_from": "2023-11-13",
+      "date_to": "2023-11-19",
+      "time": null,
+      "day": null,
+      "room": null,
+      "instructor": null
+    }
+  }
 ]
     

@@ -1,6 +1,6 @@
 <template>
     <header>
-        <Navigation :buttons="navigationButtons" :username="username" :status="status" />
+        <Navigation />
     </header>
 
     <main>
@@ -92,6 +92,8 @@ import CreateRoom from '../components/admin/CreateRoom.vue';
 import RoomUpdateDelete from '../components/admin/RoomUpdateDelete.vue';
 
 import axios from 'axios';
+import { toast } from 'vue3-toastify';
+import 'vue3-toastify/dist/index.css';
 
 export default {
     emits: [
@@ -101,12 +103,9 @@ export default {
     ],
     data() {
         return{
-            navigationButtons: [
-                { text: 'Home', class: 'not-selected',  route: '/' },
-                { text: 'Administration', class: 'selected' }
-            ],
-            username: 'USERNAME',
-            status : 'Admin',
+            header: {
+                "Authorization": localStorage.getItem("token"),
+            },
 
             user: {},
             permissions: [],
@@ -153,12 +152,23 @@ export default {
     mounted() {
         this.GetUserList();
 
-        axios.get('http://127.0.0.1:8000/api/permission')
+        axios.get('http://127.0.0.1:8000/api/permission', {headers: this.header})
         .then(response => {
             this.permissions = response.data.data;
         })
         .catch(error => {
-            console.error(error);
+            for (const key in error.response.data.errors) {
+                if (error.response.data.errors.hasOwnProperty(key)) {
+                    const errorDes = error.response.data.errors[key];
+                    const errorMessage = `${key}: ${errorDes}`;
+    
+                    toast.error(errorMessage, {
+                        autoClose: 5000,
+                        position: toast.POSITION.BOTTOM_LEFT,
+                        hideProgressBar: true,
+                    });
+                }
+            }
         });
 
         this.GetSubjectList();
@@ -166,7 +176,7 @@ export default {
     },
     methods: {
         GetUserList(){
-            axios.get('http://127.0.0.1:8000/api/user')
+            axios.get('http://127.0.0.1:8000/api/user', {headers: this.header})
             .then(response => {
                 this.userArray = response.data.data;
                 this.userArray.sort((a, b) => {
@@ -187,7 +197,18 @@ export default {
                 this.isUserLoad = true;
             })
             .catch(error => {
-                console.error(error);
+                for (const key in error.response.data.errors) {
+                    if (error.response.data.errors.hasOwnProperty(key)) {
+                        const errorDes = error.response.data.errors[key];
+                        const errorMessage = `${key}: ${errorDes}`;
+        
+                        toast.error(errorMessage, {
+                            autoClose: 5000,
+                            position: toast.POSITION.BOTTOM_LEFT,
+                            hideProgressBar: true,
+                        });
+                    }
+                }
             });
         },
         UserBack() {
@@ -201,12 +222,31 @@ export default {
             this.isUpdateDeleteUserOpen = false;
         },
         CreateUser(user) {
-            axios.post(`http://127.0.0.1:8000/api/user`, user)
+            axios.post(`http://127.0.0.1:8000/api/user`, user, {headers: this.header})
             .then(response => {
                 this.GetUserList();
+                this.isUserListOpen = true;
+                this.isCerateUserOpen = false;
+                this.isUpdateDeleteUserOpen = false;
+                toast.success("Create user is success!", {
+                    autoClose: 5000,
+                    position: toast.POSITION.BOTTOM_RIGHT,
+                    hideProgressBar: true,
+                });
             })
             .catch(error => {
-                console.error(error);
+                for (const key in error.response.data.errors) {
+                    if (error.response.data.errors.hasOwnProperty(key)) {
+                        const errorDes = error.response.data.errors[key];
+                        const errorMessage = `${key}: ${errorDes}`;
+        
+                        toast.error(errorMessage, {
+                            autoClose: 5000,
+                            position: toast.POSITION.BOTTOM_RIGHT,
+                            hideProgressBar: true,
+                        });
+                    }
+                }
             });
         },
         EditUser(user){
@@ -216,32 +256,64 @@ export default {
             this.isUpdateDeleteUserOpen = true;
         },
         UpdateUser(id, user){
-            axios.put(`http://127.0.0.1:8000/api/user/${id}`, user)
+            axios.put(`http://127.0.0.1:8000/api/user/${id}`, user, {headers: this.header})
             .then(response => {
                 this.GetUserList();
                 this.isUserListOpen = true;
                 this.isCerateUserOpen = false;
                 this.isUpdateDeleteUserOpen = false;
+                toast.success("Update user is success!", {
+                    autoClose: 5000,
+                    position: toast.POSITION.BOTTOM_RIGHT,
+                    hideProgressBar: true,
+                });
             })
             .catch(error => {
-                console.error(error);
+                for (const key in error.response.data.errors) {
+                    if (error.response.data.errors.hasOwnProperty(key)) {
+                        const errorDes = error.response.data.errors[key];
+                        const errorMessage = `${key}: ${errorDes}`;
+        
+                        toast.error(errorMessage, {
+                            autoClose: 5000,
+                            position: toast.POSITION.BOTTOM_RIGHT,
+                            hideProgressBar: true,
+                        });
+                    }
+                }
             });
         },
         DeleteUser(id){
-            axios.delete(`http://127.0.0.1:8000/api/user/${id}`)
+            axios.delete(`http://127.0.0.1:8000/api/user/${id}`, {headers: this.header})
             .then(response => {
                 this.GetUserList();
                 this.isUserListOpen = true;
                 this.isCerateUserOpen = false;
                 this.isUpdateDeleteUserOpen = false;
+                toast.success("Delete user is success!", {
+                    autoClose: 5000,
+                    position: toast.POSITION.BOTTOM_RIGHT,
+                    hideProgressBar: true,
+                });
             })
             .catch(error => {
-                console.error(error);
+                for (const key in error.response.data.errors) {
+                    if (error.response.data.errors.hasOwnProperty(key)) {
+                        const errorDes = error.response.data.errors[key];
+                        const errorMessage = `${key}: ${errorDes}`;
+        
+                        toast.error(errorMessage, {
+                            autoClose: 5000,
+                            position: toast.POSITION.BOTTOM_RIGHT,
+                            hideProgressBar: true,
+                        });
+                    }
+                }
             });
         },
 
         GetSubjectList() {
-            axios.get('http://127.0.0.1:8000/api/subject')
+            axios.get('http://127.0.0.1:8000/api/subject', {headers: this.header})
             .then(response => {
                 this.subjectArray = response.data.data;
                 this.subjectArray.sort((a, b) => {
@@ -261,7 +333,18 @@ export default {
                 this.isSubjectLoad = true;
             })
             .catch(error => {
-                console.error(error);
+                for (const key in error.response.data.errors) {
+                    if (error.response.data.errors.hasOwnProperty(key)) {
+                        const errorDes = error.response.data.errors[key];
+                        const errorMessage = `${key}: ${errorDes}`;
+        
+                        toast.error(errorMessage, {
+                            autoClose: 5000,
+                            position: toast.POSITION.BOTTOM_LEFT,
+                            hideProgressBar: true,
+                        });
+                    }
+                }
             });
         },
         SubjectBack() {
@@ -275,15 +358,31 @@ export default {
             this.isUpdateDeleteSubjectOpen = false;
         },
         CreateSubject(subject) {
-            axios.post(`http://127.0.0.1:8000/api/subject`, subject)
+            axios.post(`http://127.0.0.1:8000/api/subject`, subject, {headers: this.header})
             .then(response => {
                 this.GetSubjectList();
                 this.isSubjectListOpen = true;
                 this.isCerateSubjectOpen = false;
                 this.isUpdateDeleteSubjectOpen = false;
+                toast.success("Create subject is success!", {
+                    autoClose: 5000,
+                    position: toast.POSITION.BOTTOM_LEFT,
+                    hideProgressBar: true,
+                });
             })
             .catch(error => {
-                console.error(error);
+                for (const key in error.response.data.errors) {
+                    if (error.response.data.errors.hasOwnProperty(key)) {
+                        const errorDes = error.response.data.errors[key];
+                        const errorMessage = `${key}: ${errorDes}`;
+        
+                        toast.error(errorMessage, {
+                            autoClose: 5000,
+                            position: toast.POSITION.BOTTOM_LEFT,
+                            hideProgressBar: true,
+                        });
+                    }
+                }
             });
         },
         EditSubject(subject) {
@@ -293,39 +392,82 @@ export default {
             this.isUpdateDeleteSubjectOpen = true;
         },
         UpdateSubject(id, subject) {
-            axios.put(`http://127.0.0.1:8000/api/subject/${id}`, subject)
+            axios.put(`http://127.0.0.1:8000/api/subject/${id}`, subject, {headers: this.header})
             .then(response => {
                 this.GetSubjectList();
                 this.isSubjectListOpen = true;
                 this.isCerateSubjectOpen = false;
                 this.isUpdateDeleteSubjectOpen = false;
+                toast.success("Update subject is success!", {
+                    autoClose: 5000,
+                    position: toast.POSITION.BOTTOM_LEFT,
+                    hideProgressBar: true,
+                });
             })
             .catch(error => {
-                console.error(error);
+                for (const key in error.response.data.errors) {
+                    if (error.response.data.errors.hasOwnProperty(key)) {
+                        const errorDes = error.response.data.errors[key];
+                        const errorMessage = `${key}: ${errorDes}`;
+        
+                        toast.error(errorMessage, {
+                            autoClose: 5000,
+                            position: toast.POSITION.BOTTOM_LEFT,
+                            hideProgressBar: true,
+                        });
+                    }
+                }
             });
         },
         DeleteSubject(id){
-            axios.delete(`http://127.0.0.1:8000/api/subject/${id}`)
+            axios.delete(`http://127.0.0.1:8000/api/subject/${id}`, {headers: this.header})
             .then(response => {
                 this.GetSubjectList();
                 this.isSubjectListOpen = true;
                 this.isCerateSubjectOpen = false;
                 this.isUpdateDeleteSubjectOpen = false;
+                toast.success("Delete subject is success!", {
+                    autoClose: 5000,
+                    position: toast.POSITION.BOTTOM_LEFT,
+                    hideProgressBar: true,
+                });
             })
             .catch(error => {
-                console.error(error);
+                for (const key in error.response.data.errors) {
+                    if (error.response.data.errors.hasOwnProperty(key)) {
+                        const errorDes = error.response.data.errors[key];
+                        const errorMessage = `${key}: ${errorDes}`;
+        
+                        toast.error(errorMessage, {
+                            autoClose: 5000,
+                            position: toast.POSITION.BOTTOM_LEFT,
+                            hideProgressBar: true,
+                        });
+                    }
+                }
             });
         },
 
         GetRoomList() {
-            axios.get('http://127.0.0.1:8000/api/room')
+            axios.get('http://127.0.0.1:8000/api/room', {headers: this.header})
             .then(response => {
                 this.roomArray = response.data.data;
                 this.roomArray.sort((a, b) => a.number - b.number);
                 this.isRoomLoad = true;
             })
             .catch(error => {
-                console.error(error);
+                for (const key in error.response.data.errors) {
+                    if (error.response.data.errors.hasOwnProperty(key)) {
+                        const errorDes = error.response.data.errors[key];
+                        const errorMessage = `${key}: ${errorDes}`;
+        
+                        toast.error(errorMessage, {
+                            autoClose: 5000,
+                            position: toast.POSITION.BOTTOM_LEFT,
+                            hideProgressBar: true,
+                        });
+                    }
+                }
             });
         },
         RoomBack() {
@@ -339,15 +481,31 @@ export default {
             this.isUpdateDeleteRoomOpen = false;
         },
         CreateRoom(room) {
-            axios.post(`http://127.0.0.1:8000/api/room`, room)
+            axios.post(`http://127.0.0.1:8000/api/room`, room, {headers: this.header})
             .then(response => {
                 this.GetRoomList();
                 this.isRoomListOpen = true;
                 this.isCerateRoomOpen = false;
                 this.isUpdateDeleteRoomOpen = false;
+                toast.success("Create room is success!", {
+                    autoClose: 5000,
+                    position: toast.POSITION.BOTTOM_LEFT,
+                    hideProgressBar: true,
+                });
             })
             .catch(error => {
-                console.error(error);
+                for (const key in error.response.data.errors) {
+                    if (error.response.data.errors.hasOwnProperty(key)) {
+                        const errorDes = error.response.data.errors[key];
+                        const errorMessage = `${key}: ${errorDes}`;
+        
+                        toast.error(errorMessage, {
+                            autoClose: 5000,
+                            position: toast.POSITION.BOTTOM_LEFT,
+                            hideProgressBar: true,
+                        });
+                    }
+                }
             });
         },
         EditRoom(room) {
@@ -357,27 +515,59 @@ export default {
             this.isUpdateDeleteRoomOpen = true;
         },
         UpdateRoom(id, room) {
-            axios.put(`http://127.0.0.1:8000/api/room/${id}`, room)
+            axios.put(`http://127.0.0.1:8000/api/room/${id}`, room, {headers: this.header})
             .then(response => {
                 this.GetRoomList();
                 this.isRoomListOpen = true;
                 this.isCerateRoomOpen = false;
                 this.isUpdateDeleteRoomOpen = false;
+                toast.success("Update room is success!", {
+                    autoClose: 5000,
+                    position: toast.POSITION.BOTTOM_LEFT,
+                    hideProgressBar: true,
+                });
             })
             .catch(error => {
-                console.error(error);
+                for (const key in error.response.data.errors) {
+                    if (error.response.data.errors.hasOwnProperty(key)) {
+                        const errorDes = error.response.data.errors[key];
+                        const errorMessage = `${key}: ${errorDes}`;
+        
+                        toast.error(errorMessage, {
+                            autoClose: 5000,
+                            position: toast.POSITION.BOTTOM_LEFT,
+                            hideProgressBar: true,
+                        });
+                    }
+                }
             });
         },
         DeleteRoom(id){
-            axios.delete(`http://127.0.0.1:8000/api/room/${id}`)
+            axios.delete(`http://127.0.0.1:8000/api/room/${id}`, {headers: this.header})
             .then(response => {
                 this.GetRoomList();
                 this.isRoomListOpen = true;
                 this.isCerateRoomOpen = false;
                 this.isUpdateDeleteRoomOpen = false;
+                toast.success("Delete room is success!", {
+                    autoClose: 5000,
+                    position: toast.POSITION.BOTTOM_LEFT,
+                    hideProgressBar: true,
+                });
             })
             .catch(error => {
-                console.error(error);
+                for (const key in error.response.data.errors) {
+                    if (error.response.data.errors.hasOwnProperty(key)) {
+                        const errorDes = error.response.data.errors[key];
+                        const errorMessage = `${key}: ${errorDes}`;
+        
+                        toast.error(errorMessage, {
+                            autoClose: 5000,
+                            position: toast.POSITION.BOTTOM_LEFT,
+                            hideProgressBar: true,
+                        });
+                    }
+                }
             });
         },
     }

@@ -1,30 +1,30 @@
 <template>
     <form>
         <div>
-            <p>Username:</p>
+            <p>Username <span style="color: red;">*</span></p>
             <input type="text" v-model="user.username" />
         </div>
         <div>
-            <p>Email:</p>
+            <p>Email <span style="color: red;">*</span></p>
             <input type="email" v-model="user.email" />
         </div>
         <div class="password">
-            <p>Password:</p>
+            <p>Password  <span style="color: red;">*</span></p>
             <input class="password-input" :type="showPassword ? 'text' : 'password'" v-model="user.password" />
             <img v-if="showPassword" @click="togglePasswordVisibility" src="../../assets/Eye.svg" alt="Hide Password" />
             <img v-else @click="togglePasswordVisibility" src="../../assets/EyeOff.svg" alt="Show Password" />
         </div>
         <div>
-            <p>First name:</p>
+            <p>First name <span style="color: red;">*</span></p>
             <input type="text" v-model="user.first_name" />
         </div>
         <div>
-            <p>Last name:</p>
+            <p>Last name <span style="color: red;">*</span></p>
             <input type="text" v-model="user.last_name" />
         </div>
         <div>
-            <p>Permission:</p>
-            <div class="custom-select" @click.stop="toggleDropdownPermission">
+            <p>Permission <span style="color: red;">*</span></p>
+            <div class="custom-select" @click.stop="toggleDropdownPermission" :style="{'color': selectedPermission ? 'initial' : 'rgb(0,0,0,0.5)'}">
                 {{ selectedPermission || 'Permission' }}
                 <div v-if="isPermissionOpen" class="dropdown" ref="dropdown" @click.stop>
                 <div v-for="permission in permissions" :key="permission.description" @click="selectValue(permission)">
@@ -172,15 +172,17 @@ form > div > input {
   color: rgb(0, 0, 0, 0.5);
 }
 
-.dropdown div:hover {
-  color: rgb(0, 0, 0);
-}
 
 .dropdown div:last-child {
   cursor: pointer;
   padding: 7px 0px;
   color: rgb(0, 0, 0, 0.5);
 }
+
+.dropdown div:hover {
+  color: rgb(0, 0, 0);
+}
+
 
 .password {
     position: relative;

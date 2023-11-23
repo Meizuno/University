@@ -1,6 +1,11 @@
 <template>
-    <div class="cell" :style="colors.outside" @click="handleClick" :class="{ clickable: isScheduler }">
-      <div class="tooltip"> 
+    <div class="all">
+      <div
+        class="tooltip"
+        :style="{'display': isTooltipVisible ? 'block' : 'none'}"  
+        @mouseenter="showTooltip"
+        @mouseleave="hideTooltip"
+      > 
         <div v-if="activity.subject.code">
           <p>Code:</p>
           <p>{{ activity.subject.code }}</p>
@@ -9,11 +14,23 @@
           <p>Type:</p>
           <p>{{ activity.activity_type.name }}</p>
         </div>
+        <div v-if="activity.activity_type">
+          <p>Duration:</p>
+          <p>{{ activity.duration }} hours</p>
+        </div>
         <div v-if="activity.instruktor">
-          <p>Code:</p>
+          <p>Instructor:</p>
           <p>{{ activity.instruktor.first_name + activity.instruktor.last_name }}</p>
         </div>
       </div>
+  <div
+    class="cell"
+    :style="colors.outside"
+    @click="handleClick"
+    :class="{ clickable: isScheduler }"
+    @mouseenter="showTooltip"
+    @mouseleave="hideTooltip"
+  >
         <div :style="colors.inside">
             <p :style="colors.title">Subject</p>
             <p class="var">{{ activity.subject.code }}</p>
@@ -23,6 +40,7 @@
             <p class="var">{{ activity.room.number }}</p>
         </div>
     </div>
+  </div>
 
     <div v-if="isDialogOpen" class="custom-dialog">
       <p>Do you want to delete activity from schudule?</p>
@@ -62,6 +80,7 @@ export default {
       },
 
       isDialogOpen: false,
+      isTooltipVisible: false,
     }
   },
   mounted() {
@@ -123,14 +142,22 @@ export default {
     closeDialog() {
       this.isDialogOpen = false;
     },
+    showTooltip() {
+      this.isTooltipVisible = true;
+    },
+    hideTooltip() {
+      this.isTooltipVisible = false;
+    },
   }
 };
 </script>
 
 <style scoped>
 
-.cell {
+.all {
   position: relative;
+}
+.cell {
   display: flex;
   flex-wrap: wrap;
   gap: 10px;
@@ -142,21 +169,19 @@ export default {
 
 .tooltip {
   position: absolute;
-  bottom: 105%;
+  bottom: 100%;
   left: 50%;
   transform: translateX(-50%);
+  padding: 8px;
   background-color: white;
-  color: black;
   border: 1px solid rgb(0, 0, 0, 0.2);
-  border-radius: 4px;
-  opacity: 0;
-  transition: opacity 0.3s ease;
-  z-index: 3;
+  border-radius: 5px;
 }
 
 .tooltip > div {
   display: flex;
   gap: 5px;
+  white-space: nowrap;
 }
 
 

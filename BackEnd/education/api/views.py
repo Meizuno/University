@@ -1,6 +1,6 @@
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
-from authorization.decorators import handle_error, login_required
+from authorization.decorators import handle_error
 from authorization.models import Permission, User
 from drf_yasg.utils import swagger_auto_schema
 from rest_framework import status
@@ -9,6 +9,18 @@ from education.api.serializers import *
 from education.api.doc_responses import *
 from django.db.models import Q
 from datetime import datetime
+
+
+def api_access(request, level):
+    user = request.user
+    if (not user.is_authenticated) or user.permission.level > level:
+        raise ValidationError(
+            {
+                "success": False,
+                "errors": "Permissions denied.",
+            },
+            status=status.HTTP_403_FORBIDDEN,
+        )
 
 
 @swagger_auto_schema(
@@ -23,6 +35,7 @@ from datetime import datetime
 def get_permissions(request):
     """Get all permission levels"""
 
+    api_access(request, 5)
     permissions = Permission.objects.all()
     serializator = PermissionSerializer(permissions, many=True)
     return Response({"data": serializator.data})
@@ -37,8 +50,8 @@ def get_permissions(request):
 )
 @api_view(["GET"])
 @handle_error
-@login_required
 def my_info(request):
+    api_access(request, 5)
     serializer = ReadUserSerializer(request.user)
     return Response(serializer.data, status=status.HTTP_200_OK)
 
@@ -65,11 +78,13 @@ def get_users_or_create(request):
     """Read users or create new"""
 
     if request.method == "GET":
+        api_access(request, 1)
         params = request.GET.dict()
         users = User.objects.filter(**params)
         serializator = ReadUserSerializer(users, many=True)
         return Response({"data": serializator.data})
     elif request.method == "POST":
+        api_access(request, 1)
         serializator = UserSerializer(data=request.data)
         if serializator.is_valid():
             User.objects.create_user(**serializator.data)
@@ -111,14 +126,16 @@ def rud_user(request, user_id):
     """Read, update or delete user"""
 
     if request.method == "GET":
+        api_access(request, 5)
         user = User.objects.get(id=user_id)
         serializator = ReadUserSerializer(user)
         return Response({"data": serializator.data})
     elif request.method == "PUT":
+        print(request.user)
+        api_access(request, 1)
         serializator = UserSerializer(data=request.data)
         if serializator.is_valid():
             user = User.objects.filter(id=user_id)
-
             if not user.exists():
                 return Response(
                     {
@@ -130,6 +147,7 @@ def rud_user(request, user_id):
             user.update(**serializator.validated_data)
             return Response({"success": True, "errors": None})
     elif request.method == "DELETE":
+        api_access(request, 1)
         user = User.objects.filter(id=user_id)
         if not user.exists():
             return Response(
@@ -165,10 +183,12 @@ def get_rooms_or_create(request):
     """Read rooms or create new"""
 
     if request.method == "GET":
+        api_access(request, 4)
         rooms = Room.objects.all()
         serializator = ReadRoomSerializer(rooms, many=True)
         return Response({"data": serializator.data})
     elif request.method == "POST":
+        api_access(request, 1)
         serializator = RoomSerializer(data=request.data)
         if serializator.is_valid():
             Room.objects.create(**serializator.data)
@@ -210,6 +230,7 @@ def rud_room(request, room_id):
     """Read, update or delete room"""
 
     if request.method == "GET":
+        api_access(request, 4)
         room = Room.objects.get(id=room_id)
         serializator = ReadRoomSerializer(room)
         return Response({"data": serializator.data})
@@ -228,6 +249,7 @@ def rud_room(request, room_id):
             room.update(**serializator.validated_data)
             return Response({"success": True, "errors": None})
     elif request.method == "DELETE":
+        api_access(request, 1)
         room = Room.objects.filter(id=room_id)
         if not room.exists():
             return Response(
@@ -269,9 +291,13 @@ def get_subjects_or_create(request):
         serializator = ReadSubjectSerializer(subjects, many=True)
         return Response({"data": serializator.data})
     elif request.method == "POST":
+        api_access(request, 1)
         serializator = SubjectSerializer(data=request.data)
         if serializator.is_valid():
-            Subject.objects.create(**serializator.data)
+            subject = Subject.objects.create(**serializator.data)
+            InstructorSubject.objects.create(
+                subject=subject, instructor=subject.guarantor
+            )
             return Response({"success": True, "errors": None})
         else:
             return Response(
@@ -314,6 +340,7 @@ def rud_subject(request, subject_id):
         serializator = ReadSubjectSerializer(subject)
         return Response({"data": serializator.data})
     elif request.method == "PUT":
+        api_access(request, 1)
         serializator = SubjectSerializer(data=request.data)
         if serializator.is_valid():
             subject = Subject.objects.filter(id=subject_id)
@@ -326,8 +353,12 @@ def rud_subject(request, subject_id):
                     status=status.HTTP_400_BAD_REQUEST,
                 )
             subject.update(**serializator.validated_data)
+            InstructorSubject.objects.filter(subject=subject[0]).update(
+                instructor=subject[0].guarantor
+            )
             return Response({"success": True, "errors": None})
     elif request.method == "DELETE":
+        api_access(request, 1)
         subject = Subject.objects.filter(id=subject_id)
         if not subject.exists():
             return Response(
@@ -337,6 +368,7 @@ def rud_subject(request, subject_id):
                 },
                 status=status.HTTP_400_BAD_REQUEST,
             )
+        InstructorSubject.objects.filter(subject=subject[0]).delete()
         subject.delete()
         return Response({"success": True, "errors": None})
 
@@ -548,30 +580,16 @@ def get_student_subjects(request, student_id):
 @handle_error
 def activity_to_schedule(request, activity_id):
     if request.method == "POST":
+        api_access(request, 4)
         serializator = ActivitySchedulerSerializer(data=request.data)
         if serializator.is_valid():
-            activity = Activity.objects.filter(id=activity_id)
-            if not activity.exists():
-                return Response(
-                    {
-                        "success": True,
-                        "errors": "Activity does not exist.",
-                    },
-                    status=status.HTTP_400_BAD_REQUEST,
-                )
-            activity.update(**serializator.validated_data)
+            activity = Activity.objects.get(id=activity_id)
+            activity.schedule_update(**serializator.validated_data)
             return Response({"success": True, "errors": None})
     elif request.method == "DELETE":
-        activity = Activity.objects.filter(id=activity_id)
-        if not activity.exists():
-            return Response(
-                {
-                    "success": True,
-                    "errors": "Activity does not exist.",
-                },
-                status=status.HTTP_400_BAD_REQUEST,
-            )
-        activity.update(room=None, time=None, day=None)
+        api_access(request, 4)
+        activity = Activity.objects.get(id=activity_id)
+        activity.schedule_update(room_id=None, time=None, day=None)
         return Response({"success": True, "errors": None})
 
 

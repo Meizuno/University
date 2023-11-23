@@ -1,7 +1,7 @@
 <template>
     <form>
         <div>
-            <p>Number:</p>
+            <p>Number <span style="color: red;">*</span></p>
             <input type="text" v-model="room.number" />
         </div>
         <div>

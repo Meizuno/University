@@ -31,6 +31,8 @@ import ScheduleCell from '../components/ScheduleCell.vue';
 import NotResolvedCell from '../components/NotResolvedCell.vue';
 import Calendar from '../components/Calendar.vue';
 import axios from 'axios';
+import { toast } from 'vue3-toastify';
+import 'vue3-toastify/dist/index.css';
 
 export default {
     emits: ["remove-from-calendar", "add-to-calendar", "add-to-calendar"],
@@ -42,6 +44,10 @@ export default {
     },
     data() {
         return {
+            header: {
+                "Authorization": localStorage.getItem("token"),
+            },
+
             activitiesNotResolved: [],
             activitiesResolved: [],
             rooms: [],
@@ -52,7 +58,7 @@ export default {
     methods: {
         GetActivities() {
             this.dataForCalendarReceived = false;
-            axios.get('http://127.0.0.1:8000/api/activity')
+            axios.get('http://127.0.0.1:8000/api/activity', {headers: this.header})
             .then(response => {
                 let activities = response.data.data;
                 this.activitiesNotResolved = [];
@@ -72,32 +78,48 @@ export default {
             });
         },
         HandleRemoveFromCalendar(activity) {
-            axios.delete(`http://127.0.0.1:8000/api/scheduler-activity/${activity.id}`)
+            axios.delete(`http://127.0.0.1:8000/api/scheduler-activity/${activity.id}`, {headers: this.header})
             .then(response => {
                 this.GetActivities();
                 this.$refs.calendarRef.UpdateCalendar();
+                toast.success("Remove from calendar successful!", {
+                    autoClose: 5000,
+                    position: toast.POSITION.BOTTOM_RIGHT,
+                    hideProgressBar: true,
+                });
             })
             .catch(error => {
                 console.error(error);
             });
         },
         HandleAddToCalendar(activity, data) {
-            axios.post(`http://127.0.0.1:8000/api/scheduler-activity/${activity.id}`, data)
+            axios.post(`http://127.0.0.1:8000/api/scheduler-activity/${activity.id}`, data, {headers: this.header})
             .then(response => {
                 this.GetActivities();
                 this.$refs.calendarRef.UpdateCalendar();
+                toast.success("Add to calendar successful!", {
+                    autoClose: 5000,
+                    position: toast.POSITION.BOTTOM_RIGHT,
+                    hideProgressBar: true,
+                });
             })
             .catch(error => {
-                console.error(error);
+                let message = error.response.data.detail.replace(/['\[\]]/g, '');
+                toast.error(message, {
+                    autoClose: 5000,
+                    position: toast.POSITION.BOTTOM_LEFT,
+                    hideProgressBar: true,
+                });
             });
         }
     },
     mounted() {
         this.GetActivities();
 
-        axios.get('http://127.0.0.1:8000/api/room')
+        axios.get('http://127.0.0.1:8000/api/room', {headers: this.header})
         .then(response => {
             this.rooms = response.data.data;
+            this.rooms.sort((a, b) => a.number - b.number);
         })
         .catch(error => {
             console.error('Error response for rooms: ', error);
