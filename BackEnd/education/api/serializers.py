@@ -57,7 +57,8 @@ class ReadSubjectSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Subject
-        fields = ("id", "code", "name", "description", "guarantor")
+        #fields = ("id", "code", "name", "description", "guarantor")
+        fields = "__all__"
 
 
 class SubjectSerializer(serializers.Serializer):
@@ -107,7 +108,12 @@ class ActivityGuarantorSerializer(serializers.Serializer):
 
 
 class ActivityInstructorSerializer(serializers.Serializer):
-    instructor_id = serializers.IntegerField()
+    #instructor_id = serializers.IntegerField()
+    instructor_notes = serializers.CharField(
+        max_length=255,
+        required=False,
+        allow_blank=True,
+    )
 
 
 class ActivitySchedulerSerializer(serializers.Serializer):

@@ -50,13 +50,19 @@ export default {
     }
   },
   methods:{
+    getUser(){
+      const storedUser = localStorage.getItem('user');
+      if(storedUser) {
+        this.user = JSON.parse(storedUser);
+      }
+    },
     // get activities /activity?instructor=id
     // get subject /subject?instructors=id
     getActivities(){
       const date_from = this.convertDate(this.startDate);
       const date_to = this.convertDate(this.endDate);
       // set to dynamic
-      axios.get(`http://127.0.0.1:8000/api/instructor_activities/5?date_from=${date_from}&date_to=${date_to}`)
+      axios.get(`http://127.0.0.1:8000/api/instructor_activities/${this.user.id}?date_from=${date_from}&date_to=${date_to}`)
           .then(response=>{
             this.activities = response.data.data;
             this.updateKey();
@@ -109,6 +115,10 @@ export default {
       return `${year}-${month.padStart(2, '0')}-${day.padStart(2, '0')}`;
     },
   },
+  mounted() {
+    this.getUser();
+    this.getActivities();
+  }
 
 }
 </script>

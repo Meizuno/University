@@ -40,6 +40,7 @@ import Navigation from "@/components/Navigation.vue";
 import axios from "axios";
 import Calendar from "@/components/Calendar.vue";
 import CalendarTest from "@/components/CalendarTest.vue";
+import {toast} from "vue3-toastify";
 
 export default {
   components: {CalendarTest, Calendar, Navigation},
@@ -65,6 +66,10 @@ export default {
       axios.post(`http://127.0.0.1:8000/api/student_register_activity/${this.user.id}/${activity.id}`)
           .then(response=>{
             this.getStudentActivities();
+            toast.success("Activity was successfully registered!", {
+              autoClose: 5000,
+              position: toast.POSITION.BOTTOM_RIGHT,
+            });
           })
           .catch(e=>{
             console.log(e);
@@ -74,9 +79,18 @@ export default {
       axios.delete(`http://127.0.0.1:8000/api/student_register_activity/${this.user.id}/${activity.id}`)
           .then(response=>{
             this.getStudentActivities();
+            toast.success("Activity was successfully unregistered!", {
+              autoClose: 5000,
+              position: toast.POSITION.BOTTOM_RIGHT,
+            });
           })
-          .catch(e=>{
-            console.log(e);
+          .catch(error=>{
+            let message = error.response.data.detail.replace(/['\[\]]/g, '');
+            toast.error(message, {
+              autoClose: 5000,
+              position: toast.POSITION.BOTTOM_LEFT,
+              hideProgressBar: true,
+            });
           })
     },
     async getScheduleActivities(subjectId){

@@ -111,6 +111,7 @@ import GuarantRequest from "@/components/GuarantRequest.vue";
 import axios from "axios";
 import {reactive, ref} from "vue";
 import Cross from "@/components/icons/Cross.vue";
+import {toast} from "vue3-toastify";
 
 
 export default {
@@ -166,7 +167,7 @@ export default {
         "guarantor_notes": this.notes,
         "duration": this.selectedDuration,
         "activity_type_id": this.selectedType,
-        "subject_id": 1, // CHANGE TO DYNAMIC {FOR TEST}
+        "subject_id": this.guarantorSubject.id, // CHANGE TO DYNAMIC {FOR TEST}
         "date_from": this.range.start,
         "date_to": this.range.end,
         "activity_repetition_id": this.selectedRepeating,
@@ -174,8 +175,11 @@ export default {
       console.log(dataToSend);
       axios.post("http://127.0.0.1:8000/api/activity", dataToSend)
           .then(response=>{
-            console.log(response);
             this.getRequests()
+            toast.success("Request was successfully created!", {
+              autoClose: 5000,
+              position: toast.POSITION.BOTTOM_RIGHT,
+            });
           })
           .catch(error=>{
             console.log(error);
@@ -190,7 +194,7 @@ export default {
     },
     getRequests(){
       // change to subject id
-      axios.get("http://127.0.0.1:8000/api/get_requests/1")
+      axios.get(`http://127.0.0.1:8000/api/get_requests/${this.guarantorSubject.id}`)
           .then(response=>{
             this.requests = response.data.data;
           })
@@ -198,11 +202,13 @@ export default {
             console.log(error)
           });
     },
-    async getSubject(){
+    getSubject(){
       try {
         // change to user.id
-        const response = await axios.get("http://127.0.0.1:8000/api/subject?guarantor_id=2")
-        this.guarantorSubject = response.data.data[0];
+        const storedSubject = localStorage.getItem('subject');
+        if(storedSubject) {
+          this.guarantorSubject = JSON.parse(storedSubject);
+        }
 
       }catch (e) {
         console.log(e);
@@ -211,8 +217,11 @@ export default {
     deleteRequest(activity){
       axios.delete(`http://127.0.0.1:8000/api/activity/${activity.id}`)
           .then(response=>{
-            console.log(response);
             this.getRequests();
+            toast.success("Request was successfully deleted!", {
+              autoClose: 5000,
+              position: toast.POSITION.BOTTOM_RIGHT,
+            });
           })
           .catch(e=>{
             console.log(e);
@@ -222,8 +231,8 @@ export default {
 
   },
   async mounted() {
+    this.getSubject();
     this.getRequests();
-    await this.getSubject();
   }
 }
 </script>
@@ -307,7 +316,6 @@ export default {
   border-radius: 10px;
   border: 3px solid #d3d3d3;
   height: 100%;
-
 }
 .select-type{
   margin-top: 10px;

@@ -2,25 +2,31 @@
   <div :class="cardClass" class="request_card">
     <div class="header">
       <div class="head-name">
-        {{ subject.code }} {{request.activity_type.name}}
+        {{request.activity_type.name}}
       </div>
-      <div class="cross" @click="deleteRequest">
-        <cross></cross>
+      <div class="cross" >
+        <div v-if="!registered" @click="registerActivity">
+          <checkmark></checkmark>
+        </div>
+        <div v-else @click="unregisterActivity">
+          <cross></cross>
+        </div>
       </div>
     </div>
     <div class="body">
       <div class="repeating">Repeating: {{ this.repeating }}</div>
       <div class="duration">Duration: {{request.duration}}</div>
-      <div class="notes">Notes: {{request.guarantor_notes}}</div>
+      <div class="notes">Guarantor notes: {{request.guarantor_notes}}</div>
     </div>
   </div>
 </template>
 
 <script>
 import Cross from "@/components/icons/Cross.vue";
+import Checkmark from "@/components/icons/Checkmark.vue";
 
 export default {
-  components: {Cross},
+  components: {Checkmark, Cross},
   data(){
     return{
       repeating: '',
@@ -31,8 +37,8 @@ export default {
       type: Object,
       required: true,
     },
-    subject: {
-      type: Object,
+    registered: {
+      type: Boolean,
       required: true,
     }
   },
@@ -69,8 +75,11 @@ export default {
       }
 
     },
-    deleteRequest(){
-      this.$emit('deleteRequest', this.request);
+    registerActivity(){
+      this.$emit('registerActivity', this.request);
+    },
+    unregisterActivity(){
+      this.$emit('unregisterActivity', this.request);
     },
   },
 
@@ -94,6 +103,7 @@ export default {
   margin-top: 3px;
   margin-right: 10px;
   border-radius: 10px;
+  color: black; /* Цвет текста */
 }
 .header{
   height: 40px;

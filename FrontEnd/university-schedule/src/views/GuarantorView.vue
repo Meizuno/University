@@ -32,20 +32,24 @@ export default {
         {text:'Instructors', class:'not-selected', route: '/guarantor/instructors'},
         {text:'Activities', class:'not-selected', route: '/guarantor/activities'},
       ],
-      user : {
-
-      },
-      guarantorSubject : {},
+      user: {},
+      guarantorSubject: {},
       activities: [],
       calendarKey: 0,
     }
   },
 
   methods: {
+    getUser(){
+      const storedUser = localStorage.getItem('user');
+      if(storedUser) {
+        this.user = JSON.parse(storedUser);
+      }
+    },
     async getGuarantorSubjectAndActivities(){
       try {
         // change to user.id
-        axios.get("http://127.0.0.1:8000/api/subject?guarantor_id=2")
+        axios.get(`http://127.0.0.1:8000/api/subject?guarantor_id=${this.user.id}`)
             .then(response => {
               this.guarantorSubject = response.data.data[0];
               localStorage.setItem('subject', JSON.stringify(this.guarantorSubject));
@@ -66,8 +70,9 @@ export default {
       this.calendarKey += 1;
     }
   },
-  mounted() {
-    this.getGuarantorSubjectAndActivities();
+  async mounted() {
+    this.getUser();
+    await this.getGuarantorSubjectAndActivities();
   },
 }
 </script>

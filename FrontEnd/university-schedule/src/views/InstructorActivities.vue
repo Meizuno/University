@@ -21,18 +21,48 @@
           </option>
         </select>
       </div>
-
     </div>
-    <CalendarTest style="margin-top: 5px"
-                  :activities="activities"
-                  :key="calendarKey"
-                  :is-scheduler="false"
-                  @register_activity="registerActivity"
-                  @unregister_activity="unregisterActivity"
-    >
-    </CalendarTest>
-  </div>
+    <div class="all__activities__container">
+      <div class="act-title">
+        Available activities
+      </div>
+      <div class="activities-container">
+        <InstructorAvailableCard
+            v-for="activity in activities"
+            :request="activity"
+            :key="activity.id"
+            :registered="false"
+            @registerActivity="writeNotes"
+        >
+        </InstructorAvailableCard>
 
+      </div>
+    </div>
+    <div class="registered__activities__container">
+      <div class="act-title">
+        Registered activities
+      </div>
+      <div class="activities-container">
+        <InstructorAvailableCard
+            v-for="activity in registeredActivities"
+            :request="activity"
+            :key="activity.id"
+            :registered="true"
+            @unregisterActivity="unregisterActivity"
+        >
+        </InstructorAvailableCard>
+      </div>
+    </div>
+
+  </div>
+  <div v-if="showModal">
+    <ModalWindow
+        :activity="selectedActivity"
+        @close-modal="closeModal"
+        @register-activity="registerActivity"
+    >
+    </ModalWindow>
+  </div>
 </template>
 
 <script>
@@ -40,9 +70,11 @@ import Navigation from "@/components/Navigation.vue";
 import axios from "axios";
 import Calendar from "@/components/Calendar.vue";
 import CalendarTest from "@/components/CalendarTest.vue";
+import InstructorAvailableCard from "@/components/Instructor/InstructorAvailableCard.vue";
+import ModalWindow from "@/components/Instructor/ModalWindow.vue";
 
 export default {
-  components: {CalendarTest, Calendar, Navigation},
+  components: {ModalWindow, InstructorAvailableCard, CalendarTest, Calendar, Navigation},
   data(){
     return{
       user: {},
@@ -54,41 +86,41 @@ export default {
       ],
       selectedSubject: 0,
       activities: [],
-      calendarKey: 0,
       registeredActivities: [],
-
+      showModal: false,
+      selectedActivity:{},
     }
   },
   methods: {
-    registerActivity(activity){
-      // set to dynamic user
-      axios.post(`http://127.0.0.1:8000/api/instructor_register_activity/5/${activity.id}`)
+
+    writeNotes(activity){
+      this.selectedActivity = activity;
+      this.openModal();
+    },
+    registerActivity(payload) {
+      const { activity, notes } = payload;
+      const dataToSend = {
+        "instructor_notes": notes,
+      };
+      axios.post(`http://127.0.0.1:8000/api/instructor_register_activity/${this.user.id}/${activity.id}`,dataToSend)
           .then(response=>{
-            this.getInstructorActivities();
+            this.getScheduleActivities(this.selectedSubject);
           })
           .catch(e=>{
             console.log(e);
           })
+      this.closeModal();
     },
     unregisterActivity(activity){
-      axios.delete(`http://127.0.0.1:8000/api/instructor_register_activity/5/${activity.id}`)
+      axios.delete(`http://127.0.0.1:8000/api/instructor_register_activity/${this.user.id}/${activity.id}`)
           .then(response=>{
-            this.getInstructorActivities();
+            this.getScheduleActivities(this.selectedSubject);
           })
           .catch(e=>{
             console.log(e);
           })
     },
     async getScheduleActivities(subjectId){
-      // instructor should be NULL
-      // await axios.get(`http://127.0.0.1:8000/api/subject_activities/${subjectId}`)
-      //     .then(response=>{
-      //       this.activities = response.data.data;
-      //       this.getInstructorActivities();
-      //     })
-      //     .catch(e=>{
-      //       console.log(e);
-      //     })
       await axios.get(`http://127.0.0.1:8000/api/instructor_free_activities/${subjectId}`)
           .then(response=>{
             this.activities = response.data.data;
@@ -101,22 +133,15 @@ export default {
     updateCalendarKey() {
       this.calendarKey += 1;
     },
-    activityTypes(){
-      this.activities.forEach(activity => {
-        const registeredActivity = this.registeredActivities.find(
-            registered => registered.id === activity.id
-        );
-        activity.regtype = registeredActivity ? 'registered' : 'unregistered';
-      });
-    },
     getUserAndSubjects(){
       try{
-        // const storedUser = localStorage.getItem('user');
-        // if(storedUser){
-        //   this.user = JSON.parse(storedUser);
+        const storedUser = localStorage.getItem('user');
+        if(storedUser) {
+          this.user = JSON.parse(storedUser);
+        }
         try{
           // set to dynamic
-          axios.get('http://127.0.0.1:8000/api/subject?instructors=5')
+          axios.get(`http://127.0.0.1:8000/api/subject?instructors=${this.user.id}`)
               .then(response => {
                 this.registeredSubjects = response.data.data;
               })
@@ -132,26 +157,18 @@ export default {
       }
     },
     async getInstructorActivities(){
-      await axios.get(`http://127.0.0.1:8000/api/activity?instructor=5&subject=${this.selectedSubject}`)
+      await axios.get(`http://127.0.0.1:8000/api/activity?instructor=${this.user.id}&subject=${this.selectedSubject}`)
           .then(response=>{
             this.registeredActivities = response.data.data;
-            this.registeredActivities.forEach(activity => {
-              if (!this.activities.some(item => item.id === activity.id)) {
-                this.activities.push(activity);
-              }
-            });
-            this.activityTypes();
-            this.updateCalendarKey();
           })
-      // await axios.get(`http://127.0.0.1:8000/api/student_activities_subject/${this.user.id}/${this.selectedSubject}`)
-      //     .then(response=>{
-      //       this.registeredActivities = response.data.data;
-      //       this.activityTypes();
-      //       this.updateCalendarKey();
-      //     })
-      //     .catch(e=>{
-      //       console.log(e);
-      //     })
+
+    },
+    closeModal(){
+      this.showModal = false;
+      this.selectedActivity = {};
+    },
+    openModal(){
+      this.showModal = true;
     }
   },
   watch: {
@@ -181,7 +198,7 @@ export default {
   height: 60px;
   background: #81d4fa;
   margin-top: 20px;
-  margin-left: 30px;
+  margin-left: 170px;
   display: flex;
   align-items: center;
   font-size: 22px;
@@ -207,5 +224,51 @@ export default {
 }
 .subject-title{
   margin-left: 10px;
+}
+.all__activities__container{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  height: 40vh;
+  justify-content: center;
+}
+.registered__activities__container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  height: 40vh;
+  justify-content: center;
+}
+.act-title{
+  font-size: 25px;
+  font-weight: bold;
+}
+.activities-container{
+  background: white;
+  display: flex;
+  justify-content: start;
+  align-items: center;
+  padding-left: 20px;
+  height: 80%;
+  width: 80%;
+  border-radius: 15px;
+  border: 3px solid teal;
+  overflow: auto;
+}
+.activities-container::-webkit-scrollbar {
+  width: 1px;
+}
+
+.activities-container::-webkit-scrollbar-track {
+  background-color: #d3d3d3;
+  border: none;
+  border-radius: 5px;
+}
+
+.activities-container::-webkit-scrollbar-thumb {
+  background-color: black;
+  border-radius: 10px;
+  border: 3px solid #d3d3d3;
+  height: 100%;
 }
 </style>

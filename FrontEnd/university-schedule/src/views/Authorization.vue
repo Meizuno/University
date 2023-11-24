@@ -53,8 +53,10 @@ export default {
             axios.get('http://127.0.0.1:8000/api/my-info', {headers:headers})
                 .then(response => {
                   const user = response.data;
-                  localStorage.setItem('username', user.username);
-                  localStorage.setItem('status', user.permission.description);
+                  localStorage.setItem('user', JSON.stringify(user));
+                  // localStorage.setItem('username', user.username);
+                  // localStorage.setItem('status', user.permission.description);
+                  console.log(user.permission.description);
                   switch (user.permission.description) {
                     case 'Admin':
                       this.$router.push('/admin')
