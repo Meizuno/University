@@ -72,7 +72,8 @@ export default {
     },
   },
   mounted() {
-    axios.get('http://127.0.0.1:8000/api/subject')
+    console.log();
+    axios.get(`${import.meta.env.VITE_API_HOST}/subject`)
         .then(response => {
             this.subjects = response.data.data;
             this.fetchSubjectActivities();

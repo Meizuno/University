@@ -152,7 +152,7 @@ export default {
     mounted() {
         this.GetUserList();
 
-        axios.get('http://127.0.0.1:8000/api/permission', {headers: this.header})
+        axios.get(`${import.meta.env.VITE_API_HOST}/permission`, {headers: this.header})
         .then(response => {
             this.permissions = response.data.data;
         })
@@ -176,7 +176,7 @@ export default {
     },
     methods: {
         GetUserList(){
-            axios.get('http://127.0.0.1:8000/api/user', {headers: this.header})
+            axios.get(`${import.meta.env.VITE_API_HOST}/user`, {headers: this.header})
             .then(response => {
                 this.userArray = response.data.data;
                 this.userArray.sort((a, b) => {
@@ -194,6 +194,7 @@ export default {
                     return 0;
                 });
                 this.guarantors = this.userArray.filter(user => user.permission.level === 2);
+                this.GetGuarantors();
                 this.isUserLoad = true;
             })
             .catch(error => {
@@ -222,7 +223,7 @@ export default {
             this.isUpdateDeleteUserOpen = false;
         },
         CreateUser(user) {
-            axios.post(`http://127.0.0.1:8000/api/user`, user, {headers: this.header})
+            axios.post(`${import.meta.env.VITE_API_HOST}/user`, user, {headers: this.header})
             .then(response => {
                 this.GetUserList();
                 this.isUserListOpen = true;
@@ -256,7 +257,7 @@ export default {
             this.isUpdateDeleteUserOpen = true;
         },
         UpdateUser(id, user){
-            axios.put(`http://127.0.0.1:8000/api/user/${id}`, user, {headers: this.header})
+            axios.put(`${import.meta.env.VITE_API_HOST}/user/${id}`, user, {headers: this.header})
             .then(response => {
                 this.GetUserList();
                 this.isUserListOpen = true;
@@ -284,7 +285,7 @@ export default {
             });
         },
         DeleteUser(id){
-            axios.delete(`http://127.0.0.1:8000/api/user/${id}`, {headers: this.header})
+            axios.delete(`${import.meta.env.VITE_API_HOST}/user/${id}`, {headers: this.header})
             .then(response => {
                 this.GetUserList();
                 this.isUserListOpen = true;
@@ -311,9 +312,18 @@ export default {
                 }
             });
         },
+        GetGuarantors(){
+            this.guarantors = this.guarantors.filter(guarantor => {
+                const existsInSubjectArray = this.subjectArray.some(subject => {
+                    return subject.guarantor.id === guarantor.id;
+                });
+
+                return !existsInSubjectArray;
+            });
+        },
 
         GetSubjectList() {
-            axios.get('http://127.0.0.1:8000/api/subject', {headers: this.header})
+            axios.get(`${import.meta.env.VITE_API_HOST}/subject`, {headers: this.header})
             .then(response => {
                 this.subjectArray = response.data.data;
                 this.subjectArray.sort((a, b) => {
@@ -331,6 +341,8 @@ export default {
                     return 0;
                 });
                 this.isSubjectLoad = true;
+
+                this.GetGuarantors();
             })
             .catch(error => {
                 for (const key in error.response.data.errors) {
@@ -358,7 +370,7 @@ export default {
             this.isUpdateDeleteSubjectOpen = false;
         },
         CreateSubject(subject) {
-            axios.post(`http://127.0.0.1:8000/api/subject`, subject, {headers: this.header})
+            axios.post(`${import.meta.env.VITE_API_HOST}/subject`, subject, {headers: this.header})
             .then(response => {
                 this.GetSubjectList();
                 this.isSubjectListOpen = true;
@@ -392,7 +404,7 @@ export default {
             this.isUpdateDeleteSubjectOpen = true;
         },
         UpdateSubject(id, subject) {
-            axios.put(`http://127.0.0.1:8000/api/subject/${id}`, subject, {headers: this.header})
+            axios.put(`${import.meta.env.VITE_API_HOST}/subject/${id}`, subject, {headers: this.header})
             .then(response => {
                 this.GetSubjectList();
                 this.isSubjectListOpen = true;
@@ -420,7 +432,7 @@ export default {
             });
         },
         DeleteSubject(id){
-            axios.delete(`http://127.0.0.1:8000/api/subject/${id}`, {headers: this.header})
+            axios.delete(`${import.meta.env.VITE_API_HOST}/subject/${id}`, {headers: this.header})
             .then(response => {
                 this.GetSubjectList();
                 this.isSubjectListOpen = true;
@@ -449,7 +461,7 @@ export default {
         },
 
         GetRoomList() {
-            axios.get('http://127.0.0.1:8000/api/room', {headers: this.header})
+            axios.get(`${import.meta.env.VITE_API_HOST}/room`, {headers: this.header})
             .then(response => {
                 this.roomArray = response.data.data;
                 this.roomArray.sort((a, b) => a.number - b.number);
@@ -481,7 +493,7 @@ export default {
             this.isUpdateDeleteRoomOpen = false;
         },
         CreateRoom(room) {
-            axios.post(`http://127.0.0.1:8000/api/room`, room, {headers: this.header})
+            axios.post(`${import.meta.env.VITE_API_HOST}/room`, room, {headers: this.header})
             .then(response => {
                 this.GetRoomList();
                 this.isRoomListOpen = true;
@@ -515,7 +527,7 @@ export default {
             this.isUpdateDeleteRoomOpen = true;
         },
         UpdateRoom(id, room) {
-            axios.put(`http://127.0.0.1:8000/api/room/${id}`, room, {headers: this.header})
+            axios.put(`${import.meta.env.VITE_API_HOST}/room/${id}`, room, {headers: this.header})
             .then(response => {
                 this.GetRoomList();
                 this.isRoomListOpen = true;
@@ -543,7 +555,7 @@ export default {
             });
         },
         DeleteRoom(id){
-            axios.delete(`http://127.0.0.1:8000/api/room/${id}`, {headers: this.header})
+            axios.delete(`${import.meta.env.VITE_API_HOST}/room/${id}`, {headers: this.header})
             .then(response => {
                 this.GetRoomList();
                 this.isRoomListOpen = true;

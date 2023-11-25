@@ -41,7 +41,7 @@ const router = createRouter({
       component: Scheduler,
       beforeEnter: (to, from, next) => {
         const status = JSON.parse(localStorage.getItem('user')).permission.description
-        if (status !== 'Scheduler') {
+        if (status !== 'Scheduler' && status !== 'Admin') {
           next('/');
         } else {
           next();
@@ -77,7 +77,7 @@ const router = createRouter({
       component: GuarantorView,
       beforeEnter: (to, from, next) => {
         const status = JSON.parse(localStorage.getItem('user')).permission.description
-        if (status !== 'Guarantor') {
+        if (status !== 'Guarantor' && status !== 'Admin') {
           next('/');
         } else {
           next();
@@ -89,7 +89,7 @@ const router = createRouter({
       component: GuarantorInstructors,
       beforeEnter: (to, from, next) => {
         const status = JSON.parse(localStorage.getItem('user')).permission.description
-        if (status !== 'Guarantor') {
+        if (status !== 'Guarantor' && status !== 'Admin') {
           next('/');
         } else {
           next();
@@ -101,7 +101,7 @@ const router = createRouter({
       component: GuarantorActivities,
       beforeEnter: (to, from, next) => {
         const status = JSON.parse(localStorage.getItem('user')).permission.description
-        if (status !== 'Guarantor') {
+        if (status !== 'Guarantor' && status !== 'Admin') {
           next('/');
         } else {
           next();
@@ -125,7 +125,7 @@ const router = createRouter({
       component: InstructorView,
       beforeEnter: (to, from, next) => {
         const status = JSON.parse(localStorage.getItem('user')).permission.description
-        if (status !== 'Instructor' && status !== 'Guarantor') {
+        if (status !== 'Instructor' && status !== 'Guarantor' && status !== 'Admin') {
           next('/');
         } else {
           next();
@@ -137,7 +137,7 @@ const router = createRouter({
       component: InstructorActivities,
       beforeEnter: (to, from, next) => {
         const status = JSON.parse(localStorage.getItem('user')).permission.description
-        if (status !== 'Instructor' && status !== 'Guarantor') {
+        if (status !== 'Instructor' && status !== 'Guarantor' && status !== 'Admin') {
           next('/');
         } else {
           next();

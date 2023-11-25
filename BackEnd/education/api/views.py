@@ -14,13 +14,7 @@ from datetime import datetime
 def api_access(request, level):
     user = request.user
     if (not user.is_authenticated) or user.permission.level > level:
-        raise ValidationError(
-            {
-                "success": False,
-                "errors": "Permissions denied.",
-            },
-            status=status.HTTP_403_FORBIDDEN,
-        )
+        raise ValidationError("Permissions denied.")
 
 
 @swagger_auto_schema(
@@ -78,7 +72,7 @@ def get_users_or_create(request):
     """Read users or create new"""
 
     if request.method == "GET":
-        api_access(request, 1)
+        # api_access(request, 1)
         params = request.GET.dict()
         users = User.objects.filter(**params)
         serializator = ReadUserSerializer(users, many=True)
@@ -480,7 +474,9 @@ def register_subject(request, user_id, subject_id):
 def get_activity_or_create(request):
     if request.method == "GET":
         params = request.GET.dict()
-        print(params)
+        if params.get("instructor__isnull"):
+            print(bool(params["instructor__isnull"]))
+            params["instructor__isnull"] = bool(params["instructor__isnull"])
         activity = Activity.objects.filter(**params)
         serializator = ReadActivitySerializer(activity, many=True)
         return Response({"data": serializator.data})
@@ -557,6 +553,23 @@ def get_student_subjects(request, student_id):
     subjects = student.student_subjects
     serializer = ReadSubjectSerializer(subjects, many=True)
     return Response({"data": serializer.data})
+
+
+@swagger_auto_schema(
+    method="get",
+    request_body=ActivitySchedulerSerializer,
+    responses={
+        200: OK_200_RESPONSE_DEFAULT,
+        403: ERROR_403_RESPONSE_DEFAULT,
+    },
+)
+@api_view(["GET"])
+@handle_error
+def schedule_activity(request):
+    api_access(request, 4)
+    activity = Activity.objects.filter(instructor__isnull=False)
+    serializator = ReadActivitySerializer(activity, many=True)
+    return Response({"data": serializator.data})
 
 
 @swagger_auto_schema(
