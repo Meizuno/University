@@ -194,6 +194,7 @@ export default {
                     return 0;
                 });
                 this.guarantors = this.userArray.filter(user => user.permission.level === 2);
+                this.GetGuarantors();
                 this.isUserLoad = true;
             })
             .catch(error => {
@@ -311,6 +312,15 @@ export default {
                 }
             });
         },
+        GetGuarantors(){
+            this.guarantors = this.guarantors.filter(guarantor => {
+                const existsInSubjectArray = this.subjectArray.some(subject => {
+                    return subject.guarantor.id === guarantor.id;
+                });
+
+                return !existsInSubjectArray;
+            });
+        },
 
         GetSubjectList() {
             axios.get(`${import.meta.env.VITE_API_HOST}/subject`, {headers: this.header})
@@ -331,6 +341,8 @@ export default {
                     return 0;
                 });
                 this.isSubjectLoad = true;
+
+                this.GetGuarantors();
             })
             .catch(error => {
                 for (const key in error.response.data.errors) {

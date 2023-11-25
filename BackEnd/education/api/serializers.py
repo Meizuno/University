@@ -57,7 +57,6 @@ class ReadSubjectSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Subject
-        #fields = ("id", "code", "name", "description", "guarantor")
         fields = "__all__"
 
 

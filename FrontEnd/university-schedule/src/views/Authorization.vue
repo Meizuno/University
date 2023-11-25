@@ -54,9 +54,6 @@ export default {
                 .then(response => {
                   const user = response.data;
                   localStorage.setItem('user', JSON.stringify(user));
-                  // localStorage.setItem('username', user.username);
-                  // localStorage.setItem('status', user.permission.description);
-                  console.log(user.permission.description);
                   switch (user.permission.description) {
                     case 'Admin':
                       this.$router.push('/admin')

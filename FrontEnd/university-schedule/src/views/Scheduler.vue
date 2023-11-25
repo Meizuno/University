@@ -58,7 +58,7 @@ export default {
     methods: {
         GetActivities() {
             this.dataForCalendarReceived = false;
-            axios.get(`${import.meta.env.VITE_API_HOST}/activity`, {headers: this.header})
+            axios.get(`${import.meta.env.VITE_API_HOST}/schedule-activity`, {headers: this.header})
             .then(response => {
                 let activities = response.data.data;
                 this.activitiesNotResolved = [];

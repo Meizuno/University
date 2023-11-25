@@ -7,16 +7,19 @@
                 <p class="status">{{ status }}</p>
             </div>
         </div>
-        <nav>
-            <div class="menu">
-                <button v-for="button in buttons" :key="button.text"  :class="{ 'selected': button.text === currentPage }" class="menu-item" @click="handleButtonClick(button.route)">
-                    {{ button.text }}
-                </button>
+        <div class="menu">
+            <div v-for="button in buttons" :key="button.text" class="menu-item" @click="handleButtonClick(button)">
+                {{ button.text }}
+                <div v-if="button.dropdown && button.isShow" class="dropdown">
+                    <div v-for="item in button.dropdown" :key="item.text" @click="handleButtonClick(item)">
+                        {{ item.text }}
+                    </div>
+                </div>
             </div>
             <div class="btn-login" @click="Auth">
                 {{ authButton }}
             </div>
-        </nav>
+        </div>
     </div>
 </template>
 
@@ -61,10 +64,10 @@ export default {
         UpdateUserData() {
             if (localStorage.getItem("token")){
                 this.user = JSON.parse(localStorage.getItem('user'));
-                this.username = this.user.username;
-                this.status = this.user.permission.description
-                // this.username = localStorage.getItem("username");
-                // this.status = localStorage.getItem("status");
+                if (this.user){
+                    this.username = this.user.username;
+                    this.status = this.user.permission.description
+                }
                 this.authButton = localStorage.getItem("token") ? "logout" : "login";
             }
 
@@ -72,7 +75,36 @@ export default {
                 case "Admin":
                     this.buttons = [
                         { text: 'Home', route: '/' },
-                        { text: 'Administration', route: '/admin' }
+                        {
+                            text: 'Guarantor',
+                            dropdown: [
+                                {
+                                    text: 'Schedule',
+                                    route: '/guarantor',
+                                    isShow: false,
+                                },
+                                {
+                                    text: 'Instructors',
+                                    route: '/guarantor/instructors',
+                                    isShow: false,
+                                },
+                                {
+                                    text: 'Activities',
+                                    route: '/guarantor/activities',
+                                    isShow: false,
+                                },
+                            ],
+                        },
+                        { 
+                            text: 'Admin',
+                            dropdown: [
+                                {        
+                                    text: 'Admin panel',
+                                    route: '/admin',
+                                    isShow: false,
+                                },
+                            ]
+                        },
                     ];
                     break;
                 case "Scheduler":
@@ -111,11 +143,6 @@ export default {
                     break;
             }
         },
-        handleButtonClick(path) {
-            if (path) {
-                this.$router.push(path);
-            }
-        },
         Auth() {
             if (localStorage.getItem("token")){
                 localStorage.clear();
@@ -128,7 +155,14 @@ export default {
         },
         ToHome() {
             this.$router.push('/');
-        }
+        },
+        handleButtonClick(button) {
+            if (button.route) {
+                this.$router.push(button.route);
+            } else if (button.dropdown) {
+                button.isShow = !button.isShow;
+            }
+        },
     }
 };
 </script>
@@ -141,15 +175,9 @@ export default {
     border-radius: 15px;
     padding: 10px 40px;
     display: flex;
-    flex-wrap: nowrap;
+    justify-content: space-between;
 }
 
-.header nav {
-    display: flex;
-    flex-wrap: nowrap;
-    margin-left: auto;
-    align-items: center;
-}
 .btn-login {
     background: rgba(0, 0, 0, 0.7);
     padding: 10px 20px;
@@ -166,21 +194,20 @@ export default {
 
 .menu {
     display: flex;
-    flex-wrap: nowrap;
-    position: relative;
-    right: 30%;
+    align-items: center;
+    gap: 30px;
 }
 
 .menu-item{
     color: rgba(0, 0, 0, 0.6);
+    margin: 5px;
     border: none;
     background-color: white;
-    margin: 5%;
     font-size: 20px;
     font-weight: bold;
 }
 
-.menu-item:hover, .selected {
+.menu-item:hover {
     text-decoration: underline;
     cursor: pointer;
     color: black;
@@ -192,7 +219,6 @@ export default {
     gap: 20px;
     flex-wrap: nowrap;
     align-items: center;
-    margin-right: auto;
 }
 
 .user img {
@@ -213,6 +239,28 @@ export default {
     font-size: 14px;
     font-weight: bold;
     color: rgba(0, 0, 0, 0.4);
+}
+
+.dropdown {
+    display: flex;
+    flex-direction: column;
+    position: absolute;
+    background-color: white;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 18px;
+    white-space: nowrap;
+    z-index: 1;
+}
+
+.dropdown div {
+    padding: 10px;
+    cursor: pointer;
+}
+
+.menu-item {
+    cursor: pointer;
+    position: relative;
 }
 
 </style>

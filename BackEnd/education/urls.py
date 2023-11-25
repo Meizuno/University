@@ -22,6 +22,7 @@ urlpatterns = [
     path("activity/<int:activity_id>", get_activity),
     # Scheduler activity
     path("scheduler-activity/<int:activity_id>", activity_to_schedule),
+    path("schedule-activity", schedule_activity),
     # Student subjects endpoint
     path("student_subjects/<int:student_id>", get_student_subjects),
     # Instructor register subject
