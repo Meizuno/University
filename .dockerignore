@@ -1,0 +1,7 @@
+./BackEnd/.venv
+./BackEnd/README.md
+
+./FrontEnd/university-schedule/node_modules/
+./FrontEnd/university-schedule/.vscode/
+./FrontEnd/university-schedule/.gitignore
+./FrontEnd/university-schedule/README.md

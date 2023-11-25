@@ -1,0 +1,16 @@
+FROM python:3.8-alpine3.16
+
+RUN apk add --no-cache postgresql-client build-base postgresql-dev libffi-dev
+
+WORKDIR /usr/src/app
+
+COPY ./BackEnd/ .
+
+RUN pip3 install -r requirements.txt \
+    && python3 manage.py makemigrations \
+    && python3 manage.py migrate \
+    && python3 manage.py loaddata data.json
+
+CMD [ "python3", "manage.py", "runserver", "0.0.0.0:8000"]
+
+EXPOSE 8000

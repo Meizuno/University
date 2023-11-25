@@ -58,7 +58,7 @@ export default {
     methods: {
         GetActivities() {
             this.dataForCalendarReceived = false;
-            axios.get('http://127.0.0.1:8000/api/activity', {headers: this.header})
+            axios.get(`${import.meta.env.VITE_API_HOST}/activity`, {headers: this.header})
             .then(response => {
                 let activities = response.data.data;
                 this.activitiesNotResolved = [];
@@ -78,7 +78,7 @@ export default {
             });
         },
         HandleRemoveFromCalendar(activity) {
-            axios.delete(`http://127.0.0.1:8000/api/scheduler-activity/${activity.id}`, {headers: this.header})
+            axios.delete(`${import.meta.env.VITE_API_HOST}/scheduler-activity/${activity.id}`, {headers: this.header})
             .then(response => {
                 this.GetActivities();
                 this.$refs.calendarRef.UpdateCalendar();
@@ -93,7 +93,7 @@ export default {
             });
         },
         HandleAddToCalendar(activity, data) {
-            axios.post(`http://127.0.0.1:8000/api/scheduler-activity/${activity.id}`, data, {headers: this.header})
+            axios.post(`${import.meta.env.VITE_API_HOST}/scheduler-activity/${activity.id}`, data, {headers: this.header})
             .then(response => {
                 this.GetActivities();
                 this.$refs.calendarRef.UpdateCalendar();
@@ -116,7 +116,7 @@ export default {
     mounted() {
         this.GetActivities();
 
-        axios.get('http://127.0.0.1:8000/api/room', {headers: this.header})
+        axios.get(`${import.meta.env.VITE_API_HOST}/room`, {headers: this.header})
         .then(response => {
             this.rooms = response.data.data;
             this.rooms.sort((a, b) => a.number - b.number);

@@ -43,14 +43,14 @@ export default {
   methods:{
     sendGetUser() {
       localStorage.clear();
-      axios.post('http://127.0.0.1:8000/api/auth/token', this.postData)
+      axios.post(`${import.meta.env.VITE_API_HOST}/auth/token`, this.postData)
           .then(response => {
             const token = response.data.access;
             localStorage.setItem('token', 'Bearer ' + token);
             const headers = {
               'Authorization': 'Bearer ' + token,
             };
-            axios.get('http://127.0.0.1:8000/api/my-info', {headers:headers})
+            axios.get(`${import.meta.env.VITE_API_HOST}/my-info`, {headers:headers})
                 .then(response => {
                   const user = response.data;
                   localStorage.setItem('username', user.username);
