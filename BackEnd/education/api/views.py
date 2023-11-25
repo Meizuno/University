@@ -480,6 +480,7 @@ def register_subject(request, user_id, subject_id):
 def get_activity_or_create(request):
     if request.method == "GET":
         params = request.GET.dict()
+        print(params)
         activity = Activity.objects.filter(**params)
         serializator = ReadActivitySerializer(activity, many=True)
         return Response({"data": serializator.data})
@@ -648,6 +649,11 @@ def register_instructor(request, instructor_id, subject_id):
                     "errors": "Instructor didn't registered on the subject.",
                 }
             )
+
+        activities = Activity.objects.filter(instructor_id=instructor_id, subject_id=subject_id)
+        for a in activities:
+            a.students.clear()
+        activities.update(instructor_id=None, day=None, time=None, room_id=None)
 
         instructor_subject.delete()
         return Response(
@@ -864,6 +870,7 @@ def get_student_activities(request, student_id):
 )
 @swagger_auto_schema(
     method="post",
+    request_body=ActivityInstructorSerializer,
     responses={
         200: OK_200_RESPONSE_DEFAULT,
         403: ERROR_403_RESPONSE_DEFAULT,
@@ -886,11 +893,13 @@ def instructor_register_activity(request, instructor_id, activity_id):
 
                 }, status=status.HTTP_400_BAD_REQUEST
             )
+        serializer = ActivityInstructorSerializer(data=request.data)
+        if serializer.is_valid():
+            activity.instructor = instructor
+            activity.instructor_notes = request.data['instructor_notes']
+            activity.save()
 
-        activity.instructor = instructor
-        activity.save()
-
-        return Response({"success": True, "errors": None})
+            return Response({"success": True, "errors": None})
 
     elif request.method == "DELETE":
         try:
@@ -908,7 +917,15 @@ def instructor_register_activity(request, instructor_id, activity_id):
             )
 
         if activity.instructor == instructor:
+
             activity.instructor = None
+            activity.instructor_notes = None
+            activity.room_id = None
+            activity.time = None
+            activity.day = None
+
+            StudentActivity.objects.filter(activity_id=activity_id).delete()
+
             activity.save()
             return Response(
                 {
@@ -939,7 +956,7 @@ def get_instructor_free_activities(request, subject_id):
     activities = Activity.objects.filter(
         Q(subject__id=subject_id) &
         Q(instructor__isnull=True) &
-        Q(time__isnull=False)
+        Q(time__isnull=True)
     )
 
     serializer = ReadActivitySerializer(activities, many=True)
@@ -964,7 +981,7 @@ def get_instructor_activities(request, instructor_id):
     def get_week_number(date):
         return datetime.strptime(date, "%Y-%m-%d").isocalendar()[1]
 
-    activities = instructor.activity
+    activities = instructor.activity.filter(Q(time__isnull=False))
 
     if date_from and date_to:
         activities = activities.filter(date_from__lte=date_to, date_to__gte=date_from)

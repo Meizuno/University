@@ -105,6 +105,7 @@ export default {
         axios.get(`http://127.0.0.1:8000/api/student_subjects/${this.user.id}`)
             .then(response => {
               this.registeredSubjects = response.data.data;
+
             })
             .catch(error => {
               console.error('Error response: ', error);

@@ -22,6 +22,7 @@ import RegisterSubjectCard from "@/components/RegisterSubjectCard.vue";
 import RegisteredSubjectCard from "@/components/RegisteredSubjectCard.vue";
 import RegisterInstructorCard from "@/components/RegisterInstructorCard.vue";
 import ListOfInstructors from "@/components/ListOfInstructors.vue";
+import {toast} from "vue3-toastify";
 
 export default {
   components: {ListOfInstructors, RegisterInstructorCard, RegisteredSubjectCard, RegisterSubjectCard, Navigation},
@@ -43,9 +44,10 @@ export default {
     async getSubject(){
       try {
         // change to user.id
-        const response = await axios.get("http://127.0.0.1:8000/api/subject?guarantor_id=2")
-        this.guarantorSubject = response.data.data[0];
-        await this.getInstructors();
+        const storedSubject = localStorage.getItem('subject');
+        if(storedSubject) {
+          this.guarantorSubject = JSON.parse(storedSubject);
+        }
 
       }catch (e) {
         console.log(e);
@@ -81,20 +83,23 @@ export default {
 
     async loadData(){
       await this.getSubject();
+      await this.getInstructors();
     },
     unregisterInstructor(instructor) {
       try {
         axios.delete(`http://127.0.0.1:8000/api/register_instructor/${instructor.id}/${this.guarantorSubject.id}`)
             .then(response => {
-              console.log(response.data);
               const index = this.registered_instructors.findIndex(regInstructor => regInstructor.id === instructor.id);
               if (index !== -1) {
                 const removedInstructor = this.registered_instructors.splice(index, 1)[0];
                 this.instructors.push(removedInstructor);
               } else {
-                // Если не найдено, возможно, инструктор был уже удален
                 console.log("Instructor not found in registered instructors.");
               }
+              toast.success("Instructor was successfully unregistered!", {
+                autoClose: 5000,
+                position: toast.POSITION.BOTTOM_RIGHT,
+              });
             });
       } catch (e) {
         console.error(e);
@@ -111,9 +116,12 @@ export default {
                 const removedInstructor = this.instructors.splice(index, 1)[0];
                 this.registered_instructors.push(removedInstructor);
               } else {
-                // Если не найдено, возможно, инструктор уже зарегистрирован
                 console.log("Instructor not found in instructors list.");
               }
+              toast.success("Instructor was successfully registered!", {
+                autoClose: 5000,
+                position: toast.POSITION.BOTTOM_RIGHT,
+              });
             });
       } catch (e) {
         console.error(e);

@@ -27,12 +27,20 @@ const router = createRouter({
     {
       path: '/student',
       component: StudentView,
+      beforeEnter: (to, from, next) => {
+        const status = JSON.parse(localStorage.getItem('user')).permission.description
+        if (status !== 'Student') {
+          next('/');
+        } else {
+          next();
+        }
+      }
     },
     {
       path: '/scheduler',
       component: Scheduler,
       beforeEnter: (to, from, next) => {
-        const status = localStorage.getItem('status');
+        const status = JSON.parse(localStorage.getItem('user')).permission.description
         if (status !== 'Scheduler') {
           next('/');
         } else {
@@ -43,28 +51,68 @@ const router = createRouter({
     {
       path: '/student/subjects',
       component: StudentSubjects,
+      beforeEnter: (to, from, next) => {
+        const status = JSON.parse(localStorage.getItem('user')).permission.description
+        if (status !== 'Student') {
+          next('/');
+        } else {
+          next();
+        }
+      }
     },
     {
       path: '/student/activities',
       component: StudentActivities,
+      beforeEnter: (to, from, next) => {
+        const status = JSON.parse(localStorage.getItem('user')).permission.description
+        if (status !== 'Student') {
+          next('/');
+        } else {
+          next();
+        }
+      }
     },
     {
       path: '/guarantor',
       component: GuarantorView,
+      beforeEnter: (to, from, next) => {
+        const status = JSON.parse(localStorage.getItem('user')).permission.description
+        if (status !== 'Guarantor') {
+          next('/');
+        } else {
+          next();
+        }
+      }
     },
     {
       path: '/guarantor/instructors',
       component: GuarantorInstructors,
+      beforeEnter: (to, from, next) => {
+        const status = JSON.parse(localStorage.getItem('user')).permission.description
+        if (status !== 'Guarantor') {
+          next('/');
+        } else {
+          next();
+        }
+      }
     },
     {
       path: '/guarantor/activities',
       component: GuarantorActivities,
+      beforeEnter: (to, from, next) => {
+        const status = JSON.parse(localStorage.getItem('user')).permission.description
+        if (status !== 'Guarantor') {
+          next('/');
+        } else {
+          next();
+        }
+      }
     },
     {
       path: '/admin',
       component: Admin,
       beforeEnter: (to, from, next) => {
-        const status = localStorage.getItem('status');
+        const status = JSON.parse(localStorage.getItem('user')).permission.description
         if (status !== 'Admin') {
           next('/');
         } else {
@@ -75,10 +123,26 @@ const router = createRouter({
     {
       path: '/instructor',
       component: InstructorView,
+      beforeEnter: (to, from, next) => {
+        const status = JSON.parse(localStorage.getItem('user')).permission.description
+        if (status !== 'Instructor') {
+          next('/');
+        } else {
+          next();
+        }
+      }
     },
     {
       path: '/instructor/activities',
       component: InstructorActivities,
+      beforeEnter: (to, from, next) => {
+        const status = JSON.parse(localStorage.getItem('user')).permission.description
+        if (status !== 'Instructor') {
+          next('/');
+        } else {
+          next();
+        }
+      }
     },
 
   ]

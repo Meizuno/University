@@ -13,6 +13,7 @@
 <script>
 import Checkmark from "@/components/icons/Checkmark.vue";
 import axios from "axios";
+import {toast} from "vue3-toastify";
 
 export default {
   components: {Checkmark},
@@ -25,8 +26,11 @@ export default {
     registerSubject(user_id, subject_id){
       axios.post(`http://127.0.0.1:8000/api/register/${user_id}/${subject_id}`)
           .then(response => {
-            console.log("ok unregister");
             this.$emit('subjectsUpdate');
+            toast.success("Subject was successfully registered!", {
+              autoClose: 5000,
+              position: toast.POSITION.BOTTOM_RIGHT,
+            });
           })
           .catch(error => {
             console.error('Error response: ', error);

@@ -13,6 +13,7 @@
 <script>
 import Cross from "@/components/icons/Cross.vue";
 import axios from "axios";
+import {toast} from "vue3-toastify";
 
 export default {
   components: {Cross},
@@ -31,7 +32,10 @@ export default {
     unregisterSubject(user_id, subject_id){
       axios.delete(`http://127.0.0.1:8000/api/register/${user_id}/${subject_id}`)
           .then(response => {
-            console.log("ok unregister");
+            toast.success("Subject was successfully unregistered!", {
+              autoClose: 5000,
+              position: toast.POSITION.BOTTOM_RIGHT,
+            });
             this.$emit('subjectsUpdate');
           })
           .catch(error => {

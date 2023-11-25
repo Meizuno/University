@@ -30,7 +30,7 @@ export default {
                 { text: 'Home', route: '/' },
             ],
             authButton: 'login',
-
+            user: {},
             currentPage: '',
         }
     },
@@ -46,13 +46,25 @@ export default {
             case "/":
                 this.currentPage = "Home";
                 break;
+            case "/student":
+              this.currentPage = "Student";
+              break;
+            case "/guarantor":
+              this.currentPage = "Guarantor";
+              break;
+            case "/instructor":
+              this.currentPage = "Instructor";
+              break;
         }
     },
     methods: {
         UpdateUserData() {
             if (localStorage.getItem("token")){
-                this.username = localStorage.getItem("username");
-                this.status = localStorage.getItem("status");
+                this.user = JSON.parse(localStorage.getItem('user'));
+                this.username = this.user.username;
+                this.status = this.user.permission.description
+                // this.username = localStorage.getItem("username");
+                // this.status = localStorage.getItem("status");
                 this.authButton = localStorage.getItem("token") ? "logout" : "login";
             }
 
@@ -69,6 +81,32 @@ export default {
                         { text: 'Schedule', route: '/scheduler' }
                     ];
                     break;
+                case "Student":
+                  this.buttons = [
+                    {text:'Home', route: '/'},
+                    {text:'Schedule',  route:'/student'},
+                    {text:'Subjects',  route:'/student/subjects'},
+                    {text:'Activities', route:'/student/activities'},
+                  ]
+                  break;
+
+                case "Guarantor":
+                  this.buttons = [
+                    {text:'Home', route: '/'},
+                    {text:'Schedule',  route:'/guarantor'},
+                    {text:'Instructors',  route:'/guarantor/instructors'},
+                    {text:'Activities', route:'/guarantor/activities'},
+                  ]
+                  break;
+
+                case "Instructor":
+                  this.buttons = [
+                    {text:'Home', route: '/'},
+                    {text:'Schedule',  route:'/instructor'},
+                    {text:'Activities', route:'/instructor/activities'},
+                  ]
+                  break;
+
                 default:
                     break;
             }
