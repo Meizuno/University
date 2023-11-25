@@ -1,10 +1,5 @@
 <template>
-  <navigation
-      class="nav-bar"
-      :username="'instructor username'"
-      :status="`guarantor`"
-      :buttons="buttons"
-  ></navigation>
+  <navigation class="nav-bar"></navigation>
   <div class="main-container">
 
     <div class="range-picker">

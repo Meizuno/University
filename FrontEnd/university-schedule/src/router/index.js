@@ -125,7 +125,7 @@ const router = createRouter({
       component: InstructorView,
       beforeEnter: (to, from, next) => {
         const status = JSON.parse(localStorage.getItem('user')).permission.description
-        if (status !== 'Instructor') {
+        if (status !== 'Instructor' && status !== 'Guarantor') {
           next('/');
         } else {
           next();
@@ -137,7 +137,7 @@ const router = createRouter({
       component: InstructorActivities,
       beforeEnter: (to, from, next) => {
         const status = JSON.parse(localStorage.getItem('user')).permission.description
-        if (status !== 'Instructor') {
+        if (status !== 'Instructor' && status !== 'Guarantor') {
           next('/');
         } else {
           next();

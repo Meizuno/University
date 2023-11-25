@@ -11,8 +11,9 @@
             <div class="subject-time-span">
                 <p>Time span:</p>
                 <ul>
-                    <li>13 lectures</li>
-                    <li>6 practices</li>
+                    <li v-if="subject.lectureHours">{{subject.lectureHours}} lectures</li>
+                    <li v-if="subject.practiceHours">{{subject.practiceHours}} practices</li>
+                    <li v-if="subject.laboratoryHours">{{subject.laboratoryHours}} laboratory</li>
                 </ul>
             </div>
             <div class="subject-description">
@@ -31,10 +32,50 @@ export default {
       subjects: []
     };
   },
+  methods: {
+    calculateWeeks(activity) {
+      const millisecondsInWeek = 7 * 24 * 60 * 60 * 1000;
+      const difference = Math.abs(new Date(activity.date_to) - new Date(activity.date_from));
+      const weeks =  Math.ceil(difference / millisecondsInWeek);
+      if (activity.activity_repetition === 2 || activity.activity_repetition === 3){
+        return Math.ceil(weeks / 2);
+      }
+      else{
+        return weeks;
+      }
+    },
+    async fetchSubjectActivities() {
+      for (const subject of this.subjects) {
+        const response = await axios.get(`http://127.0.0.1:8000/api/activity?subject=${subject.id}`);
+        const activities = response.data.data;
+
+        let lectureWeeks = 0;
+        let practiceWeeks = 0;
+        let laboratoryWeeks = 0;
+        for (const activity of activities) {
+          if (activity.activity_type.name === 'Lecture' && lectureWeeks === 0) {
+            lectureWeeks = this.calculateWeeks(activity)
+          }
+          else if (activity.activity_type.name === 'Practice' && practiceWeeks === 0) {
+
+            practiceWeeks = this.calculateWeeks(activity)
+          }
+          else if (activity.activity_type.name === 'Laboratory' && laboratoryWeeks === 0) {
+
+            laboratoryWeeks = this.calculateWeeks(activity)
+          }
+        }
+        subject.lectureHours = lectureWeeks;
+        subject.practiceHours = practiceWeeks;
+        subject.laboratoryHours = laboratoryWeeks;
+      }
+    },
+  },
   mounted() {
     axios.get('http://127.0.0.1:8000/api/subject')
         .then(response => {
             this.subjects = response.data.data;
+            this.fetchSubjectActivities();
         })
         .catch(error => {
             console.error('Error response: ', error);
@@ -71,6 +112,7 @@ export default {
 
 .subject-title > p {
     margin: 5px 0px;
+    text-align: right
 }
 
 .subject-guarantor {

@@ -46,16 +46,36 @@ export default {
             case "/":
                 this.currentPage = "Home";
                 break;
+            case "/student/subjects":
+            case "/student/activities":
             case "/student":
               this.currentPage = "Student";
               break;
             case "/guarantor":
+            case "/guarantor/instructors":
+            case "/guarantor/activities":
               this.currentPage = "Guarantor";
               break;
             case "/instructor":
+            case "/instructor/activities":
               this.currentPage = "Instructor";
               break;
         }
+        if(this.status === 'Guarantor'){
+          if(this.currentPage === 'Guarantor'){
+            this.buttons.push({ text: 'InstructorMode', route: '/instructor' })
+          }
+          else if(this.currentPage === 'Instructor'){
+            this.buttons = [
+              {text:'Home', route: '/'},
+              {text:'Schedule',  route:'/instructor'},
+              {text:'Activities', route:'/instructor/activities'},
+              {text: 'GuarantorMode', route: '/guarantor' },
+            ]
+          }
+        }
+
+
     },
     methods: {
         UpdateUserData() {
@@ -110,6 +130,7 @@ export default {
                 default:
                     break;
             }
+
         },
         handleButtonClick(path) {
             if (path) {
@@ -128,8 +149,9 @@ export default {
         },
         ToHome() {
             this.$router.push('/');
-        }
-    }
+        },
+    },
+
 };
 </script>
 

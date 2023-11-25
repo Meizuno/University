@@ -1,10 +1,6 @@
 <template>
 
-  <navigation class="nav-bar"
-              :username="user.username"
-              :status="`instructor`"
-              :buttons="buttons"
-  ></navigation>
+  <navigation class="nav-bar"></navigation>
   <div class="main-container">
     <div class="subject-picker">
       <div class="subject-title">
@@ -79,11 +75,6 @@ export default {
     return{
       user: {},
       registeredSubjects: [],
-      buttons: [
-        {text: 'Home', class: 'not-selected', route: '/'},
-        {text: 'Schedule', class: 'not-selected', route: '/instructor'},
-        {text: 'Activities', class: 'selected', route: '/instructor/activities'},
-      ],
       selectedSubject: 0,
       activities: [],
       registeredActivities: [],
