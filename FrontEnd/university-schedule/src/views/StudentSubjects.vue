@@ -1,9 +1,6 @@
 <template>
   <navigation
       class="nav-bar"
-      :username="user.username"
-      :status="'student'"
-      :buttons="buttons"
   >
   </navigation>
 
@@ -52,12 +49,9 @@ export default {
   data(){
     return{
       user: {},
-      buttons: [
-        {text:'Home', class:'not-selected', route: '/'},
-        {text:'Schedule', class:'not-selected', route:'/student'},
-        {text:'Subjects', class:'selected', route:'/student/subjects'},
-        {text:'Activities', class:'not-selected', route:'/student/activities'},
-      ],
+      header: {
+        "Authorization": localStorage.getItem("token"),
+      },
       subjects:[],
       registeredSubjects:[],
     }
@@ -89,7 +83,7 @@ export default {
     },
     async getAllSubjects(){
       try{
-        axios.get('http://127.0.0.1:8000/api/subject')
+        axios.get('http://127.0.0.1:8000/api/subject',{headers: this.header})
             .then(response => {
               this.subjects = response.data.data;
             })
@@ -102,7 +96,7 @@ export default {
     },
     async getRegisteredSubjects(){
       try{
-        axios.get(`http://127.0.0.1:8000/api/student_subjects/${this.user.id}`)
+        axios.get(`http://127.0.0.1:8000/api/student_subjects/${this.user.id}`,{headers: this.header})
             .then(response => {
               this.registeredSubjects = response.data.data;
 

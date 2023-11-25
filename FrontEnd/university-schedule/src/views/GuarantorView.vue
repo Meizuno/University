@@ -1,9 +1,6 @@
 <template>
   <navigation
       class="nav-bar"
-      :username="'test username'"
-      :status="`guarantor ${guarantorSubject.code}`"
-      :buttons="buttons"
   >
   </navigation>
   <div class="main-container">
@@ -26,12 +23,9 @@ export default {
   components: {CalendarTest, DaysSchedule, Navigation},
   data(){
     return{
-      buttons: [
-        {text:'Home', class:'not-selected', route: '/'},
-        {text:'Schedule', class:'selected', route:'/guarantor'},
-        {text:'Instructors', class:'not-selected', route: '/guarantor/instructors'},
-        {text:'Activities', class:'not-selected', route: '/guarantor/activities'},
-      ],
+      header: {
+        "Authorization": localStorage.getItem("token"),
+      },
       user: {},
       guarantorSubject: {},
       activities: [],
@@ -49,11 +43,11 @@ export default {
     async getGuarantorSubjectAndActivities(){
       try {
         // change to user.id
-        axios.get(`http://127.0.0.1:8000/api/subject?guarantor_id=${this.user.id}`)
+        axios.get(`http://127.0.0.1:8000/api/subject?guarantor_id=${this.user.id}`, {headers: this.header})
             .then(response => {
               this.guarantorSubject = response.data.data[0];
               localStorage.setItem('subject', JSON.stringify(this.guarantorSubject));
-              axios.get(`http://127.0.0.1:8000/api/subject_activities/${this.guarantorSubject.id}`)
+              axios.get(`http://127.0.0.1:8000/api/subject_activities/${this.guarantorSubject.id}`, {headers: this.header})
                   .then(response=>{
                     this.activities = response.data.data;
                     this.updateKey();

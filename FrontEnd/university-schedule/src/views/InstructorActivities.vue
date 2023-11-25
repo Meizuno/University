@@ -80,6 +80,9 @@ export default {
       registeredActivities: [],
       showModal: false,
       selectedActivity:{},
+      header: {
+        "Authorization": localStorage.getItem("token"),
+      },
     }
   },
   methods: {
@@ -93,7 +96,7 @@ export default {
       const dataToSend = {
         "instructor_notes": notes,
       };
-      axios.post(`http://127.0.0.1:8000/api/instructor_register_activity/${this.user.id}/${activity.id}`,dataToSend)
+      axios.post(`http://127.0.0.1:8000/api/instructor_register_activity/${this.user.id}/${activity.id}`,dataToSend,{headers: this.header})
           .then(response=>{
             this.getScheduleActivities(this.selectedSubject);
           })
@@ -103,7 +106,7 @@ export default {
       this.closeModal();
     },
     unregisterActivity(activity){
-      axios.delete(`http://127.0.0.1:8000/api/instructor_register_activity/${this.user.id}/${activity.id}`)
+      axios.delete(`http://127.0.0.1:8000/api/instructor_register_activity/${this.user.id}/${activity.id}`, {headers: this.header})
           .then(response=>{
             this.getScheduleActivities(this.selectedSubject);
           })
@@ -112,7 +115,7 @@ export default {
           })
     },
     async getScheduleActivities(subjectId){
-      await axios.get(`http://127.0.0.1:8000/api/instructor_free_activities/${subjectId}`)
+      await axios.get(`http://127.0.0.1:8000/api/instructor_free_activities/${subjectId}`, {headers: this.header})
           .then(response=>{
             this.activities = response.data.data;
             this.getInstructorActivities();
@@ -132,7 +135,7 @@ export default {
         }
         try{
           // set to dynamic
-          axios.get(`http://127.0.0.1:8000/api/subject?instructors=${this.user.id}`)
+          axios.get(`http://127.0.0.1:8000/api/subject?instructors=${this.user.id}`, {headers: this.header})
               .then(response => {
                 this.registeredSubjects = response.data.data;
               })
@@ -148,7 +151,7 @@ export default {
       }
     },
     async getInstructorActivities(){
-      await axios.get(`http://127.0.0.1:8000/api/activity?instructor=${this.user.id}&subject=${this.selectedSubject}`)
+      await axios.get(`http://127.0.0.1:8000/api/activity?instructor=${this.user.id}&subject=${this.selectedSubject}`, {headers: this.header})
           .then(response=>{
             this.registeredActivities = response.data.data;
           })

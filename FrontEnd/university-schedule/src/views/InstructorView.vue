@@ -32,11 +32,9 @@ export default {
   components: {CalendarTest, Navigation},
   data() {
     return {
-      buttons: [
-        {text: 'Home', class: 'not-selected', route: '/'},
-        {text: 'Schedule', class: 'selected', route: '/instructor'},
-        {text: 'Activities', class: 'not-selected', route: '/instructor/activities'},
-      ],
+      header: {
+        "Authorization": localStorage.getItem("token"),
+      },
       startDate: '18.09.2023',
       endDate: '24.09.2023',
       activities: [],
@@ -57,7 +55,7 @@ export default {
       const date_from = this.convertDate(this.startDate);
       const date_to = this.convertDate(this.endDate);
       // set to dynamic
-      axios.get(`http://127.0.0.1:8000/api/instructor_activities/${this.user.id}?date_from=${date_from}&date_to=${date_to}`)
+      axios.get(`http://127.0.0.1:8000/api/instructor_activities/${this.user.id}?date_from=${date_from}&date_to=${date_to}`, {headers: this.header})
           .then(response=>{
             this.activities = response.data.data;
             this.updateKey();

@@ -549,6 +549,7 @@ def get_activity(request, activity_id):
 @api_view(["GET"])
 @handle_error
 def get_student_subjects(request, student_id):
+    api_access(request, 5)
     student = User.objects.get(id=student_id)
     subjects = student.student_subjects
     serializer = ReadSubjectSerializer(subjects, many=True)
@@ -626,6 +627,7 @@ def activity_to_schedule(request, activity_id):
 @api_view(["POST", "DELETE"])
 @handle_error
 def register_instructor(request, instructor_id, subject_id):
+    api_access(request, 2)
     # add check if its instructor
     if request.method == "POST":
         try:
@@ -688,6 +690,7 @@ def register_instructor(request, instructor_id, subject_id):
 @api_view(["POST"])
 @handle_error
 def get_instructor_subject(request, instructor_id):
+    api_access(request, 3)
     instructor = User.objects.get(id=instructor_id)
     subjects = instructor.instructors_subjects
     serializer = ReadSubjectSerializer(subjects, many=True)
@@ -705,7 +708,7 @@ def get_instructor_subject(request, instructor_id):
 @api_view(["GET"])
 @handle_error
 def get_all_instructors(request):
-
+    api_access(request, 2)
     instructors = User.objects.filter(
         Q(permission__id=3)
     )
@@ -725,6 +728,7 @@ def get_all_instructors(request):
 @api_view(["GET"])
 @handle_error
 def get_guarantor_requests(request, subject_id):
+    api_access(request, 4)
     activities = Activity.objects.filter(
         Q(subject__id=subject_id) & Q(time__isnull=True)
     )
@@ -743,6 +747,7 @@ def get_guarantor_requests(request, subject_id):
 @api_view(["GET"])
 @handle_error
 def get_subject_activities(request, subject_id):
+    api_access(request, 5)
     activities = Activity.objects.filter(
         Q(subject__id=subject_id) & Q(time__isnull=False)
     )
@@ -761,6 +766,7 @@ def get_subject_activities(request, subject_id):
 @api_view(["GET"])
 @handle_error
 def get_student_activities_subject(request, student_id, subject_id):
+    api_access(request, 5)
     student = User.objects.get(id=student_id)
     activities = student.student_activity.filter(Q(subject__id=subject_id))
     serializer = ReadActivitySerializer(activities, many=True)
@@ -786,6 +792,7 @@ def get_student_activities_subject(request, student_id, subject_id):
 @api_view(["POST", "DELETE"])
 @handle_error
 def student_register_activity(request, student_id, activity_id):
+    #api_access(request, 5)
     if request.method == "POST":
         try:
             User.objects.get(id=student_id)
@@ -841,6 +848,7 @@ def student_register_activity(request, student_id, activity_id):
 @api_view(["GET"])
 @handle_error
 def get_student_activities(request, student_id):
+    api_access(request, 5)
     student = User.objects.get(id=student_id)
     # params = request.GET.dict()
     # activities = student.student_activity.filter(**params)
@@ -893,6 +901,7 @@ def get_student_activities(request, student_id):
 @api_view(["POST", "DELETE"])
 @handle_error
 def instructor_register_activity(request, instructor_id, activity_id):
+    api_access(request, 3)
     if request.method == "POST":
         try:
             instructor = User.objects.get(id=instructor_id)
@@ -966,6 +975,7 @@ def instructor_register_activity(request, instructor_id, activity_id):
 @api_view(["GET"])
 @handle_error
 def get_instructor_free_activities(request, subject_id):
+    api_access(request, 3)
     activities = Activity.objects.filter(
         Q(subject__id=subject_id) &
         Q(instructor__isnull=True) &
@@ -986,6 +996,7 @@ def get_instructor_free_activities(request, subject_id):
 @api_view(["GET"])
 @handle_error
 def get_instructor_activities(request, instructor_id):
+    api_access(request, 3)
     instructor = User.objects.get(id=instructor_id)
 
     date_from = request.GET.get("date_from")

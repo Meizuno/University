@@ -1,9 +1,6 @@
 <template>
   <navigation
       class="nav-bar"
-      :username="'test username'"
-      :status="'guarantor'"
-      :buttons="buttons"
   >
   </navigation>
   <div class="main-container">
@@ -127,12 +124,9 @@ export default {
       }),
 
       range: ref(null),
-      buttons: [
-        {text:'Home', class:'not-selected', route: '/'},
-        {text:'Schedule', class:'not-selected', route:'/guarantor'},
-        {text:'Instructors', class:'not-selected', route: '/guarantor/instructors'},
-        {text:'Activities', class:'selected', route: '/guarantor/activities'},
-      ],
+      header: {
+        "Authorization": localStorage.getItem("token"),
+      },
       selectedType: 0,
       typeOptions : [
         {text: 'Lecture', value: 1},
@@ -173,7 +167,7 @@ export default {
         "activity_repetition_id": this.selectedRepeating,
       };
       console.log(dataToSend);
-      axios.post("http://127.0.0.1:8000/api/activity", dataToSend)
+      axios.post("http://127.0.0.1:8000/api/activity", dataToSend, {headers: this.header})
           .then(response=>{
             this.getRequests()
             toast.success("Request was successfully created!", {
@@ -194,7 +188,7 @@ export default {
     },
     getRequests(){
       // change to subject id
-      axios.get(`http://127.0.0.1:8000/api/get_requests/${this.guarantorSubject.id}`)
+      axios.get(`http://127.0.0.1:8000/api/get_requests/${this.guarantorSubject.id}`, {headers: this.header})
           .then(response=>{
             this.requests = response.data.data;
           })
@@ -215,7 +209,7 @@ export default {
       }
     },
     deleteRequest(activity){
-      axios.delete(`http://127.0.0.1:8000/api/activity/${activity.id}`)
+      axios.delete(`http://127.0.0.1:8000/api/activity/${activity.id}`, {headers: this.header})
           .then(response=>{
             this.getRequests();
             toast.success("Request was successfully deleted!", {

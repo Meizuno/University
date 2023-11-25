@@ -1,9 +1,6 @@
 <template>
   <navigation
       class="nav-bar"
-      :username="'test username'"
-      :status="'guarantor'"
-      :buttons="buttons"
   >
   </navigation>
   <ListOfInstructors
@@ -28,12 +25,9 @@ export default {
   components: {ListOfInstructors, RegisterInstructorCard, RegisteredSubjectCard, RegisterSubjectCard, Navigation},
   data(){
     return{
-      buttons: [
-        {text:'Home', class:'not-selected', route: '/'},
-        {text:'Schedule', class:'not-selected', route:'/guarantor'},
-        {text:'Instructors', class:'selected', route: '/guarantor/instructors'},
-        {text:'Activities', class:'not-selected', route: '/guarantor/activities'},
-      ],
+      header: {
+        "Authorization": localStorage.getItem("token"),
+      },
       instructors : [],
       registered_instructors: [],
       guarantorSubject : {},
@@ -56,19 +50,21 @@ export default {
     },
     getInstructors(){
       try {
-        axios.get("http://127.0.0.1:8000/api/get_all_instructors")
+        axios.get("http://127.0.0.1:8000/api/get_all_instructors", {headers: this.header})
             .then(response => {
               const allInstructors = response.data.data;
               const tempInstructors = [];
               const tempRegisteredInstructors = [];
+              if(allInstructors){
+                allInstructors.forEach(instructor => {
+                  if (this.guarantorSubject.instructors.includes(instructor.id)) {
+                    tempRegisteredInstructors.push(instructor);
+                  } else {
+                    tempInstructors.push(instructor);
+                  }
+                });
+              }
 
-              allInstructors.forEach(instructor => {
-                if (this.guarantorSubject.instructors.includes(instructor.id)) {
-                  tempRegisteredInstructors.push(instructor);
-                } else {
-                  tempInstructors.push(instructor);
-                }
-              });
 
               this.instructors = tempInstructors;
               this.registered_instructors = tempRegisteredInstructors;
@@ -87,7 +83,7 @@ export default {
     },
     unregisterInstructor(instructor) {
       try {
-        axios.delete(`http://127.0.0.1:8000/api/register_instructor/${instructor.id}/${this.guarantorSubject.id}`)
+        axios.delete(`http://127.0.0.1:8000/api/register_instructor/${instructor.id}/${this.guarantorSubject.id}`, {headers: this.header})
             .then(response => {
               const index = this.registered_instructors.findIndex(regInstructor => regInstructor.id === instructor.id);
               if (index !== -1) {
@@ -108,7 +104,7 @@ export default {
 
     registerInstructor(instructor) {
       try {
-        axios.post(`http://127.0.0.1:8000/api/register_instructor/${instructor.id}/${this.guarantorSubject.id}`)
+        axios.post(`http://127.0.0.1:8000/api/register_instructor/${instructor.id}/${this.guarantorSubject.id}`, {headers: this.header})
             .then(response => {
               console.log(response.data);
               const index = this.instructors.findIndex(inst => inst.id === instructor.id);
