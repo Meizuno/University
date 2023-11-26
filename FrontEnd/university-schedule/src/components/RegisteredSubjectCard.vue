@@ -20,6 +20,9 @@ export default {
   data(){
     return{
       user_id : Number,
+      header: {
+        "Authorization": localStorage.getItem("token"),
+      },
     }
   },
   props: {
@@ -30,7 +33,7 @@ export default {
   },
   methods: {
     unregisterSubject(user_id, subject_id){
-      axios.delete(`http://127.0.0.1:8000/api/register/${user_id}/${subject_id}`)
+      axios.delete(`${import.meta.env.VITE_API_HOST}/register/${user_id}/${subject_id}`, {headers: this.header})
           .then(response => {
             toast.success("Subject was successfully unregistered!", {
               autoClose: 5000,

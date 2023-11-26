@@ -55,7 +55,7 @@ export default {
       const date_from = this.convertDate(this.startDate);
       const date_to = this.convertDate(this.endDate);
       // set to dynamic
-      axios.get(`http://127.0.0.1:8000/api/instructor_activities/${this.user.id}?date_from=${date_from}&date_to=${date_to}`, {headers: this.header})
+      axios.get(`${import.meta.env.VITE_API_HOST}/instructor_activities/${this.user.id}?date_from=${date_from}&date_to=${date_to}`, {headers: this.header})
           .then(response=>{
             this.activities = response.data.data;
             this.updateKey();

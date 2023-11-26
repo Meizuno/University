@@ -167,7 +167,7 @@ export default {
         "activity_repetition_id": this.selectedRepeating,
       };
       console.log(dataToSend);
-      axios.post("http://127.0.0.1:8000/api/activity", dataToSend, {headers: this.header})
+      axios.post(`${import.meta.env.VITE_API_HOST}/activity`, dataToSend, {headers: this.header})
           .then(response=>{
             this.getRequests()
             toast.success("Request was successfully created!", {
@@ -188,7 +188,7 @@ export default {
     },
     getRequests(){
       // change to subject id
-      axios.get(`http://127.0.0.1:8000/api/get_requests/${this.guarantorSubject.id}`, {headers: this.header})
+      axios.get(`${import.meta.env.VITE_API_HOST}/get_requests/${this.guarantorSubject.id}`, {headers: this.header})
           .then(response=>{
             this.requests = response.data.data;
           })
@@ -209,7 +209,7 @@ export default {
       }
     },
     deleteRequest(activity){
-      axios.delete(`http://127.0.0.1:8000/api/activity/${activity.id}`, {headers: this.header})
+      axios.delete(`${import.meta.env.VITE_API_HOST}/activity/${activity.id}`, {headers: this.header})
           .then(response=>{
             this.getRequests();
             toast.success("Request was successfully deleted!", {

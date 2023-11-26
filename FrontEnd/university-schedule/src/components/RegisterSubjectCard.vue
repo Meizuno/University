@@ -20,11 +20,14 @@ export default {
   data(){
     return{
       user_id: Number,
+      header: {
+        "Authorization": localStorage.getItem("token"),
+      },
     }
   },
   methods: {
     registerSubject(user_id, subject_id){
-      axios.post(`http://127.0.0.1:8000/api/register/${user_id}/${subject_id}`)
+      axios.post(`${import.meta.env.VITE_API_HOST}/register/${user_id}/${subject_id}`, {}, {headers: this.header})
           .then(response => {
             this.$emit('subjectsUpdate');
             toast.success("Subject was successfully registered!", {

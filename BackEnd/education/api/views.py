@@ -384,7 +384,7 @@ def rud_subject(request, subject_id):
 @api_view(["POST", "DELETE"])
 def register_subject(request, user_id, subject_id):
     """Register subject to user"""
-
+    api_access(request, 5)
     if request.method == "POST":
         user = User.objects.filter(id=user_id)
         if not user.exists():
@@ -481,6 +481,7 @@ def get_activity_or_create(request):
         serializator = ReadActivitySerializer(activity, many=True)
         return Response({"data": serializator.data})
     elif request.method == "POST":
+        api_access(request, 4)
         serializator = ActivityGuarantorSerializer(data=request.data)
         if serializator.is_valid():
             Activity.objects.create(**serializator.data)
@@ -503,6 +504,7 @@ def get_activity_or_create(request):
 @api_view(["DELETE"])
 @handle_error
 def delete_activity(request, activity_id):
+    api_access(request, 4)
     activity = Activity.objects.filter(id=activity_id)
     if not activity.exists():
         return Response(
@@ -526,6 +528,7 @@ def delete_activity(request, activity_id):
 @api_view(["GET"])
 @handle_error
 def get_activity(request, activity_id):
+    api_access(request, 5)
     activity = Activity.objects.filter(id=activity_id)
     if not activity.exists():
         return Response(
@@ -558,7 +561,6 @@ def get_student_subjects(request, student_id):
 
 @swagger_auto_schema(
     method="get",
-    request_body=ActivitySchedulerSerializer,
     responses={
         200: OK_200_RESPONSE_DEFAULT,
         403: ERROR_403_RESPONSE_DEFAULT,
@@ -792,7 +794,7 @@ def get_student_activities_subject(request, student_id, subject_id):
 @api_view(["POST", "DELETE"])
 @handle_error
 def student_register_activity(request, student_id, activity_id):
-    #api_access(request, 5)
+    api_access(request, 5)
     if request.method == "POST":
         try:
             User.objects.get(id=student_id)

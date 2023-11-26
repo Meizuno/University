@@ -57,7 +57,7 @@ export default {
   },
   methods: {
     registerActivity(activity){
-      axios.post(`http://127.0.0.1:8000/api/student_register_activity/${this.user.id}/${activity.id}`,{headers: this.header})
+      axios.post(`${import.meta.env.VITE_API_HOST}/student_register_activity/${this.user.id}/${activity.id}`,{},{headers: this.header})
           .then(response=>{
             this.getStudentActivities();
             toast.success("Activity was successfully registered!", {
@@ -70,7 +70,7 @@ export default {
           })
     },
     unregisterActivity(activity){
-      axios.delete(`http://127.0.0.1:8000/api/student_register_activity/${this.user.id}/${activity.id}`,{headers: this.header})
+      axios.delete(`${import.meta.env.VITE_API_HOST}/student_register_activity/${this.user.id}/${activity.id}`,{headers: this.header})
           .then(response=>{
             this.getStudentActivities();
             toast.success("Activity was successfully unregistered!", {
@@ -88,7 +88,7 @@ export default {
           })
     },
     async getScheduleActivities(subjectId){
-      await axios.get(`http://127.0.0.1:8000/api/subject_activities/${subjectId}`, {headers: this.header})
+      await axios.get(`${import.meta.env.VITE_API_HOST}/subject_activities/${subjectId}`, {headers: this.header})
           .then(response=>{
             this.activities = response.data.data;
             this.getStudentActivities();
@@ -114,7 +114,7 @@ export default {
         if(storedUser){
           this.user = JSON.parse(storedUser);
           try{
-            axios.get(`http://127.0.0.1:8000/api/student_subjects/${this.user.id}`, {headers: this.header})
+            axios.get(`${import.meta.env.VITE_API_HOST}/student_subjects/${this.user.id}`, {headers: this.header})
                 .then(response => {
                   this.registeredSubjects = response.data.data;
                 })
@@ -131,7 +131,7 @@ export default {
     },
     async getStudentActivities(){
       // http://127.0.0.1:8000/api/activity?students=10&subject=3
-      await axios.get(`http://127.0.0.1:8000/api/student_activities_subject/${this.user.id}/${this.selectedSubject}`, {headers: this.header})
+      await axios.get(`${import.meta.env.VITE_API_HOST}/student_activities_subject/${this.user.id}/${this.selectedSubject}`, {headers: this.header})
           .then(response=>{
             this.registeredActivities = response.data.data;
             this.activityTypes();
@@ -166,7 +166,7 @@ export default {
 }
 .subject-picker{
   width: 190px;
-  height: 60px;
+  min-height: 60px;
   background: #81d4fa;
   margin-top: 20px;
   margin-left: 30px;
