@@ -22,9 +22,9 @@
         <p>Guarantor notes:</p>
         <p>{{ activity.guarantor_notes }}</p>
       </div>
-      <div v-if="activity.instruktor">
+      <div v-if="activity.instructor">
         <p>Instructor:</p>
-        <p>{{ activity.instruktor.first_name + activity.instruktor.last_name }}</p>
+        <p>{{ activity.instructor.first_name + " " + activity.instructor.last_name }}</p>
       </div>
       <div v-if="activity.instructor_notes">
         <p>Instructor notes:</p>

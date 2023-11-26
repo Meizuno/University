@@ -165,7 +165,6 @@ export default {
                     toast.error(errorMessage, {
                         autoClose: 5000,
                         position: toast.POSITION.BOTTOM_LEFT,
-                        hideProgressBar: true,
                     });
                 }
             }
@@ -206,7 +205,7 @@ export default {
                         toast.error(errorMessage, {
                             autoClose: 5000,
                             position: toast.POSITION.BOTTOM_LEFT,
-                            hideProgressBar: true,
+
                         });
                     }
                 }
@@ -231,23 +230,14 @@ export default {
                 this.isUpdateDeleteUserOpen = false;
                 toast.success("Create user is success!", {
                     autoClose: 5000,
-                    position: toast.POSITION.BOTTOM_RIGHT,
-                    hideProgressBar: true,
+                    position: toast.POSITION.BOTTOM_RIGHT
                 });
             })
             .catch(error => {
-                for (const key in error.response.data.errors) {
-                    if (error.response.data.errors.hasOwnProperty(key)) {
-                        const errorDes = error.response.data.errors[key];
-                        const errorMessage = `${key}: ${errorDes}`;
-        
-                        toast.error(errorMessage, {
-                            autoClose: 5000,
-                            position: toast.POSITION.BOTTOM_RIGHT,
-                            hideProgressBar: true,
-                        });
-                    }
-                }
+                toast.error("Dublicate username or email.", {
+                    autoClose: 5000,
+                    position: toast.POSITION.BOTTOM_RIGHT
+                });
             });
         },
         EditUser(user){
@@ -265,8 +255,7 @@ export default {
                 this.isUpdateDeleteUserOpen = false;
                 toast.success("Update user is success!", {
                     autoClose: 5000,
-                    position: toast.POSITION.BOTTOM_RIGHT,
-                    hideProgressBar: true,
+                    position: toast.POSITION.BOTTOM_RIGHT
                 });
             })
             .catch(error => {
@@ -278,7 +267,7 @@ export default {
                         toast.error(errorMessage, {
                             autoClose: 5000,
                             position: toast.POSITION.BOTTOM_RIGHT,
-                            hideProgressBar: true,
+
                         });
                     }
                 }
@@ -293,8 +282,7 @@ export default {
                 this.isUpdateDeleteUserOpen = false;
                 toast.success("Delete user is success!", {
                     autoClose: 5000,
-                    position: toast.POSITION.BOTTOM_RIGHT,
-                    hideProgressBar: true,
+                    position: toast.POSITION.BOTTOM_RIGHT
                 });
             })
             .catch(error => {
@@ -306,7 +294,7 @@ export default {
                         toast.error(errorMessage, {
                             autoClose: 5000,
                             position: toast.POSITION.BOTTOM_RIGHT,
-                            hideProgressBar: true,
+
                         });
                     }
                 }
@@ -353,7 +341,7 @@ export default {
                         toast.error(errorMessage, {
                             autoClose: 5000,
                             position: toast.POSITION.BOTTOM_LEFT,
-                            hideProgressBar: true,
+
                         });
                     }
                 }
@@ -378,8 +366,7 @@ export default {
                 this.isUpdateDeleteSubjectOpen = false;
                 toast.success("Create subject is success!", {
                     autoClose: 5000,
-                    position: toast.POSITION.BOTTOM_LEFT,
-                    hideProgressBar: true,
+                    position: toast.POSITION.BOTTOM_LEFT
                 });
             })
             .catch(error => {
@@ -391,7 +378,7 @@ export default {
                         toast.error(errorMessage, {
                             autoClose: 5000,
                             position: toast.POSITION.BOTTOM_LEFT,
-                            hideProgressBar: true,
+
                         });
                     }
                 }
@@ -412,8 +399,7 @@ export default {
                 this.isUpdateDeleteSubjectOpen = false;
                 toast.success("Update subject is success!", {
                     autoClose: 5000,
-                    position: toast.POSITION.BOTTOM_LEFT,
-                    hideProgressBar: true,
+                    position: toast.POSITION.BOTTOM_LEFT
                 });
             })
             .catch(error => {
@@ -425,7 +411,7 @@ export default {
                         toast.error(errorMessage, {
                             autoClose: 5000,
                             position: toast.POSITION.BOTTOM_LEFT,
-                            hideProgressBar: true,
+
                         });
                     }
                 }
@@ -440,8 +426,7 @@ export default {
                 this.isUpdateDeleteSubjectOpen = false;
                 toast.success("Delete subject is success!", {
                     autoClose: 5000,
-                    position: toast.POSITION.BOTTOM_LEFT,
-                    hideProgressBar: true,
+                    position: toast.POSITION.BOTTOM_LEFT
                 });
             })
             .catch(error => {
@@ -453,7 +438,7 @@ export default {
                         toast.error(errorMessage, {
                             autoClose: 5000,
                             position: toast.POSITION.BOTTOM_LEFT,
-                            hideProgressBar: true,
+
                         });
                     }
                 }
@@ -476,7 +461,7 @@ export default {
                         toast.error(errorMessage, {
                             autoClose: 5000,
                             position: toast.POSITION.BOTTOM_LEFT,
-                            hideProgressBar: true,
+
                         });
                     }
                 }
@@ -501,8 +486,7 @@ export default {
                 this.isUpdateDeleteRoomOpen = false;
                 toast.success("Create room is success!", {
                     autoClose: 5000,
-                    position: toast.POSITION.BOTTOM_LEFT,
-                    hideProgressBar: true,
+                    position: toast.POSITION.BOTTOM_LEFT
                 });
             })
             .catch(error => {
@@ -514,7 +498,7 @@ export default {
                         toast.error(errorMessage, {
                             autoClose: 5000,
                             position: toast.POSITION.BOTTOM_LEFT,
-                            hideProgressBar: true,
+
                         });
                     }
                 }
@@ -535,8 +519,7 @@ export default {
                 this.isUpdateDeleteRoomOpen = false;
                 toast.success("Update room is success!", {
                     autoClose: 5000,
-                    position: toast.POSITION.BOTTOM_LEFT,
-                    hideProgressBar: true,
+                    position: toast.POSITION.BOTTOM_LEFT
                 });
             })
             .catch(error => {
@@ -548,7 +531,7 @@ export default {
                         toast.error(errorMessage, {
                             autoClose: 5000,
                             position: toast.POSITION.BOTTOM_LEFT,
-                            hideProgressBar: true,
+
                         });
                     }
                 }
@@ -563,8 +546,7 @@ export default {
                 this.isUpdateDeleteRoomOpen = false;
                 toast.success("Delete room is success!", {
                     autoClose: 5000,
-                    position: toast.POSITION.BOTTOM_LEFT,
-                    hideProgressBar: true,
+                    position: toast.POSITION.BOTTOM_LEFT
                 });
             })
             .catch(error => {
@@ -576,7 +558,7 @@ export default {
                         toast.error(errorMessage, {
                             autoClose: 5000,
                             position: toast.POSITION.BOTTOM_LEFT,
-                            hideProgressBar: true,
+
                         });
                     }
                 }

@@ -18,9 +18,9 @@
           <p>Duration:</p>
           <p>{{ activity.duration }} hours</p>
         </div>
-        <div v-if="activity.instruktor">
+        <div v-if="activity.instructor">
           <p>Instructor:</p>
-          <p>{{ activity.instruktor.first_name + activity.instruktor.last_name }}</p>
+          <p>{{ activity.instructor.first_name + " " + activity.instructor.last_name }}</p>
         </div>
       </div>
   <div

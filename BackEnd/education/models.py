@@ -79,10 +79,15 @@ class Activity(models.Model):
             if (hours + self.duration) > 17:
                 raise ValidationError("Too late for activity.")
             time_to = f"{hours + self.duration}:00:00"
-            for activity in Activity.objects.filter(time__lt=time_to, day=day, room_id=room_id):
+            for activity in Activity.objects.filter(room_id=room_id, time__lt=time_to, day=day):
                 activity_to = int(str(activity.time).split(":")[0]) + activity.duration
                 if activity_to > hours:
                     raise ValidationError("Collision room and time.")
+            for activity in Activity.objects.filter(instructor=self.instructor, time__lt=time_to, day=day):
+                activity_to = int(str(activity.time).split(":")[0]) + activity.duration
+                if activity_to > hours:
+                    raise ValidationError("Collision instructor and time.")
+
         self.day = day
         self.time = time
         self.room_id = room_id

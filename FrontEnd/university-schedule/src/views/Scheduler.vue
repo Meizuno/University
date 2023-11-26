@@ -85,7 +85,6 @@ export default {
                 toast.success("Remove from calendar successful!", {
                     autoClose: 5000,
                     position: toast.POSITION.BOTTOM_RIGHT,
-                    hideProgressBar: true,
                 });
             })
             .catch(error => {
@@ -100,7 +99,6 @@ export default {
                 toast.success("Add to calendar successful!", {
                     autoClose: 5000,
                     position: toast.POSITION.BOTTOM_RIGHT,
-                    hideProgressBar: true,
                 });
             })
             .catch(error => {
@@ -108,7 +106,6 @@ export default {
                 toast.error(message, {
                     autoClose: 5000,
                     position: toast.POSITION.BOTTOM_LEFT,
-                    hideProgressBar: true,
                 });
             });
         }

@@ -72,7 +72,7 @@ def get_users_or_create(request):
     """Read users or create new"""
 
     if request.method == "GET":
-        # api_access(request, 1)
+        api_access(request, 2)
         params = request.GET.dict()
         users = User.objects.filter(**params)
         serializator = ReadUserSerializer(users, many=True)
@@ -558,7 +558,6 @@ def get_student_subjects(request, student_id):
 
 @swagger_auto_schema(
     method="get",
-    request_body=ActivitySchedulerSerializer,
     responses={
         200: OK_200_RESPONSE_DEFAULT,
         403: ERROR_403_RESPONSE_DEFAULT,

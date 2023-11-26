@@ -9,10 +9,10 @@
         </div>
         <div class="menu">
             <div v-for="button in buttons" :key="button.text" class="menu-item" @click="handleButtonClick(button)">
-                {{ button.text }}
+                <p class="btn-route">{{ button.text }}</p>
                 <div v-if="button.dropdown && button.isShow" class="dropdown">
                     <div v-for="item in button.dropdown" :key="item.text" @click="handleButtonClick(item)">
-                        {{ item.text }}
+                        <p class="btn-route">{{ item.text }}</p>
                     </div>
                 </div>
             </div>
@@ -94,7 +94,32 @@ export default {
             switch(this.status){
                 case "Admin":
                     this.buttons = [
-                        { text: 'Home', route: '/' },
+                        { text: 'Subjects', route: '/' },
+                        {
+                            text: 'Scheduler',
+                            dropdown: [
+                                {        
+                                    text: 'Schedule',
+                                    route: '/scheduler',
+                                    isShow: false,
+                                },
+                            ]
+                        },
+                        {
+                            text: 'Instructor',
+                            dropdown: [
+                                {
+                                    text: 'Schedule',
+                                    route: '/instructor',
+                                    isShow: false,
+                                },
+                                {
+                                    text: 'Activities',
+                                    route: '/instructor/activities',
+                                    isShow: false,
+                                },
+                            ],
+                        },
                         {
                             text: 'Guarantor',
                             dropdown: [
@@ -196,7 +221,7 @@ export default {
     margin: 20px;
     background-color: white;
     border-radius: 15px;
-    padding: 10px 40px;
+    padding: 10px 20px;
     display: flex;
     justify-content: space-between;
 }
@@ -206,7 +231,7 @@ export default {
     padding: 10px 20px;
     border-radius: 20px;
     color: rgba(255,255,255,1);
-    font-size: 20px;
+    font-size: 16px;
     text-transform: uppercase;
 }
 
@@ -226,15 +251,15 @@ export default {
     margin: 5px;
     border: none;
     background-color: white;
-    font-size: 20px;
+    font-size: 16px;
     font-weight: bold;
 }
 
-.menu-item:hover {
+/* .menu-item:hover {
     text-decoration: underline;
     cursor: pointer;
     color: black;
-}
+} */
 
 
 .user {
@@ -271,9 +296,19 @@ export default {
     background-color: white;
     border: 1px solid #ccc;
     border-radius: 5px;
-    font-size: 18px;
+    font-size: 14px;
     white-space: nowrap;
     z-index: 1;
+}
+
+.btn-route {
+    margin: 0;
+}
+
+.btn-route:hover {
+    text-decoration: underline;
+    cursor: pointer;
+    color: black;
 }
 
 .dropdown div {
