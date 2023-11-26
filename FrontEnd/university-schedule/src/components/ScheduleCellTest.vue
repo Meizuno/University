@@ -1,6 +1,11 @@
 <template>
-  <div class="cell" :style="colors.outside" @click="changeActivity">
-    <div class="tooltip">
+  <div class="all">
+    <div
+        class="tooltip"
+        :style="{'display': isTooltipVisible ? 'block' : 'none'}"
+        @mouseenter="showTooltip"
+        @mouseleave="hideTooltip"
+    >
       <div v-if="activity.subject.code">
         <p>Code:</p>
         <p>{{ activity.subject.code }}</p>
@@ -9,18 +14,32 @@
         <p>Type:</p>
         <p>{{ activity.activity_type.name }}</p>
       </div>
-      <div v-if="activity.instruktor">
-        <p>Code:</p>
-        <p>{{ activity.instruktor.first_name + activity.instruktor.last_name }}</p>
+      <div v-if="activity.activity_type">
+        <p>Duration:</p>
+        <p>{{ activity.duration }} hours</p>
+      </div>
+      <div v-if="activity.instructor">
+        <p>Instructor:</p>
+        <p>{{ activity.instructor.first_name + " " + activity.instructor.last_name }}</p>
       </div>
     </div>
-    <div :style="colors.inside">
-      <p :style="colors.title">Subject</p>
-      <p class="var">{{ activity.subject.code }}</p>
-    </div>
-    <div :style="colors.inside">
-      <p :style="colors.title">Room</p>
-      <p class="var">{{ activity.room.number }}</p>
+    <div
+        class="cell"
+        :style="colors.outside"
+        @click="changeActivity"
+        :class="{ clickable: true }"
+        @mouseenter="showTooltip"
+        @mouseleave="hideTooltip"
+
+    >
+      <div :style="colors.inside">
+        <p :style="colors.title">Subject</p>
+        <p class="var">{{ activity.subject.code }}</p>
+      </div>
+      <div :style="colors.inside">
+        <p :style="colors.title">Room</p>
+        <p class="var">{{ activity.room.number }}</p>
+      </div>
     </div>
   </div>
 
@@ -52,7 +71,7 @@ export default {
         inside: { 'background-color': "#9DDBAB" },
         title: { 'color': "#E2F4E6" }
       },
-
+      isTooltipVisible: false,
       isDialogOpen: false,
     }
   },
@@ -60,6 +79,12 @@ export default {
     this.UpdateStyles()
   },
   methods: {
+    showTooltip() {
+      this.isTooltipVisible = true;
+    },
+    hideTooltip() {
+      this.isTooltipVisible = false;
+    },
     UpdateStyles() {
       switch (this.activity.activity_type.name) {
         case "Lecture":
@@ -117,8 +142,10 @@ export default {
 
 <style scoped>
 
-.cell {
+.all {
   position: relative;
+}
+.cell {
   display: flex;
   flex-wrap: wrap;
   gap: 10px;
@@ -126,26 +153,23 @@ export default {
   color: white;
   padding: 10px;
   border-radius: 20px;
-  cursor: pointer;
 }
 
 .tooltip {
   position: absolute;
-  bottom: 105%;
+  bottom: 100%;
   left: 50%;
   transform: translateX(-50%);
+  padding: 8px;
   background-color: white;
-  color: black;
   border: 1px solid rgb(0, 0, 0, 0.2);
-  border-radius: 4px;
-  opacity: 0;
-  transition: opacity 0.3s ease;
-  z-index: 3;
+  border-radius: 5px;
 }
 
 .tooltip > div {
   display: flex;
   gap: 5px;
+  white-space: nowrap;
 }
 
 

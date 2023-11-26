@@ -322,7 +322,7 @@
   },
   {
     "model": "education.StudentSubject",
-    "pk": 1,
+    "pk": 2,
     "fields": {
       "student": 11,
       "subject": 2
@@ -330,7 +330,7 @@
   },
   {
     "model": "education.StudentSubject",
-    "pk": 1,
+    "pk": 3,
     "fields": {
       "student": 11,
       "subject": 3
