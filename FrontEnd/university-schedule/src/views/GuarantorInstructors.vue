@@ -50,7 +50,7 @@ export default {
     },
     getInstructors(){
       try {
-        axios.get("http://127.0.0.1:8000/api/get_all_instructors", {headers: this.header})
+        axios.get(`${import.meta.env.VITE_API_HOST}/get_all_instructors`, {headers: this.header})
             .then(response => {
               const allInstructors = response.data.data;
               const tempInstructors = [];
@@ -83,7 +83,7 @@ export default {
     },
     unregisterInstructor(instructor) {
       try {
-        axios.delete(`http://127.0.0.1:8000/api/register_instructor/${instructor.id}/${this.guarantorSubject.id}`, {headers: this.header})
+        axios.delete(`${import.meta.env.VITE_API_HOST}/register_instructor/${instructor.id}/${this.guarantorSubject.id}`, {headers: this.header})
             .then(response => {
               const index = this.registered_instructors.findIndex(regInstructor => regInstructor.id === instructor.id);
               if (index !== -1) {
@@ -104,7 +104,7 @@ export default {
 
     registerInstructor(instructor) {
       try {
-        axios.post(`http://127.0.0.1:8000/api/register_instructor/${instructor.id}/${this.guarantorSubject.id}`, {headers: this.header})
+        axios.post(`${import.meta.env.VITE_API_HOST}/register_instructor/${instructor.id}/${this.guarantorSubject.id}`,{},{headers: this.header})
             .then(response => {
               console.log(response.data);
               const index = this.instructors.findIndex(inst => inst.id === instructor.id);

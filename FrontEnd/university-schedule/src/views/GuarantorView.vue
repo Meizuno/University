@@ -43,11 +43,11 @@ export default {
     async getGuarantorSubjectAndActivities(){
       try {
         // change to user.id
-        axios.get(`http://127.0.0.1:8000/api/subject?guarantor_id=${this.user.id}`, {headers: this.header})
+        axios.get(`${import.meta.env.VITE_API_HOST}/subject?guarantor_id=${this.user.id}`, {headers: this.header})
             .then(response => {
               this.guarantorSubject = response.data.data[0];
               localStorage.setItem('subject', JSON.stringify(this.guarantorSubject));
-              axios.get(`http://127.0.0.1:8000/api/subject_activities/${this.guarantorSubject.id}`, {headers: this.header})
+              axios.get(`${import.meta.env.VITE_API_HOST}/subject_activities/${this.guarantorSubject.id}`, {headers: this.header})
                   .then(response=>{
                     this.activities = response.data.data;
                     this.updateKey();

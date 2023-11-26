@@ -8,7 +8,7 @@
             <div class="subject-guarantor">
                 <p>{{ subject.guarantor.first_name + " " + subject.guarantor.last_name}}</p>
             </div>
-            <div class="subject-time-span">
+            <div class="subject-time-span" v-if="subject.lectureHours || subject.practiceHours || subject.laboratoryHours">
                 <p>Time span:</p>
                 <ul>
                     <li v-if="subject.lectureHours">{{subject.lectureHours}} lectures</li>
@@ -46,7 +46,7 @@ export default {
     },
     async fetchSubjectActivities() {
       for (const subject of this.subjects) {
-        const response = await axios.get(`http://127.0.0.1:8000/api/activity?subject=${subject.id}`);
+        const response = await axios.get(`${import.meta.env.VITE_API_HOST}/activity?subject=${subject.id}`);
         const activities = response.data.data;
 
         let lectureWeeks = 0;

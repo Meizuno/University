@@ -83,7 +83,7 @@ export default {
     },
     async getAllSubjects(){
       try{
-        axios.get('http://127.0.0.1:8000/api/subject',{headers: this.header})
+        axios.get(`${import.meta.env.VITE_API_HOST}/subject`,{headers: this.header})
             .then(response => {
               this.subjects = response.data.data;
             })
@@ -96,7 +96,7 @@ export default {
     },
     async getRegisteredSubjects(){
       try{
-        axios.get(`http://127.0.0.1:8000/api/student_subjects/${this.user.id}`,{headers: this.header})
+        axios.get(`${import.meta.env.VITE_API_HOST}/student_subjects/${this.user.id}`,{headers: this.header})
             .then(response => {
               this.registeredSubjects = response.data.data;
 
