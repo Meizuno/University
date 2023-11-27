@@ -31,6 +31,7 @@ export default {
       instructors : [],
       registered_instructors: [],
       guarantorSubject : {},
+      user: {},
     }
   },
 
@@ -38,33 +39,40 @@ export default {
     async getSubject(){
       try {
         // change to user.id
-        const storedSubject = localStorage.getItem('subject');
-        if(storedSubject) {
-          this.guarantorSubject = JSON.parse(storedSubject);
-        }
+        await axios.get(`${import.meta.env.VITE_API_HOST}/subject?guarantor_id=${this.user.id}`, {headers: this.header})
+            .then(response => {
+              this.guarantorSubject = response.data.data[0];
+            })
+            .catch(error=>{
+              console.log(error);
+            })
 
       }catch (e) {
         console.log(e);
       }
 
     },
+    getUser(){
+      const storedUser = localStorage.getItem('user');
+      if(storedUser) {
+        this.user = JSON.parse(storedUser);
+      }
+    },
     getInstructors(){
       try {
         axios.get(`${import.meta.env.VITE_API_HOST}/get_all_instructors`, {headers: this.header})
             .then(response => {
               const allInstructors = response.data.data;
+              console.log(allInstructors);
               const tempInstructors = [];
               const tempRegisteredInstructors = [];
-              if(allInstructors){
-                allInstructors.forEach(instructor => {
-                  if (this.guarantorSubject.instructors.includes(instructor.id)) {
-                    tempRegisteredInstructors.push(instructor);
-                  } else {
-                    tempInstructors.push(instructor);
-                  }
-                });
-              }
-
+              allInstructors.forEach(instructor => {
+                if (this.guarantorSubject.instructors.includes(instructor.id)) {
+                  tempRegisteredInstructors.push(instructor);
+                } else {
+                  tempInstructors.push(instructor);
+                }
+              });
 
               this.instructors = tempInstructors;
               this.registered_instructors = tempRegisteredInstructors;
@@ -78,6 +86,7 @@ export default {
     },
 
     async loadData(){
+      this.getUser();
       await this.getSubject();
       await this.getInstructors();
     },
@@ -93,7 +102,7 @@ export default {
                 console.log("Instructor not found in registered instructors.");
               }
               toast.success("Instructor was successfully unregistered!", {
-                autoClose: 5000,
+                autoClose: 1000,
                 position: toast.POSITION.BOTTOM_RIGHT,
               });
             });
@@ -115,7 +124,7 @@ export default {
                 console.log("Instructor not found in instructors list.");
               }
               toast.success("Instructor was successfully registered!", {
-                autoClose: 5000,
+                autoClose: 1000,
                 position: toast.POSITION.BOTTOM_RIGHT,
               });
             });

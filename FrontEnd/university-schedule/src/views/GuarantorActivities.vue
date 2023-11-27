@@ -155,7 +155,6 @@ export default {
     }
   },
   methods:{
-
     sendRequest(){
       const dataToSend = {
         "guarantor_notes": this.notes,
@@ -166,7 +165,6 @@ export default {
         "date_to": this.range.end,
         "activity_repetition_id": this.selectedRepeating,
       };
-      console.log(dataToSend);
       axios.post(`${import.meta.env.VITE_API_HOST}/activity`, dataToSend, {headers: this.header})
           .then(response=>{
             this.getRequests()
@@ -176,7 +174,11 @@ export default {
             });
           })
           .catch(error=>{
-            console.log(error);
+            let message = error.response.data.detail.replace(/['\[\]]/g, '');
+            toast.error(message, {
+              autoClose: 5000,
+              position: toast.POSITION.BOTTOM_LEFT,
+            });
           });
 
       this.selectedRepeating = 0;
@@ -217,8 +219,12 @@ export default {
               position: toast.POSITION.BOTTOM_RIGHT,
             });
           })
-          .catch(e=>{
-            console.log(e);
+          .catch(error=>{
+            let message = error.response.data.detail.replace(/['\[\]]/g, '');
+            toast.error(message, {
+              autoClose: 5000,
+              position: toast.POSITION.BOTTOM_LEFT,
+            });
           })
 
     }
