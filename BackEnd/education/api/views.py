@@ -334,23 +334,23 @@ def rud_subject(request, subject_id):
         serializator = ReadSubjectSerializer(subject)
         return Response({"data": serializator.data})
     elif request.method == "PUT":
-        api_access(request, 1)
-        serializator = SubjectSerializer(data=request.data)
-        if serializator.is_valid():
-            subject = Subject.objects.filter(id=subject_id)
-            if not subject.exists():
-                return Response(
-                    {
-                        "success": True,
-                        "errors": "Subject does not exist.",
-                    },
-                    status=status.HTTP_400_BAD_REQUEST,
-                )
-            subject.update(**serializator.validated_data)
-            InstructorSubject.objects.filter(subject=subject[0]).update(
-                instructor=subject[0].guarantor
-            )
-            return Response({"success": True, "errors": None})
+        try:
+            api_access(request, 1)
+            serializator = SubjectSerializer(data=request.data)
+            if serializator.is_valid():
+                subject = Subject.objects.filter(id=subject_id)
+                if not subject.exists():
+                    return Response(
+                        {
+                            "success": True,
+                            "errors": "Subject does not exist.",
+                        },
+                        status=status.HTTP_400_BAD_REQUEST,
+                    )
+                subject.update(**serializator.validated_data)
+                return Response({"success": True, "errors": None})
+        except Exception as ex:
+            print(ex)
     elif request.method == "DELETE":
         api_access(request, 1)
         subject = Subject.objects.filter(id=subject_id)

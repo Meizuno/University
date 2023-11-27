@@ -163,7 +163,7 @@ export default {
                     const errorMessage = `${key}: ${errorDes}`;
     
                     toast.error(errorMessage, {
-                        autoClose: 5000,
+                        autoClose: 3000,
                         position: toast.POSITION.BOTTOM_LEFT,
                     });
                 }
@@ -192,7 +192,7 @@ export default {
 
                     return 0;
                 });
-                this.guarantors = this.userArray.filter(user => user.permission.level === 2);
+                this.guarantors = this.userArray.filter(user => user.permission.level <= 2);
                 this.GetGuarantors();
                 this.isUserLoad = true;
             })
@@ -203,7 +203,7 @@ export default {
                         const errorMessage = `${key}: ${errorDes}`;
         
                         toast.error(errorMessage, {
-                            autoClose: 5000,
+                            autoClose: 3000,
                             position: toast.POSITION.BOTTOM_LEFT,
 
                         });
@@ -229,13 +229,13 @@ export default {
                 this.isCerateUserOpen = false;
                 this.isUpdateDeleteUserOpen = false;
                 toast.success("Create user is success!", {
-                    autoClose: 5000,
+                    autoClose: 3000,
                     position: toast.POSITION.BOTTOM_RIGHT
                 });
             })
             .catch(error => {
                 toast.error("Dublicate username or email.", {
-                    autoClose: 5000,
+                    autoClose: 3000,
                     position: toast.POSITION.BOTTOM_RIGHT
                 });
             });
@@ -254,23 +254,16 @@ export default {
                 this.isCerateUserOpen = false;
                 this.isUpdateDeleteUserOpen = false;
                 toast.success("Update user is success!", {
-                    autoClose: 5000,
+                    autoClose: 3000,
                     position: toast.POSITION.BOTTOM_RIGHT
                 });
             })
             .catch(error => {
-                for (const key in error.response.data.errors) {
-                    if (error.response.data.errors.hasOwnProperty(key)) {
-                        const errorDes = error.response.data.errors[key];
-                        const errorMessage = `${key}: ${errorDes}`;
-        
-                        toast.error(errorMessage, {
-                            autoClose: 5000,
-                            position: toast.POSITION.BOTTOM_RIGHT,
+                toast.error(error.response.data.detail, {
+                    autoClose: 3000,
+                    position: toast.POSITION.BOTTOM_RIGHT,
 
-                        });
-                    }
-                }
+                });
             });
         },
         DeleteUser(id){
@@ -281,7 +274,7 @@ export default {
                 this.isCerateUserOpen = false;
                 this.isUpdateDeleteUserOpen = false;
                 toast.success("Delete user is success!", {
-                    autoClose: 5000,
+                    autoClose: 3000,
                     position: toast.POSITION.BOTTOM_RIGHT
                 });
             })
@@ -292,9 +285,8 @@ export default {
                         const errorMessage = `${key}: ${errorDes}`;
         
                         toast.error(errorMessage, {
-                            autoClose: 5000,
+                            autoClose: 3000,
                             position: toast.POSITION.BOTTOM_RIGHT,
-
                         });
                     }
                 }
@@ -339,9 +331,8 @@ export default {
                         const errorMessage = `${key}: ${errorDes}`;
         
                         toast.error(errorMessage, {
-                            autoClose: 5000,
+                            autoClose: 3000,
                             position: toast.POSITION.BOTTOM_LEFT,
-
                         });
                     }
                 }
@@ -365,20 +356,20 @@ export default {
                 this.isCerateSubjectOpen = false;
                 this.isUpdateDeleteSubjectOpen = false;
                 toast.success("Create subject is success!", {
-                    autoClose: 5000,
+                    autoClose: 3000,
                     position: toast.POSITION.BOTTOM_LEFT
                 });
             })
             .catch(error => {
+                console.log(error);
                 for (const key in error.response.data.errors) {
                     if (error.response.data.errors.hasOwnProperty(key)) {
                         const errorDes = error.response.data.errors[key];
                         const errorMessage = `${key}: ${errorDes}`;
         
                         toast.error(errorMessage, {
-                            autoClose: 5000,
+                            autoClose: 3000,
                             position: toast.POSITION.BOTTOM_LEFT,
-
                         });
                     }
                 }
@@ -398,7 +389,7 @@ export default {
                 this.isCerateSubjectOpen = false;
                 this.isUpdateDeleteSubjectOpen = false;
                 toast.success("Update subject is success!", {
-                    autoClose: 5000,
+                    autoClose: 3000,
                     position: toast.POSITION.BOTTOM_LEFT
                 });
             })
@@ -409,9 +400,8 @@ export default {
                         const errorMessage = `${key}: ${errorDes}`;
         
                         toast.error(errorMessage, {
-                            autoClose: 5000,
+                            autoClose: 3000,
                             position: toast.POSITION.BOTTOM_LEFT,
-
                         });
                     }
                 }
@@ -425,7 +415,7 @@ export default {
                 this.isCerateSubjectOpen = false;
                 this.isUpdateDeleteSubjectOpen = false;
                 toast.success("Delete subject is success!", {
-                    autoClose: 5000,
+                    autoClose: 3000,
                     position: toast.POSITION.BOTTOM_LEFT
                 });
             })
@@ -436,9 +426,8 @@ export default {
                         const errorMessage = `${key}: ${errorDes}`;
         
                         toast.error(errorMessage, {
-                            autoClose: 5000,
+                            autoClose: 3000,
                             position: toast.POSITION.BOTTOM_LEFT,
-
                         });
                     }
                 }
@@ -459,9 +448,8 @@ export default {
                         const errorMessage = `${key}: ${errorDes}`;
         
                         toast.error(errorMessage, {
-                            autoClose: 5000,
+                            autoClose: 3000,
                             position: toast.POSITION.BOTTOM_LEFT,
-
                         });
                     }
                 }
@@ -485,23 +473,15 @@ export default {
                 this.isCerateRoomOpen = false;
                 this.isUpdateDeleteRoomOpen = false;
                 toast.success("Create room is success!", {
-                    autoClose: 5000,
+                    autoClose: 3000,
                     position: toast.POSITION.BOTTOM_LEFT
                 });
             })
             .catch(error => {
-                for (const key in error.response.data.errors) {
-                    if (error.response.data.errors.hasOwnProperty(key)) {
-                        const errorDes = error.response.data.errors[key];
-                        const errorMessage = `${key}: ${errorDes}`;
-        
-                        toast.error(errorMessage, {
-                            autoClose: 5000,
-                            position: toast.POSITION.BOTTOM_LEFT,
-
-                        });
-                    }
-                }
+                toast.error(error.response.data.detail, {
+                    autoClose: 3000,
+                    position: toast.POSITION.BOTTOM_LEFT,
+                });
             });
         },
         EditRoom(room) {
@@ -518,23 +498,15 @@ export default {
                 this.isCerateRoomOpen = false;
                 this.isUpdateDeleteRoomOpen = false;
                 toast.success("Update room is success!", {
-                    autoClose: 5000,
+                    autoClose: 3000,
                     position: toast.POSITION.BOTTOM_LEFT
                 });
             })
             .catch(error => {
-                for (const key in error.response.data.errors) {
-                    if (error.response.data.errors.hasOwnProperty(key)) {
-                        const errorDes = error.response.data.errors[key];
-                        const errorMessage = `${key}: ${errorDes}`;
-        
-                        toast.error(errorMessage, {
-                            autoClose: 5000,
-                            position: toast.POSITION.BOTTOM_LEFT,
-
-                        });
-                    }
-                }
+                toast.error(error.response.data.detail, {
+                    autoClose: 3000,
+                    position: toast.POSITION.BOTTOM_LEFT,
+                });
             });
         },
         DeleteRoom(id){
@@ -545,7 +517,7 @@ export default {
                 this.isCerateRoomOpen = false;
                 this.isUpdateDeleteRoomOpen = false;
                 toast.success("Delete room is success!", {
-                    autoClose: 5000,
+                    autoClose: 3000,
                     position: toast.POSITION.BOTTOM_LEFT
                 });
             })
@@ -556,9 +528,8 @@ export default {
                         const errorMessage = `${key}: ${errorDes}`;
         
                         toast.error(errorMessage, {
-                            autoClose: 5000,
+                            autoClose: 3000,
                             position: toast.POSITION.BOTTOM_LEFT,
-
                         });
                     }
                 }

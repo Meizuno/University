@@ -83,7 +83,7 @@ export default {
                 this.GetActivities();
                 this.$refs.calendarRef.UpdateCalendar();
                 toast.success("Remove from calendar successful!", {
-                    autoClose: 5000,
+                    autoClose: 3000,
                     position: toast.POSITION.BOTTOM_RIGHT,
                 });
             })
@@ -97,14 +97,14 @@ export default {
                 this.GetActivities();
                 this.$refs.calendarRef.UpdateCalendar();
                 toast.success("Add to calendar successful!", {
-                    autoClose: 5000,
+                    autoClose: 3000,
                     position: toast.POSITION.BOTTOM_RIGHT,
                 });
             })
             .catch(error => {
                 let message = error.response.data.detail.replace(/['\[\]]/g, '');
                 toast.error(message, {
-                    autoClose: 5000,
+                    autoClose: 3000,
                     position: toast.POSITION.BOTTOM_LEFT,
                 });
             });

@@ -32,6 +32,9 @@
 </template>
 
 <script>
+import { toast } from 'vue3-toastify';
+import 'vue3-toastify/dist/index.css';
+
 export default {
     props: {
         guarantors: {
@@ -59,8 +62,16 @@ export default {
             this.$emit('back');
         },
         CreateSubject() {
-            this.subject.guarantor_id = this.selectedGuarantorID;
-            this.$emit('create-subject', this.subject);
+            if (this.subject.code.length !== 3){
+                toast.error("Code has 3 chars.", {
+                    autoClose: 3000,
+                    position: toast.POSITION.BOTTOM_LEFT,
+                });
+            }
+            else{
+                this.subject.guarantor_id = this.selectedGuarantorID;
+                this.$emit('create-subject', this.subject);
+            }
         },
         toggleDropdownGuarantor() {
             this.isGuarantorOpen = !this.isGuarantorOpen;

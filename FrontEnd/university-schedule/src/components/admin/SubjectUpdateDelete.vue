@@ -12,17 +12,6 @@
             <p>Description</p>
             <input type="text" v-model="subject.description" />
         </div>
-        <div>
-            <p>Guarantor</p>
-            <div class="custom-select" @click.stop="toggleDropdownGuarantor">
-                {{ selectedGuarantor || 'Guarantor' }}
-                <div v-if="isGuarantorOpen" class="dropdown" ref="dropdown" @click.stop>
-                <div v-for="guarantor in guarantors" :key="guarantor.id" @click="selectValue(guarantor)">
-                    {{ guarantor.username }}
-                </div>
-                </div>
-            </div>
-        </div>
 
         <div class="btns">
             <button @click.prevent="Back">Back</button>
@@ -33,6 +22,8 @@
 </template>
 
 <script>
+import { toast } from 'vue3-toastify';
+import 'vue3-toastify/dist/index.css';
 
 export default {
     props: {
@@ -40,34 +31,27 @@ export default {
             type: Object,
             default: {}
         },
-        guarantors: {
-            type: Array,
-            default: [],
-        },
-    },
-    data() {
-        return {
-            isGuarantorOpen: false,
-            selectedGuarantor: this.subject.guarantor.username,
-            selectedGuarantorID: this.subject.guarantor.id,
-        }
     },
     methods: {
         Back() {
             this.$emit("back");
         },
         UpdateSubject() {
-            const id = this.subject["id"];
-            this.subject["guarantor_id"] = this.selectedGuarantorID;
-            delete this.subject["id"];
-            delete this.subject["guarantor"];
-            this.$emit('update-subject', id, this.subject);
+            if (this.subject.code.length !== 3){
+                toast.error("Code has 3 chars.", {
+                    autoClose: 3000,
+                    position: toast.POSITION.BOTTOM_LEFT,
+                });
+            }
+            else{
+                const id = this.subject["id"];
+                delete this.subject["id"];
+                delete this.subject["guarantor"];
+                this.$emit('update-subject', id, this.subject);
+            }
         },
         DeleteSubject() {
             this.$emit('delete-subject', this.subject["id"]);
-        },
-        toggleDropdownGuarantor() {
-            this.isGuarantorOpen = !this.isGuarantorOpen;
         },
         selectValue(guarantor) {
             this.selectedGuarantor = guarantor.username;
@@ -128,69 +112,6 @@ form > div > input {
 .btns > button:last-child:hover {
     background-color: #FF7783;
     cursor: pointer;
-}
-
-.custom-select {
-    position: relative;
-    display: flex;
-    border: 1px solid rgb(0, 0, 0, 0.4);
-    border-radius: 5px;
-    cursor: pointer;
-    width: 100%;
-    padding: 5px;
-    font-size: 16px;
-    color: rgb(0, 0, 0);
-}
-
-.dropdown {
-  background-color: white;
-  position: absolute;
-  top: 100%;
-  padding: 0px 7px;
-  width: fit-content;
-  border: 1px solid rgb(0, 0, 0, 0.2);
-  border-radius: 5px;
-  display: flex;
-  flex-direction: column;
-  outline: none;
-  z-index: 1;
-}
-
-.dropdown div:not(:last-child) {
-  cursor: pointer;
-  padding: 7px 0px;
-  border-bottom: 1px solid #ccc;
-  color: rgb(0, 0, 0, 0.5);
-}
-
-.dropdown div:hover {
-  color: rgb(0, 0, 0);
-}
-
-.dropdown div:last-child {
-  cursor: pointer;
-  padding: 7px 0px;
-  color: rgb(0, 0, 0, 0.5);
-}
-
-.password {
-    position: relative;
-}
-
-.password-input {
-    display: flex;
-    justify-content: space-between;
-    width: 100%;
-    padding: 5px;
-    border: 1px solid rgb(0, 0, 0, 0.4);
-    border-radius: 5px;
-}
-
-.password > img {
-    position: absolute;
-    right: 0;
-    top: 50%;
-    transform: translateY(20%);
 }
 
 </style>

@@ -24,7 +24,19 @@
     pip install -r requirements.txt
     ```
 
-5. Run server on localhost:
+5. Initialize database:
+
+    ```
+    python manage.py migrate
+    ```
+
+6. Generate test data:
+
+    ```
+    python manage.py loaddata data.json
+    ```
+
+7. Run server on localhost:
 
     ```
     python manage.py runserver

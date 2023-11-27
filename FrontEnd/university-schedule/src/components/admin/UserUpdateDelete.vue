@@ -8,12 +8,6 @@
             <p>Email:</p>
             <input type="email" v-model="user.email" />
         </div>
-        <div class="password">
-            <p>Password:</p>
-            <input class="password-input" :type="showPassword ? 'text' : 'password'" v-model="user.password" />
-            <img v-if="showPassword" @click="togglePasswordVisibility" src="../../assets/Eye.svg" alt="Hide Password" />
-            <img v-else @click="togglePasswordVisibility" src="../../assets/EyeOff.svg" alt="Show Password" />
-        </div>
         <div>
             <p>First name:</p>
             <input type="text" v-model="user.first_name" />
@@ -59,7 +53,6 @@ export default {
         return {
             isPermissionOpen: false,
             selectedPermission: this.user.permission.description,
-            showPassword: false,
         }
     },
     methods: {
@@ -83,9 +76,6 @@ export default {
         selectValue(permission) {
             this.selectedPermission = permission.description;
             this.isPermissionOpen = false;
-        },
-        togglePasswordVisibility() {
-            this.showPassword = !this.showPassword;
         },
     }
 };

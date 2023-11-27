@@ -1,0 +1,174 @@
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="content-type" content="text/html; charset=iso-8859-2"/>
+    <title>Projekt IIS</title>
+    <style type="text/css">
+    	table { border-collapse: collapse; }
+    	td, th { border: 1px solid black; padding: 0.3em 0.5em; text-align: left; }
+    	dt { font-weight: bold; margin-top: 0.5em; }
+    </style>
+    <style>
+        body {
+            font-size: 18px;
+            padding: 10px;
+        }
+      </style>
+</head>
+<body>
+
+<!-- Zkontrolujte prosím nastavení kódování v hlavičce dokumentu 
+     podle použitého editoru -->
+
+<h1>Plánování rozvrhů</h1> <!-- Nahradte názvem svého zadání -->
+
+<dl>
+	<dt>Autoři</dt>
+	<dd><strong>Sergei Rasstrigin</strong> <!-- Nahraďte skutečným jménem a e-mailem autora a popisem činnosti -->
+	    <a href="mailto:xrasst00@stud.fit.vutbr.cz">xrasst00@stud.fit.vutbr.cz</a> -
+		stranka Studenta, stranka Garanta, Dokumantace, návrch Databaze, <strong>vedoucí týmu</strong>
+	</dd>
+	<dd>Aliaksei Klimau <!-- Nahraďte skutečným jménem a e-mailem autora a popisem činnosti -->
+	    <a href="mailto:xklima34@stud.fit.vutbr.cz">xklima34@stud.fit.vutbr.cz</a> - 
+		stranka Vyučujícího, stranka Neregistrovaného uživatele, Autorizace
+	</dd>
+    <dd>Yurii Myronov <!-- Nahraďte skutečným jménem a e-mailem autora a popisem činnosti -->
+	    <a href="mailto:xmyron00@stud.fit.vutbr.cz">xmyron00@stud.fit.vutbr.cz</a> - 
+		stranka Administratora, stranka Rozvrháře, návrch Databaze, Instalace na server
+	</dd>
+	<dt>URL aplikace</dt>
+	<dd>Hlavní URL - <a href="http://a86c2eb991f154b978d0b1430610d980-956606991.us-east-1.elb.amazonaws.com:8080/" target="_blank">http://a86c2eb991f154b978d0b1430610d980-956606991.us-east-1.elb.amazonaws.com:8080/</a></dd>
+	<dd>Vygenerovaná dokumentace k BE - <a href="http://a035356dd569f438bb1ce3a1ee31063d-263270751.us-east-1.elb.amazonaws.com:8000/swagger" target="_blank">http://a035356dd569f438bb1ce3a1ee31063d-263270751.us-east-1.elb.amazonaws.com:8000/swagger</a></dd>
+</dl>
+
+<h2>Uživatelé systému pro testování</h2>
+<p>Uveďte prosím existující zástupce <strong>všech rolí uživatelů</strong>.</p>
+<table>
+<tr><th>Login</th><th>Heslo</th><th>Role</th></tr>
+<tr><td>admin</td><td>admin</td><td>Administrátor</td></tr>
+<tr><td>guarantor</td><td>guarantor</td><td>Garant</td></tr>
+<tr><td>instructor</td><td>instructor</td><td>Vyučující</td></tr>
+<tr><td>scheduler</td><td>scheduler</td><td>Rozvrhář</td></tr>
+<tr><td>student</td><td>student</td><td>Student</td></tr>
+</table>
+
+<p>Každý další účet pro testování má stejné heslo jako login. Seznam účtů je vidět na stránce administrátora.</p> 
+
+<h3>Video</h3>
+
+<a href="https://drive.google.com/file/d/1F4j6hKqBEfqi_SfEug7orE75tQL4JBoT/view?usp=sharing" target="_blank">https://drive.google.com/file/d/1F4j6hKqBEfqi_SfEug7orE75tQL4JBoT/view?usp=sharing</a>
+
+
+<h2>Implementace</h2>
+
+Vyuzite technologie:
+<ul>
+    <li>Databaze - <strong>PostgreSQL;</strong></li>
+    <li>BackEnd - <strong>Django(Rest Framework + JWT Autorizace)</strong></li>
+    <li>FrontEnd - <strong>Vue.js</strong></li>
+    <li>GitHub - <a href="https://github.com/Meizuno/University" target="_blank">https://github.com/Meizuno/University</a></li>
+</ul>
+
+
+<p>Hlavni funkce, ktera provadi kontrolu pro pristup k API:</p>
+<pre>
+    def api_access(request, level):
+        user = request.user
+        if (not user.is_authenticated) or user.permission.level > level:
+            raise ValidationError("Permissions denied.")
+</pre>
+
+<p>Ukazka, jak vypadaji CRUD operace pro jednoduche tabulky na priklade tabulky <em>User</em>:</p>
+<pre>
+    def get_users_or_create(request):
+    """Read users or create new"""
+
+    if request.method == "GET":
+        api_access(request, 2)
+        params = request.GET.dict()
+        users = User.objects.filter(**params)
+        serializator = ReadUserSerializer(users, many=True)
+        return Response({"data": serializator.data})
+    elif request.method == "POST":
+        api_access(request, 1)
+        serializator = UserSerializer(data=request.data)
+        if serializator.is_valid():
+            User.objects.create_user(**serializator.data)
+            return Response({"success": True, "errors": None})
+        else:
+            return Response({"success": False, "errors": serializator.errors}, status=status.HTTP_400_BAD_REQUEST)
+    
+
+    def rud_user(request, user_id):
+        """Read, update or delete user"""
+    
+        if request.method == "GET":
+            api_access(request, 5)
+            user = User.objects.get(id=user_id)
+            serializator = ReadUserSerializer(user)
+            return Response({"data": serializator.data})
+        elif request.method == "PUT":
+            print(request.user)
+            api_access(request, 1)
+            serializator = UserSerializer(data=request.data)
+            if serializator.is_valid():
+                user = User.objects.filter(id=user_id)
+                if not user.exists():
+                    return Response({"success": False, "errors": "User does not exist.",}, status=status.HTTP_400_BAD_REQUEST)
+                user.update(**serializator.validated_data)
+                return Response({"success": True, "errors": None})
+        elif request.method == "DELETE":
+            api_access(request, 1)
+            user = User.objects.filter(id=user_id)
+            if not user.exists():
+                return Response({"success": False, "errors": "User does not exist.",}, status=status.HTTP_400_BAD_REQUEST)
+            user.delete()
+            return Response({"success": True, "errors": None})
+</pre>
+
+Další důležité funkce lze najít na odkazu. <a href="github.com/Meizuno/University/blob/main/BackEnd/education/api/views.py" target="_blank">github.com/Meizuno/University/blob/main/BackEnd/education/api/views.py</a>
+
+<h3>Databáze</h3>
+
+<a href="https://dbdiagram.io/d/IIS-ITU-6511e421ffbf5169f078a69d" target="_blank">Vizualizace databázového návrhu (https://dbdiagram.io/d/IIS-ITU-6511e421ffbf5169f078a69d)</a>
+
+<h2>Instalace</h2>
+
+<h3>Instalace na server</h3>
+
+Vyuzite zdroje:
+<ul>
+    <li>Docker;</li>
+    <li>Amazon Web Services(aws);</li>
+    <li>Elastic Kubernetes Service(eks).</li>
+</ul>
+
+Vytvoření Docker image a uložení na <a href="https://hub.docker.com/repositories/meizuno" target="_blank">Docker Hub</a>. Instalace Docker image do klastru EKS pomocí AWS CLI. Na každý image byl vytvořen deployment. Pro backend a frontend je otevřen přístup mimo cluster pomocí `expose --type=LoadBalancer`.
+
+
+<h3>Softwarové požadavky</h3>
+<ul>
+    <li>PostgreSQL(v16);</li>
+    <li>Python(v3.11.2);</li>
+    <li>Node.js(v18.15.0).</li>
+</ul>
+
+nebo
+
+<ul>
+    <li>Docker(v24.0.6);</li>
+</ul>
+
+<h3>Jak spustit lokální verzi</h3>
+
+<ul>
+    <li>Pro rychlé spuštění je definován soubor `docker-compose`. Pomocí příkazu `docker-compose up` bude server spuštěn lokálně;</li>
+    <li>Pokud Docker není nainstalován (není možné spustit), je možné použít další nástroje uvedené výše. Nutné příkazy pro každou část (BE nebo FE) jsou popsány v odpovídajících složkách v souborech `README.md`.</li>
+</ul>
+
+<h2>Známé problémy</h2>
+
+Nelze aktualizovat stránky v prohlížeči kromě hlavní (možný důvod: Vue.js je frameworkem pro SPA, což znamená, že ukazuje nutné komponenty a přiřazuje jim unikátní endpointy). Pro další využití aplikace <strong>je potřeba přejít na domovskou stránku!</strong>
+
+</body>
+</html>

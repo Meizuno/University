@@ -1,6 +1,14 @@
 version: '3'
 
 services:
+  pgdb:
+    build:
+      context: .
+      dockerfile: db_dockerfile
+    container_name: pgdb
+    ports:
+      - "5432:5432"
+
   backend:
     build:
       context: .
@@ -17,21 +25,11 @@ services:
     depends_on:
       - pgdb
 
-  pgdb:
-    build:
-      context: .
-      dockerfile: db_dockerfile
-    container_name: pgdb
-    ports:
-      - "5432:5432"
-
   frontend:
     build:
       context: .
       dockerfile: frontend_dockerfile
     container_name: frontend
-    command: >
-      http-server dist -p 8080
     ports:
       - "8080:8080"
     

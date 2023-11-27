@@ -1,4 +1,5 @@
 ./BackEnd/.venv
+./BackEnd/.env
 ./BackEnd/README.md
 
 ./FrontEnd/university-schedule/node_modules/
