@@ -6,7 +6,10 @@
     <main>
         <div class="admin">
             <div>
-                <h2>User</h2>
+                <div class="title">
+                    <h2>User</h2>
+                    <img src="../assets/add-item.svg" alt="" @click="NewUser">
+                </div>
                 <UserList 
                     v-if="isUserLoad && isUserListOpen"
                     :userArray="userArray"
@@ -29,7 +32,10 @@
                 />
             </div>
             <div>
-                <h2>Subject</h2>
+                <div class="title">
+                    <h2>Subject</h2>
+                    <img src="../assets/add-item.svg" alt="" @click="NewSubject">
+                </div>
                 <SubjectList 
                     v-if="isSubjectLoad && isSubjectListOpen"
                     :subjectArray="subjectArray"
@@ -52,7 +58,10 @@
                 />
             </div>
             <div>
-                <h2>Room</h2>
+                <div class="title">
+                    <h2>Room</h2>
+                    <img src="../assets/add-item.svg" alt="" @click="NewRoom">
+                </div>
                 <RoomList 
                     v-if="isRoomLoad && isRoomListOpen"
                     :roomArray="roomArray"
@@ -558,9 +567,23 @@ template {
     border-radius: 20px;
 }
 
+.title {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
 h2 {
-    text-align: center;
     margin: 10px;
+}
+
+img {
+    width: 25px;
+    height: 25px;
+}
+
+img:hover{
+    cursor: pointer;
 }
 
 </style>
