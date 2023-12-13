@@ -29,6 +29,7 @@
             :key="activity.id"
             :registered="false"
             @registerActivity="writeNotes"
+            @checkGuarantorNotes="checkGuarantorNotes"
         >
         </InstructorAvailableCard>
 
@@ -45,6 +46,8 @@
             :key="activity.id"
             :registered="true"
             @unregisterActivity="unregisterActivity"
+            @registerActivity="writeNotes"
+            @checkGuarantorNotes="checkGuarantorNotes"
         >
         </InstructorAvailableCard>
       </div>
@@ -53,9 +56,21 @@
   </div>
   <div v-if="showModal">
     <ModalWindow
+        :isRegistered="checkIfRegistered()"
+        :isGuarantor=false
         :activity="selectedActivity"
         @close-modal="closeModal"
         @register-activity="registerActivity"
+    >
+    </ModalWindow>
+  </div>
+
+  <div v-if="showGuarantorModal">
+    <ModalWindow
+        :isRegistered=false
+        :isGuarantor=true
+        :activity="selectedActivity"
+        @close-guarantor-modal="closeGuarantorModal"
     >
     </ModalWindow>
   </div>
@@ -79,6 +94,7 @@ export default {
       activities: [],
       registeredActivities: [],
       showModal: false,
+      showGuarantorModal: false,
       selectedActivity:{},
       header: {
         "Authorization": localStorage.getItem("token"),
@@ -86,11 +102,21 @@ export default {
     }
   },
   methods: {
+    checkIfRegistered() {
 
+      return this.registeredActivities.some(obj => obj.id === this.selectedActivity.id)
+    },
     writeNotes(activity){
       this.selectedActivity = activity;
       this.openModal();
     },
+
+    checkGuarantorNotes(activity)
+    {
+      this.selectedActivity = activity;
+      this.openGuarantorModal();
+    },
+
     registerActivity(payload) {
       const { activity, notes } = payload;
       const dataToSend = {
@@ -105,6 +131,7 @@ export default {
           })
       this.closeModal();
     },
+
     unregisterActivity(activity){
       axios.delete(`${import.meta.env.VITE_API_HOST}/instructor_register_activity/${this.user.id}/${activity.id}`, {headers: this.header})
           .then(response=>{
@@ -113,6 +140,7 @@ export default {
           .catch(e=>{
             console.log(e);
           })
+      this.closeModal();
     },
     async getScheduleActivities(subjectId){
       await axios.get(`${import.meta.env.VITE_API_HOST}/instructor_free_activities/${subjectId}`, {headers: this.header})
@@ -160,9 +188,19 @@ export default {
     closeModal(){
       this.showModal = false;
       this.selectedActivity = {};
+      this.isRegistered = false;
+    },
+    closeGuarantorModal()
+    {
+      this.showGuarantorModal = false;
+      this.selectedActivity = {};
+      this.isRegistered = false;
     },
     openModal(){
       this.showModal = true;
+    },
+    openGuarantorModal() {
+      this.showGuarantorModal = true;
     }
   },
   watch: {
@@ -174,6 +212,7 @@ export default {
     this.getUserAndSubjects();
   }
 }
+
 </script>
 
 <style scoped>

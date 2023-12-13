@@ -3,10 +3,31 @@
     <div class="modal-content">
       <h2>{{ activity.title }}</h2>
       <p>{{ activity.description }}</p>
-      <textarea v-model="notes" placeholder="Enter notes..."></textarea>
-      <div class="buttons">
-        <button @click="register">Register activity</button>
-        <button @click="close">Close</button>
+      <div v-if="isGuarantor">
+        <div>
+          <textarea v-model="guarantor_notes" readonly></textarea>
+        </div>
+        <div class="buttons-guarantor">
+          <button @click="closeGuarantor">Close</button>
+        </div>
+      </div>
+      <div v-else-if="isRegistered">
+        <div>
+          <textarea v-model="instructor_notes"></textarea>
+        </div>
+        <div class="buttons">
+          <button @click="register">Save changes</button>
+          <button @click="closeInstructor">Close</button>
+        </div>
+      </div>
+      <div v-else>
+        <div>
+          <textarea v-model="instructor_notes" placeholder="Enter notes..."></textarea>
+        </div>
+        <div class="buttons">
+          <button @click="register">Register activity</button>
+          <button @click="closeInstructor">Close</button>
+        </div>
       </div>
     </div>
   </div>
@@ -18,21 +39,34 @@ export default {
     activity: {
       type: Object,
       required: true
+    },
+    isGuarantor: {
+      type: Boolean,
+      required: true
+    },
+    isRegistered: {
+      type: Boolean,
+      required: true
     }
   },
   data() {
     return {
-      notes: '',
+      instructor_notes: this.activity.instructor_notes,
+      guarantor_notes: this.activity.guarantor_notes
     };
   },
   methods: {
     register() {
-      this.$emit('register-activity', { activity: this.activity, notes: this.notes });
-      this.close();
+      this.$emit('register-activity', { activity: this.activity, notes: this.instructor_notes });
+      this.closeInstructor();
     },
-    close() {
+    closeInstructor() {
       this.$emit('close-modal');
     },
+    closeGuarantor()
+    {
+      this.$emit('close-guarantor-modal');
+    }
   },
 };
 </script>
@@ -66,6 +100,11 @@ textarea {
 .buttons {
   display: flex;
   justify-content: space-between;
+}
+
+.buttons-guarantor {
+  display: flex;
+  justify-content: center;
 }
 
 button {

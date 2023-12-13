@@ -16,17 +16,30 @@
     <div class="body">
       <div class="repeating">Repeating: {{ this.repeating }}</div>
       <div class="duration">Duration: {{request.duration}}</div>
-      <div class="notes">Guarantor notes: {{request.guarantor_notes}}</div>
+      <div class="notes-box">
+        <div class="notes-label">Guarantor notes</div>
+        <div class="notes-icon" @click="checkGuarantorNotes">
+          <IconNoteText></IconNoteText>
+        </div>
+      </div>
+      <div v-if="registered" class="notes-box">
+        <div class="notes">Your notes</div>
+        <div class="notes-icon" @click="registerActivity">
+          <IconNoteText></IconNoteText>
+        </div>
+      </div>
     </div>
   </div>
 </template>
 
 <script>
+
 import Cross from "@/components/icons/Cross.vue";
 import Checkmark from "@/components/icons/Checkmark.vue";
+import IconNoteText from "@/components/icons/IconNoteText.vue";
 
 export default {
-  components: {Checkmark, Cross},
+  components: {Checkmark, Cross, IconNoteText},
   data(){
     return{
       repeating: '',
@@ -81,6 +94,10 @@ export default {
     unregisterActivity(){
       this.$emit('unregisterActivity', this.request);
     },
+    checkGuarantorNotes()
+    {
+      this.$emit('checkGuarantorNotes', this.request);
+    },
   },
 
   mounted() {
@@ -97,8 +114,7 @@ export default {
   background: #84D296;
   min-width: 280px;
   max-width: 280px;
-  min-height: 140px;
-  max-height: 140px;
+  max-height: 170px;
   border: 3px solid black;
   margin-top: 3px;
   margin-right: 10px;
@@ -120,7 +136,9 @@ export default {
   font-size: 20px;
   padding-top: 3px;
   padding-left: 3px;
-  overflow: auto;
+  margin-bottom: 7px;
+  margin-top: 3px;
+  overflow: clip;
 }
 .cross{
   margin-left: auto;
@@ -134,6 +152,16 @@ export default {
   align-items: center;
   margin-left: 5px;
 }
+
+.notes-box{
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  margin-bottom: 0;
+  gap: 5px;
+  height: 24px
+}
+
 .lecture-type {
   background: #84D296; /* Цвет для лекции */
 }
