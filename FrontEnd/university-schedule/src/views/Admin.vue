@@ -13,7 +13,6 @@
                 <UserList 
                     v-if="isUserLoad && isUserListOpen"
                     :userArray="userArray"
-                    @new-user="NewUser"
                     @edit-user="EditUser"
                 />
                 <CreateUser
@@ -39,7 +38,6 @@
                 <SubjectList 
                     v-if="isSubjectLoad && isSubjectListOpen"
                     :subjectArray="subjectArray"
-                    @new-subject="NewSubject"
                     @edit-subject="EditSubject"
                 />
                 <CreateSubject
@@ -65,7 +63,6 @@
                 <RoomList 
                     v-if="isRoomLoad && isRoomListOpen"
                     :roomArray="roomArray"
-                    @new-room="NewRoom"
                     @edit-room="EditRoom"
                 />
                 <CreateRoom
@@ -106,9 +103,9 @@ import 'vue3-toastify/dist/index.css';
 
 export default {
     emits: [
-        "new-user", "edit-user", "back", "create-user", "update-user", "delete-user",
-        "new-subject", "edit-subject", "create-subject", "update-subject", "delete-subject",
-        "new-room", "edit-room", "create-room", "update-room", "delete-room"
+        "edit-user", "back", "create-user", "update-user", "delete-user",
+        "edit-subject", "create-subject", "update-subject", "delete-subject",
+        "edit-room", "create-room", "update-room", "delete-room"
     ],
     data() {
         return{
