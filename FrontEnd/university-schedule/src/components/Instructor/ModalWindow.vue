@@ -57,6 +57,10 @@ export default {
   },
   methods: {
     register() {
+      if (this.instructor_notes === null)
+      {
+        this.instructor_notes="";
+      }
       this.$emit('register-activity', { activity: this.activity, notes: this.instructor_notes });
       this.closeInstructor();
     },
