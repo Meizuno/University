@@ -117,12 +117,12 @@ export default {
       this.openGuarantorModal();
     },
 
-    registerActivity(payload) {
+    async registerActivity(payload) {
       const { activity, notes } = payload;
       const dataToSend = {
         "instructor_notes": notes,
       };
-      axios.post(`${import.meta.env.VITE_API_HOST}/instructor_register_activity/${this.user.id}/${activity.id}`,dataToSend,{headers: this.header})
+      await axios.post(`${import.meta.env.VITE_API_HOST}/instructor_register_activity/${this.user.id}/${activity.id}`,dataToSend,{headers: this.header})
           .then(response=>{
             this.getScheduleActivities(this.selectedSubject);
           })
@@ -132,8 +132,8 @@ export default {
       this.closeModal();
     },
 
-    unregisterActivity(activity){
-      axios.delete(`${import.meta.env.VITE_API_HOST}/instructor_register_activity/${this.user.id}/${activity.id}`, {headers: this.header})
+    async unregisterActivity(activity){
+      await axios.delete(`${import.meta.env.VITE_API_HOST}/instructor_register_activity/${this.user.id}/${activity.id}`, {headers: this.header})
           .then(response=>{
             this.getScheduleActivities(this.selectedSubject);
           })
@@ -155,7 +155,7 @@ export default {
     updateCalendarKey() {
       this.calendarKey += 1;
     },
-    getUserAndSubjects(){
+    async getUserAndSubjects(){
       try{
         const storedUser = localStorage.getItem('user');
         if(storedUser) {
@@ -163,7 +163,7 @@ export default {
         }
         try{
           // set to dynamic
-          axios.get(`${import.meta.env.VITE_API_HOST}/subject?instructors=${this.user.id}`, {headers: this.header})
+          await axios.get(`${import.meta.env.VITE_API_HOST}/subject?instructors=${this.user.id}`, {headers: this.header})
               .then(response => {
                 this.registeredSubjects = response.data.data;
               })
