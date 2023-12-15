@@ -125,21 +125,25 @@ def rud_user(request, user_id):
         serializator = ReadUserSerializer(user)
         return Response({"data": serializator.data})
     elif request.method == "PUT":
-        print(request.user)
         api_access(request, 1)
-        serializator = UserSerializer(data=request.data)
+        user = User.objects.filter(id=user_id)
+        if not user.exists():
+            return Response(
+                {
+                    "success": False,
+                    "errors": "User does not exist.",
+                },
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+        serializator = UserSerializer(instance=user[0], data=request.data)
         if serializator.is_valid():
-            user = User.objects.filter(id=user_id)
-            if not user.exists():
-                return Response(
-                    {
-                        "success": False,
-                        "errors": "User does not exist.",
-                    },
-                    status=status.HTTP_400_BAD_REQUEST,
-                )
             user.update(**serializator.validated_data)
             return Response({"success": True, "errors": None})
+        else:
+            return Response(
+                {"success": False, "errors": serializator.errors},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
     elif request.method == "DELETE":
         api_access(request, 1)
         user = User.objects.filter(id=user_id)
@@ -148,6 +152,14 @@ def rud_user(request, user_id):
                 {
                     "success": False,
                     "errors": "User does not exist.",
+                },
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+        subject = Subject.objects.filter(guarantor=user[0]).first()
+        if subject:
+            return Response(
+                {
+                    "errors": [f"Cannot delete guarantor before subject '{subject.code}'"],
                 },
                 status=status.HTTP_400_BAD_REQUEST,
             )
@@ -229,19 +241,24 @@ def rud_room(request, room_id):
         serializator = ReadRoomSerializer(room)
         return Response({"data": serializator.data})
     elif request.method == "PUT":
-        serializator = RoomSerializer(data=request.data)
+        room = Room.objects.filter(id=room_id)
+        if not room.exists():
+            return Response(
+                {
+                    "success": True,
+                    "errors": "Room does not exist.",
+                },
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+        serializator = RoomSerializer(instance=room[0], data=request.data)
         if serializator.is_valid():
-            room = Room.objects.filter(id=room_id)
-            if not room.exists():
-                return Response(
-                    {
-                        "success": True,
-                        "errors": "Room does not exist.",
-                    },
-                    status=status.HTTP_400_BAD_REQUEST,
-                )
             room.update(**serializator.validated_data)
             return Response({"success": True, "errors": None})
+        else:
+            return Response(
+                {"success": False, "errors": serializator.errors},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
     elif request.method == "DELETE":
         api_access(request, 1)
         room = Room.objects.filter(id=room_id)
@@ -334,23 +351,25 @@ def rud_subject(request, subject_id):
         serializator = ReadSubjectSerializer(subject)
         return Response({"data": serializator.data})
     elif request.method == "PUT":
-        try:
-            api_access(request, 1)
-            serializator = SubjectSerializer(data=request.data)
-            if serializator.is_valid():
-                subject = Subject.objects.filter(id=subject_id)
-                if not subject.exists():
-                    return Response(
-                        {
-                            "success": True,
-                            "errors": "Subject does not exist.",
-                        },
-                        status=status.HTTP_400_BAD_REQUEST,
-                    )
-                subject.update(**serializator.validated_data)
-                return Response({"success": True, "errors": None})
-        except Exception as ex:
-            print(ex)
+        api_access(request, 1)
+        subject = Subject.objects.filter(id=subject_id)
+        if not subject.exists():
+            return Response(
+                {
+                    "success": True,
+                    "errors": "Subject does not exist.",
+                },
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+        serializator = SubjectSerializer(instance=subject[0], data=request.data)
+        if serializator.is_valid():
+            subject.update(**serializator.validated_data)
+            return Response({"success": True, "errors": None})
+        else:
+            return Response(
+                {"success": False, "errors": serializator.errors},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
     elif request.method == "DELETE":
         api_access(request, 1)
         subject = Subject.objects.filter(id=subject_id)

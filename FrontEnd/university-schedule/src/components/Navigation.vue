@@ -95,16 +95,7 @@ export default {
                 case "Admin":
                     this.buttons = [
                         { text: 'Subjects', route: '/' },
-                        {
-                            text: 'Scheduler',
-                            dropdown: [
-                                {        
-                                    text: 'Schedule',
-                                    route: '/scheduler',
-                                    isShow: false,
-                                },
-                            ]
-                        },
+                        { text: 'Scheduler',route: '/scheduler' },
                         {
                             text: 'Instructor',
                             dropdown: [
@@ -140,16 +131,7 @@ export default {
                                 },
                             ],
                         },
-                        { 
-                            text: 'Admin',
-                            dropdown: [
-                                {        
-                                    text: 'Admin panel',
-                                    route: '/admin',
-                                    isShow: false,
-                                },
-                            ]
-                        },
+                        { text: 'Admin', route: '/admin' },
                     ];
                     break;
                 case "Scheduler":
