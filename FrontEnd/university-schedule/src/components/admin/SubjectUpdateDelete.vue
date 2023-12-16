@@ -2,15 +2,24 @@
     <form>
         <div>
             <p>Code</p>
-            <input type="text" v-model="subject.code" />
+            <input type="text" v-model="update_subject.code" :class="{ 'invalid': errors.code }"/>
+            <ul v-if="errors.code" style="color: red;">
+                <li v-for="error in errors.code">{{ error }}</li>
+            </ul>
         </div>
         <div>
             <p>Name</p>
-            <input type="email" v-model="subject.name" />
+            <input type="email" v-model="update_subject.name" :class="{ 'invalid': errors.name }"/>
+            <ul v-if="errors.name" style="color: red;">
+                <li v-for="error in errors.name">{{ error }}</li>
+            </ul>
         </div>
         <div>
             <p>Description</p>
-            <input type="text" v-model="subject.description" />
+            <input type="text" v-model="update_subject.description" :class="{ 'invalid': errors.description }"/>
+            <ul v-if="errors.description" style="color: red;">
+                <li v-for="error in errors.description">{{ error }}</li>
+            </ul>
         </div>
 
         <div class="btns">
@@ -22,8 +31,8 @@
 </template>
 
 <script>
+import axios from 'axios';
 import { toast } from 'vue3-toastify';
-import 'vue3-toastify/dist/index.css';
 
 export default {
     props: {
@@ -32,23 +41,47 @@ export default {
             default: {}
         },
     },
+    data() {
+        return {
+            update_subject: {
+                code: this.subject.code,
+                name: this.subject.name,
+                description: this.subject.description,
+                guarantor_id : this.subject.guarantor.id,
+            },
+
+            header: {
+                "Authorization": localStorage.getItem("token"),
+            },
+
+            errors: {
+                code: null,
+                name: null,
+                description: null,
+                guarantor_id: null,
+            },
+        }
+    },
     methods: {
         Back() {
             this.$emit("back");
         },
         UpdateSubject() {
-            if (this.subject.code.length !== 3){
-                toast.error("Code has 3 chars.", {
+            const id = this.subject["id"];
+            axios.put(`${import.meta.env.VITE_API_HOST}/subject/${id}`, this.update_subject, {headers: this.header})
+            .then(response => {
+                this.$emit('update-subject');
+                toast.success("Update subject is success!", {
                     autoClose: 3000,
-                    position: toast.POSITION.BOTTOM_LEFT,
+                    position: toast.POSITION.BOTTOM_LEFT
                 });
-            }
-            else{
-                const id = this.subject["id"];
-                delete this.subject["id"];
-                delete this.subject["guarantor"];
-                this.$emit('update-subject', id, this.subject);
-            }
+            })
+            .catch(error => {
+                const serverErrors = error.response.data.errors;
+                Object.keys(serverErrors).forEach(key => {
+                    this.errors[key] = serverErrors[key];
+                });
+            });
         },
         DeleteSubject() {
             this.$emit('delete-subject', this.subject["id"]);
@@ -112,6 +145,16 @@ form > div > input {
 .btns > button:last-child:hover {
     background-color: #FF7783;
     cursor: pointer;
+}
+
+ul {
+    margin: 5px;
+    padding-left: 20px;
+    font-size: 14px;
+}
+
+.invalid {
+  border-color: red;
 }
 
 </style>

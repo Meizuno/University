@@ -2,23 +2,35 @@
     <form>
         <div>
             <p>Username:</p>
-            <input type="text" v-model="user.username" />
+            <input type="text" v-model="update_user.username" :class="{ 'invalid': errors.username }"/>
+            <ul v-if="errors.username" style="color: red;">
+                <li v-for="error in errors.username">{{ error }}</li>
+            </ul>
         </div>
         <div>
             <p>Email:</p>
-            <input type="email" v-model="user.email" />
+            <input type="email" v-model="update_user.email" :class="{ 'invalid': errors.email }"/>
+            <ul v-if="errors.email" style="color: red;">
+                <li v-for="error in errors.email">{{ error }}</li>
+            </ul>
         </div>
         <div>
             <p>First name:</p>
-            <input type="text" v-model="user.first_name" />
+            <input type="text" v-model="update_user.first_name" :class="{ 'invalid': errors.first_name }"/>
+            <ul v-if="errors.first_name" style="color: red;">
+                <li v-for="error in errors.first_name">{{ error }}</li>
+            </ul>
         </div>
         <div>
             <p>Last name:</p>
-            <input type="text" v-model="user.last_name" />
+            <input type="text" v-model="update_user.last_name" :class="{ 'invalid': errors.last_name }"/>
+            <ul v-if="errors.last_name" style="color: red;">
+                <li v-for="error in errors.last_name">{{ error }}</li>
+            </ul>
         </div>
         <div>
             <p>Permission:</p>
-            <div class="custom-select" @click.stop="toggleDropdownPermission">
+            <div class="custom-select" @click.stop="toggleDropdownPermission" :class="{ 'invalid': errors.permission_id }">
                 {{ selectedPermission }}
                 <div v-if="isPermissionOpen" class="dropdown" ref="dropdown" @click.stop>
                 <div v-for="permission in permissions" :key="permission.description" @click="selectValue(permission)">
@@ -26,6 +38,9 @@
                 </div>
                 </div>
             </div>
+            <ul v-if="errors.permission_id" style="color: red;">
+                <li v-for="error in errors.permission_id">{{ error }}</li>
+            </ul>
         </div>
 
         <div class="btns">
@@ -37,6 +52,8 @@
 </template>
 
 <script>
+import axios from 'axios';
+import { toast } from 'vue3-toastify';
 
 export default {
     props: {
@@ -51,8 +68,29 @@ export default {
     },
     data() {
         return {
+            update_user: {
+                username: this.user.username,
+                email: this.user.email,
+                password: this.user.password,
+                first_name: this.user.first_name,
+                last_name: this.user.last_name,
+                permission_id : this.user.permission_id,
+            },
+
             isPermissionOpen: false,
             selectedPermission: this.user.permission.description,
+            header: {
+                "Authorization": localStorage.getItem("token"),
+            },
+
+            errors: {
+                username: null,
+                email: null,
+                password: null,
+                first_name: null,
+                last_name: null,
+                permission_id: null,
+            },
         }
     },
     methods: {
@@ -62,10 +100,25 @@ export default {
         UpdateUser() {
             const id = this.user["id"];
             const permission = this.permissions.find(p => p.description === this.selectedPermission);
-            this.user["permission_id"] = permission.id;
-            delete this.user["permission"];
-            delete this.user["id"];
-            this.$emit('update-user', id, this.user);
+            this.update_user["permission_id"] = permission.id;
+            Object.keys(this.errors).forEach(key => {
+                this.errors[key] = null;
+            });
+            console.log(this.update_user)
+            axios.put(`${import.meta.env.VITE_API_HOST}/user/${id}`, this.update_user, {headers: this.header})
+            .then(response => {
+                this.$emit('update-user');
+                toast.success("Update user is success!", {
+                    autoClose: 3000,
+                    position: toast.POSITION.BOTTOM_RIGHT
+                });
+            })
+            .catch(error => {
+                const serverErrors = error.response.data.errors;
+                Object.keys(serverErrors).forEach(key => {
+                    this.errors[key] = serverErrors[key];
+                });
+            });
         },
         DeleteUser() {
             this.$emit('delete-user', this.user["id"]);
@@ -197,5 +250,14 @@ form > div > input {
     transform: translateY(20%);
 }
 
+ul {
+    margin: 5px;
+    padding-left: 20px;
+    font-size: 14px;
+}
+
+.invalid {
+  border-color: red;
+}
 
 </style>
