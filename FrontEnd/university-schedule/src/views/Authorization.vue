@@ -14,8 +14,8 @@
             <label for="">Password</label>
           </div>
           <div class="bttns">
-            <button class="home_bttn" @click="ToHome">Home</button>
             <button class="login_bttn" @click="sendGetUser">Log in</button>
+            <button class="home_bttn" @click="ToHome">Home</button>
           </div>
 
         </form>
@@ -161,6 +161,7 @@ input:valid ~ label{
 .bttns{
   display: flex;
   justify-content: center;
+  gap: 20px;
 }
 button{
   width: 30%;
@@ -175,11 +176,9 @@ button{
 }
 .home_bttn{
   background-color: #45BFFF;
-  margin-right: 10px;
 }
 .login_bttn{
   background-color: #84D296;
-  margin-left: 10px;
 }
 
 </style>

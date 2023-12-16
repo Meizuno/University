@@ -136,7 +136,7 @@ export default {
                     break;
                 case "Scheduler":
                     this.buttons = [
-                        { text: 'Home', route: '/' },
+                        { text: 'Subjects', route: '/' },
                         { text: 'Schedule', route: '/scheduler' }
                     ];
                     break;

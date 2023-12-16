@@ -68,7 +68,6 @@ export default {
     state:{
       type: String,
       default: 'view'
-      // view(default) unregistered registered
     }
   },
   data() {
@@ -159,7 +158,6 @@ export default {
 }
 .cell {
   display: flex;
-  flex-wrap: wrap;
   gap: 10px;
   justify-content: center;
   color: white;

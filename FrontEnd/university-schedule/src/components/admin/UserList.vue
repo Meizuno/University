@@ -84,7 +84,7 @@
 }
 
 .list > div{
-    border: 1px solid rgb(0, 0, 0, 0.2);
+    border: 1px solid rgb(0, 0, 0, 0.5);
     border-radius: 10px;
     padding: 10px;
     margin: 5px 10px;
