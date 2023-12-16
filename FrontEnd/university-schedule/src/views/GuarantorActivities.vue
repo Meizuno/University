@@ -60,7 +60,11 @@
             </select>
           </div>
           <div class="select-date">
-            <div class="input-date"> Date:
+            <div class="input-date">
+              <div class="input-label">
+                Date:
+              </div>
+
               <VDatePicker
                   v-model="range"
                   is-range
@@ -68,7 +72,7 @@
                   v-model.string="customer.birthday"
               >
                 <template #default="{ inputValue, inputEvents }">
-                  <div class="flex justify-center items-center">
+                  <div>
                     <input
                         :value="inputValue.start"
                         v-on="inputEvents.start"
@@ -188,9 +192,9 @@ export default {
       this.range = ref(null);
 
     },
-    getRequests(){
+    async getRequests(){
       // change to subject id
-      axios.get(`${import.meta.env.VITE_API_HOST}/get_requests/${this.guarantorSubject.id}`, {headers: this.header})
+      await axios.get(`${import.meta.env.VITE_API_HOST}/get_requests/${this.guarantorSubject.id}`, {headers: this.header})
           .then(response=>{
             this.requests = response.data.data;
           })
@@ -210,8 +214,8 @@ export default {
         console.log(e);
       }
     },
-    deleteRequest(activity){
-      axios.delete(`${import.meta.env.VITE_API_HOST}/activity/${activity.id}`, {headers: this.header})
+    async deleteRequest(activity){
+      await axios.delete(`${import.meta.env.VITE_API_HOST}/activity/${activity.id}`, {headers: this.header})
           .then(response=>{
             this.getRequests();
             toast.success("Request was successfully deleted!", {
@@ -232,7 +236,7 @@ export default {
   },
   async mounted() {
     this.getSubject();
-    this.getRequests();
+    await this.getRequests();
   }
 }
 </script>
@@ -241,15 +245,14 @@ export default {
 .main-container{
   background: none;
   display: flex;
-  height: 83vh;
+  height: 108vh;
   justify-content: center;
 }
 .request-container{
   display: flex;
   flex-direction: column;
   align-items: center;
-  margin-top: 20px;
-  height: 93%;
+  height: 95%;
   width: 60%;
   background: white;
   border-radius: 10px;
@@ -266,21 +269,21 @@ export default {
 }
 .list__request{
   width: 100%;
-  height: 28%;
+  height: 23%;
   display: flex;
   justify-content: center;
 }
 .list_body{
-  background: #E0CFB1;
-  border: none;
+  background: #eea15a;
   border-radius: 10px;
   display: flex;
-  height: 97%;
+  height: 100%;
   width: 90%;
   padding-left: 10px;
   justify-content: left;
   align-items: center;
   overflow: auto;
+  border: 2px solid black;
 }
 .request__form{
   width: 100%;
@@ -295,11 +298,12 @@ export default {
 }
 .form-box{
   height: 95%;
-  width: 70%;
-  background: #E0CFB1;
+  width: 50%;
+  background: #eea15a;
   display: flex;
   flex-direction: column;
   border-radius: 10px;
+  border: 2px solid black;
 }
 .list_body::-webkit-scrollbar {
   width: 1px;
@@ -318,27 +322,32 @@ export default {
   height: 100%;
 }
 .select-type{
-  margin-top: 10px;
+  margin-top: 8px;
   width: 100%;
   height: 15%;
   display: flex;
-  align-items: center;
+  flex-direction: column;
+  justify-items: center;
   font-size: 25px;
   font-weight: bold;
 }
 .select-duration{
   display: flex;
-  align-items: center;
+  flex-direction: column;
+  justify-items: center;
   font-size: 25px;
   font-weight: bold;
   width: 100%;
   height: 15%;
+  margin-top: 10px;
 }
 .select-repeating{
   width: 100%;
   height: 15%;
+  margin-top: 10px;
   display: flex;
-  align-items: center;
+  flex-direction: column;
+  justify-items: center;
   font-size: 25px;
   font-weight: bold;
 }
@@ -346,7 +355,8 @@ export default {
   width: 100%;
   height: 15%;
   display: flex;
-  align-items: center;
+  margin-top: 10px;
+  flex-direction: column;
   font-size: 25px;
   font-weight: bold;
 }
@@ -359,24 +369,23 @@ export default {
   font-weight: bold;
 }
 .input-label{
-  margin-left: 10px;
+  margin-left: 5%;
 }
 .custom-select{
-  margin-left: 20px;
-  width: 200px;
-  height: 30px;
+  width: 90%;
+  align-self: center;
+  height: 35px;
   border: 2px solid black;
-  font-size: 19px;
+  font-size: 22px;
   cursor: pointer;
 }
 .notes-label{
-  margin-top: 10px;
-  margin-left: 10px;
+  margin-left: 5%
 }
 .custom-textarea {
-  width: 80%;
+  width: 85%;
   height: 40%;
-  border: 3px solid black;
+  border: 2px solid black;
   resize: none;
   font-size: 19px;
   align-self: center;
@@ -396,11 +405,13 @@ export default {
 }
 .input-date{
   display: flex;
-  margin-left: 10px;
+  flex-direction: column;
   align-items: start;
 }
 .custom-date{
-  margin-left: 15px;
+  margin-left: 5.1%;
   height: 25px;
+  width: 40.7%;
 }
+
 </style>

@@ -70,7 +70,7 @@ export default {
           this.registeredSubjects.every((registeredSubject) => registeredSubject.id !== subject.id)
       );
     },
-    async getUser(){
+    getUser(){
       try{
         const storedUser = localStorage.getItem('user');
         if(storedUser){
@@ -83,7 +83,7 @@ export default {
     },
     async getAllSubjects(){
       try{
-        axios.get(`${import.meta.env.VITE_API_HOST}/subject`,{headers: this.header})
+        await axios.get(`${import.meta.env.VITE_API_HOST}/subject`,{headers: this.header})
             .then(response => {
               this.subjects = response.data.data;
             })
@@ -96,7 +96,7 @@ export default {
     },
     async getRegisteredSubjects(){
       try{
-        axios.get(`${import.meta.env.VITE_API_HOST}/student_subjects/${this.user.id}`,{headers: this.header})
+        await axios.get(`${import.meta.env.VITE_API_HOST}/student_subjects/${this.user.id}`,{headers: this.header})
             .then(response => {
               this.registeredSubjects = response.data.data;
 

@@ -56,12 +56,12 @@ export default {
     }
   },
   methods: {
-    registerActivity(activity){
-      axios.post(`${import.meta.env.VITE_API_HOST}/student_register_activity/${this.user.id}/${activity.id}`,{},{headers: this.header})
+    async registerActivity(activity){
+      await axios.post(`${import.meta.env.VITE_API_HOST}/student_register_activity/${this.user.id}/${activity.id}`,{},{headers: this.header})
           .then(response=>{
             this.getStudentActivities();
             toast.success("Activity was successfully registered!", {
-              autoClose: 5000,
+              autoClose: 500,
               position: toast.POSITION.BOTTOM_RIGHT,
             });
           })
@@ -69,19 +69,19 @@ export default {
             console.log(e);
           })
     },
-    unregisterActivity(activity){
-      axios.delete(`${import.meta.env.VITE_API_HOST}/student_register_activity/${this.user.id}/${activity.id}`,{headers: this.header})
+    async unregisterActivity(activity){
+      await axios.delete(`${import.meta.env.VITE_API_HOST}/student_register_activity/${this.user.id}/${activity.id}`,{headers: this.header})
           .then(response=>{
             this.getStudentActivities();
             toast.success("Activity was successfully unregistered!", {
-              autoClose: 5000,
+              autoClose: 500,
               position: toast.POSITION.BOTTOM_RIGHT,
             });
           })
           .catch(error=>{
             let message = error.response.data.detail.replace(/['\[\]]/g, '');
             toast.error(message, {
-              autoClose: 5000,
+              autoClose: 500,
               position: toast.POSITION.BOTTOM_LEFT,
               hideProgressBar: true,
             });
@@ -108,13 +108,13 @@ export default {
         activity.regtype = registeredActivity ? 'registered' : 'unregistered';
       });
     },
-    getUserAndSubjects(){
+    async getUserAndSubjects(){
       try{
         const storedUser = localStorage.getItem('user');
         if(storedUser){
           this.user = JSON.parse(storedUser);
           try{
-            axios.get(`${import.meta.env.VITE_API_HOST}/student_subjects/${this.user.id}`, {headers: this.header})
+            await axios.get(`${import.meta.env.VITE_API_HOST}/student_subjects/${this.user.id}`, {headers: this.header})
                 .then(response => {
                   this.registeredSubjects = response.data.data;
                 })
@@ -130,7 +130,6 @@ export default {
       }
     },
     async getStudentActivities(){
-      // http://127.0.0.1:8000/api/activity?students=10&subject=3
       await axios.get(`${import.meta.env.VITE_API_HOST}/student_activities_subject/${this.user.id}/${this.selectedSubject}`, {headers: this.header})
           .then(response=>{
             this.registeredActivities = response.data.data;
@@ -167,7 +166,7 @@ export default {
 .subject-picker{
   width: 190px;
   min-height: 60px;
-  background: #81d4fa;
+  background: rgba(0,0,0,0.1);
   margin-top: 20px;
   margin-left: 30px;
   display: flex;

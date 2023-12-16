@@ -43,7 +43,7 @@ export default {
     async getGuarantorSubjectAndActivities(){
       try {
         // change to user.id
-        axios.get(`${import.meta.env.VITE_API_HOST}/subject?guarantor_id=${this.user.id}`, {headers: this.header})
+        await axios.get(`${import.meta.env.VITE_API_HOST}/subject?guarantor_id=${this.user.id}`, {headers: this.header})
             .then(response => {
               this.guarantorSubject = response.data.data[0];
               //console.log(this.guarantorSubject)
