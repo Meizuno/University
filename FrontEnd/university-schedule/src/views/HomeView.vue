@@ -1,7 +1,7 @@
 <!--@authors-->
 <!--xklima34, Aliaksei Klimau-->
 <!--@file HomeView.vue-->
-<!--@brief Instructor registered activites schedule view-->
+<!--@brief Home page view with existing subjects schedule-->
 
 <template>
   <header>

@@ -1,3 +1,8 @@
+<!--@authors-->
+<!--xklima34, Aliaksei Klimau-->
+<!--@file UserProfileCard.vue-->
+<!--@brief Instructor registered activities schedule view-->
+
 <template>
   <div class="card">
     <div class="container">
@@ -49,6 +54,7 @@ export default {
   components: {Checkmark, Cross, IconNoteText},
 
   props: {
+    // User whose profile card is being displayed
     user: {
       type: Object,
       required: true
@@ -56,6 +62,7 @@ export default {
   },
 
   methods: {
+    // Method for closing progile card
     closeProfile(){
       this.$emit("close-user-profile");
     }

@@ -1,7 +1,7 @@
 <!--@authors-->
 <!--xklima34, Aliaksei Klimau-->
 <!--@file InstructorView.vue-->
-<!--@brief Instructor registered activites schedule view-->
+<!--@brief Instructor registered activities schedule view-->
 
 
 <template>
