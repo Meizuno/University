@@ -17,6 +17,13 @@
 </template>
 
 <script>
+/**
+ * @authors
+ *   xrasst00, Sergei Rasstrigin
+ *
+ * @file GuarantRequest.vue
+ * @brief Component of card Guarantor's requests
+ */
 import Cross from "@/components/icons/Cross.vue";
 
 export default {
@@ -49,6 +56,10 @@ export default {
     },
   },
   methods:{
+    /**
+     * @brief Writes the formatted repeating pattern based on activity repetition.
+     * @returns {void}
+     */
     writeRepeating(){
       switch (this.request.activity_repetition) {
         case(1):
@@ -69,6 +80,10 @@ export default {
       }
 
     },
+    /**
+     * @brief Emits an event to delete the request.
+     * @returns {void}
+     */
     deleteRequest(){
       this.$emit('deleteRequest', this.request);
     },
@@ -88,8 +103,8 @@ export default {
   background: #84D296;
   min-width: 280px;
   max-width: 280px;
-  min-height: 140px;
-  max-height: 140px;
+  min-height: 135px;
+  max-height: 135px;
   border: 3px solid black;
   margin-top: 3px;
   margin-right: 10px;

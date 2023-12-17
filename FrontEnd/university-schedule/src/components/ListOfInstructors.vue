@@ -31,6 +31,13 @@
 </template>
 
 <script>
+/**
+ * @authors
+ *   xrasst00, Sergei Rasstrigin
+ *
+ * @file ListOfInstructors.vue
+ * @brief Component for list of instructors GuarantorView
+ */
 import RegisterInstructorCard from "@/components/RegisterInstructorCard.vue";
 import RegisteredInstructorCard from "@/components/RegisteredInstructorCard.vue";
 
@@ -47,10 +54,20 @@ export default {
     }
   },
   methods:{
+    /**
+     * @brief Registers an instructor.
+     * @param {Object} instructor - The instructor to register.
+     * @returns {void}
+     */
     registerInstructor(instructor){
       this.$emit('instructor_register2', instructor);
 
     },
+    /**
+     * @brief Unregisters an instructor.
+     * @param {Object} instructor - The instructor to unregister.
+     * @returns {void}
+     */
     unregisterInstructor(instructor){
       this.$emit('unregister_instructor', instructor);
 

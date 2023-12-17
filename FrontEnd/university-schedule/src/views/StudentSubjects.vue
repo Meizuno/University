@@ -39,6 +39,13 @@
 </template>
 
 <script>
+/**
+ * @authors
+ *   xrasst00, Sergei Rasstrigin
+ *
+ * @file StudentSubject.vue
+ * @brief Student subject register view
+ */
 import Navigation from "@/components/Navigation.vue";
 import axios from "axios";
 import RegisterSubjectCard from "@/components/RegisterSubjectCard.vue";
@@ -58,29 +65,44 @@ export default {
   },
 
   methods:{
+    /**
+     * @brief Redirects to the authorization page
+     */
     Authorization() {
       this.$router.push('/authorization');
     },
+    /**
+     * @brief Reloads registered and unregistered subjects
+     */
     reloadSubjects(){
       this.getRegisteredSubjects();
       this.getUnregisteredSubjects();
     },
+    /**
+     * @brief Filters unregistered subjects
+     * @returns {Array} - Unregistered subjects
+     */
     getUnregisteredSubjects() {
       return this.subjects.filter((subject) =>
           this.registeredSubjects.every((registeredSubject) => registeredSubject.id !== subject.id)
       );
     },
+    /**
+     * @brief Fetches user data from local storage
+     */
     getUser(){
       try{
         const storedUser = localStorage.getItem('user');
         if(storedUser){
           this.user = JSON.parse(storedUser);
         }
-        console.log("Hello world");
       }catch (error){
         console.log(error);
       }
     },
+    /**
+     * @brief Fetches all subjects
+     */
     async getAllSubjects(){
       try{
         await axios.get(`${import.meta.env.VITE_API_HOST}/subject`,{headers: this.header})
@@ -94,6 +116,9 @@ export default {
         console.log(e);
       }
     },
+    /**
+     * @brief Fetches registered subjects
+     */
     async getRegisteredSubjects(){
       try{
         await axios.get(`${import.meta.env.VITE_API_HOST}/student_subjects/${this.user.id}`,{headers: this.header})

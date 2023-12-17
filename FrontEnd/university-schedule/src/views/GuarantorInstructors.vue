@@ -13,6 +13,13 @@
 </template>
 
 <script>
+/**
+ * @authors
+ *   xrasst00, Sergei Rasstrigin
+ *
+ * @file GuarantorInstructors.vue
+ * @brief Guarantor manage instructors view
+ */
 import Navigation from "@/components/Navigation.vue";
 import axios from "axios";
 import RegisterSubjectCard from "@/components/RegisterSubjectCard.vue";
@@ -36,9 +43,11 @@ export default {
   },
 
   methods:{
+    /**
+     * @brief Fetches the subject information for the guarantor
+     */
     async getSubject(){
       try {
-        // change to user.id
         await axios.get(`${import.meta.env.VITE_API_HOST}/subject?guarantor_id=${this.user.id}`, {headers: this.header})
             .then(response => {
               this.guarantorSubject = response.data.data[0];
@@ -52,12 +61,18 @@ export default {
       }
 
     },
+    /**
+     * @brief Fetches user data from local storage
+     */
     getUser(){
       const storedUser = localStorage.getItem('user');
       if(storedUser) {
         this.user = JSON.parse(storedUser);
       }
     },
+    /**
+     * @brief Fetches the list of instructors and separates registered instructors
+     */
     async getInstructors(){
       try {
         await axios.get(`${import.meta.env.VITE_API_HOST}/get_all_instructors`, {headers: this.header})
@@ -84,12 +99,18 @@ export default {
         console.log(e);
       }
     },
-
+    /**
+     * @brief Loads user data, subject, and instructors data
+     */
     async loadData(){
       this.getUser();
       await this.getSubject();
       await this.getInstructors();
     },
+    /**
+     * @brief Unregisters an instructor
+     * @param {Object} instructor - The instructor to be unregistered
+     */
     async unregisterInstructor(instructor) {
       try {
         await axios.delete(`${import.meta.env.VITE_API_HOST}/register_instructor/${instructor.id}/${this.guarantorSubject.id}`, {headers: this.header})
@@ -110,7 +131,10 @@ export default {
         console.error(e);
       }
     },
-
+    /**
+     * @brief Registers an instructor
+     * @param {Object} instructor - The instructor to be registered
+     */
     async registerInstructor(instructor) {
       try {
         await axios.post(`${import.meta.env.VITE_API_HOST}/register_instructor/${instructor.id}/${this.guarantorSubject.id}`,{},{headers: this.header})

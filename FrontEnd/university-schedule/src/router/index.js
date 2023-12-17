@@ -1,3 +1,12 @@
+/**
+ * @authors
+ *   xrasst00, Sergei Rasstrigin
+ *   xmyron00, Yurii Myronov
+ *   xklima34, Aliaksei Klimau
+ *
+ * @file index.js
+ * @brief Vue JS Router
+ */
 import { createRouter, createWebHistory } from 'vue-router'
 import Home from "@/views/HomeView.vue";
 import Authorization from "@/views/Authorization.vue";

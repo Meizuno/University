@@ -11,6 +11,13 @@
 </template>
 
 <script>
+/**
+ * @authors
+ *   xrasst00, Sergei Rasstrigin
+ *
+ * @file RegisterSubjectCard.vue
+ * @brief Component for subject card for Student
+ */
 import Checkmark from "@/components/icons/Checkmark.vue";
 import axios from "axios";
 import {toast} from "vue3-toastify";
@@ -25,7 +32,13 @@ export default {
       },
     }
   },
+
   methods: {
+    /**
+     * Registers a subject for the user.
+     * @param {number} user_id - User ID for registration
+     * @param {number} subject_id - ID of the subject to register
+     */
     registerSubject(user_id, subject_id){
       axios.post(`${import.meta.env.VITE_API_HOST}/register/${user_id}/${subject_id}`, {}, {headers: this.header})
           .then(response => {
@@ -40,13 +53,14 @@ export default {
           });
     }
   },
-  // передавать юзера через пропс
+
   mounted() {
     const storedUser = localStorage.getItem('user');
     if(storedUser){
       this.user_id = JSON.parse(storedUser).id;
     }
   },
+
   props: {
     subject:{
       type: Object,

@@ -1,3 +1,12 @@
+/**
+ * @authors
+ *   xrasst00, Sergei Rasstrigin
+ *   xmyron00, Yurii Myronov
+ *   xklima34, Aliaksei Klimau
+ *
+ * @file main.js
+ * @brief Main app file
+ */
 import './assets/main.css'
 
 import { createApp } from 'vue'

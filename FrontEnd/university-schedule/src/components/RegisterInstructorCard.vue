@@ -9,6 +9,13 @@
 </template>
 
 <script>
+/**
+ * @authors
+ *   xrasst00, Sergei Rasstrigin
+ *
+ * @file RegisterInstructorCard.vue
+ * @brief Component for instructor card of instructors for Guarantor
+ */
 import Checkmark from "@/components/icons/Checkmark.vue";
 
 export default {
@@ -25,6 +32,10 @@ export default {
     }
   },
   methods:{
+    /**
+     * @brief Emits an event to register the instructor.
+     * @returns {void}
+     */
     sendDataToList(){
       this.$emit('instructor_register', this.instructor);
     }
