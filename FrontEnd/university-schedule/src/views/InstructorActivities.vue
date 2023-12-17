@@ -1,5 +1,12 @@
-<template>
+/**
+* @authors
+*   xklima34, Aliaksei Klimau
+*
+* @file InstructorActivities.vue
+* @brief Instructor activites registration view
+*/
 
+<template>
   <navigation class="nav-bar"></navigation>
   <div class="main-container">
     <div class="subject-picker">

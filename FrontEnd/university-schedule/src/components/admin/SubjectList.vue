@@ -147,7 +147,6 @@ img {
   border-color: rgb(0, 0, 0, 0.2);
   border-style: solid none solid solid;
   border-width: 1px;
-  font-size: 16px;
   padding: 7px;
 }
 

@@ -1,12 +1,3 @@
-<script setup>
-import Navigation from '../components/Navigation.vue'
-import SubjectCard from '../components/SubjectCard.vue'
-
-const navigationButtons = [
-  { text: 'Home', class: 'selected' },
-];
-
-</script>
 
 <template>
   <header>
@@ -14,6 +5,16 @@ const navigationButtons = [
   </header>
   
   <main>
-    <SubjectCard />
+    <SubjectCard/>
   </main>
 </template>
+
+<script setup>
+import Navigation from '../components/Navigation.vue'
+import SubjectCard from '../components/SubjectCard.vue'
+
+
+const navigationButtons = [
+  { text: 'Home', class: 'selected' },
+];
+</script>

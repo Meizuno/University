@@ -198,7 +198,7 @@ export default {
 
                     return 0;
                 });
-                this.guarantors = this.userArray.filter(user => user.permission.level <= 2);
+                this.guarantors = this.userArray.filter(user => user.permission.level === 2);
                 this.GetGuarantors();
                 this.isUserLoad = true;
             })
@@ -230,6 +230,7 @@ export default {
         },
         CreateUser() {
             this.GetUserList();
+            this.GetGuarantors();
             this.isUserListOpen = true;
             this.isCerateUserOpen = false;
             this.isUpdateDeleteUserOpen = false;
@@ -242,6 +243,7 @@ export default {
         },
         UpdateUser(){
             this.GetUserList();
+            this.GetGuarantors();
             this.isUserListOpen = true;
             this.isCerateUserOpen = false;
             this.isUpdateDeleteUserOpen = false;

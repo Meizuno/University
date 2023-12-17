@@ -1,6 +1,14 @@
 <template>
+
+  <div v-if="showProfile">
+    <UserProfileCard
+        :user = "user"
+        @close-user-profile="closeUserProfile"
+    ></UserProfileCard>
+  </div>
+
     <div class="header">
-        <div class="user">
+        <div class="user" @click="showUserProfile">
             <img src="../assets/avatar.svg" alt="">
             <div>
                 <p class="username">{{ username }}</p>
@@ -24,9 +32,13 @@
 </template>
 
 <script>
+import UserProfileCard from "@/components/UserProfileCard.vue";
+
 export default {
+  components: {UserProfileCard},
     data() {
         return {
+            showProfile: false,
             username: 'Anonymous',
             status: '',
             buttons: [
@@ -192,6 +204,13 @@ export default {
                 button.isShow = !button.isShow;
             }
         },
+        showUserProfile() {
+          this.showProfile = true;
+        },
+
+        closeUserProfile() {
+          this.showProfile = false;
+        }
     }
 
 };
@@ -232,7 +251,7 @@ export default {
     color: rgba(0, 0, 0, 0.6);
     margin: 5px;
     border: none;
-    background-color: white;
+    background: none;
     font-size: 16px;
     font-weight: bold;
 }
@@ -284,6 +303,7 @@ export default {
 }
 
 .btn-route {
+    background: none;
     margin: 0;
 }
 

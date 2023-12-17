@@ -247,6 +247,7 @@ form > div > input {
     padding: 5px;
     border: 1px solid rgb(0, 0, 0, 0.4);
     border-radius: 5px;
+    font-size: 16px;
 }
 
 .password > img {

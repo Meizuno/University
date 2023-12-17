@@ -81,6 +81,28 @@ export default {
         }
     },
 
+    watch: {
+        guarantors: {
+            handler() {
+                if (this.guarantors.length === 0){
+                    this.errors["guarantor_id"] = ["You don't have free guarantor."];
+                    this.isGuarantorOpen = false;
+                }
+                else {
+                    Object.keys(this.errors).forEach(key => {
+                        this.errors[key] = null;
+                    });
+                }
+            },
+        },
+    },
+
+    mounted() {
+        if (this.guarantors.length === 0){
+            this.errors["guarantor_id"] = ["You don't have free guarantor."]
+        }
+    },
+
     methods: {
         Back() {
             this.$emit('back');
