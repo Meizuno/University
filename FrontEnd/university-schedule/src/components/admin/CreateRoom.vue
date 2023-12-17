@@ -2,11 +2,17 @@
     <form>
         <div>
             <p>Number <span style="color: red;">*</span></p>
-            <input type="text" v-model="room.number" />
+            <input type="text" v-model="room.number" :class="{ 'invalid': errors.number }"/>
+            <ul v-if="errors.number" style="color: red;">
+                <li v-for="error in errors.number">{{ error }}</li>
+            </ul>
         </div>
         <div>
             <p>Description:</p>
-            <input type="email" v-model="room.description" />
+            <input type="email" v-model="room.description" :class="{ 'invalid': errors.description }"/>
+            <ul v-if="errors.description" style="color: red;">
+                <li v-for="error in errors.description">{{ error }}</li>
+            </ul>
         </div>
 
         <div class="btns">
@@ -17,12 +23,25 @@
 </template>
 
 <script>
+import { toast } from 'vue3-toastify';
+import 'vue3-toastify/dist/index.css';
+import axios from 'axios';
+
 export default {
     data() {
         return {
             room: {
                 number: '',
                 description: '',
+            },
+
+            errors: {
+                number: null,
+                description: null,
+            },
+
+            header: {
+                "Authorization": localStorage.getItem("token"),
             },
         }
     },
@@ -31,8 +50,26 @@ export default {
             this.$emit("back");
         },
         CreateRoom() {
-            this.room.number = parseInt(this.room.number, 10);
-            this.$emit('create-room', this.room);
+            Object.keys(this.errors).forEach(key => {
+                this.errors[key] = null;
+            });
+            if (!isNaN(parseInt(this.room.number, 10))) {
+                this.room.number = parseInt(this.room.number, 10);
+            }
+            axios.post(`${import.meta.env.VITE_API_HOST}/room`, this.room, {headers: this.header})
+            .then(response => {
+                this.$emit('create-room', this.room);
+                toast.success("Create room is success!", {
+                    autoClose: 3000,
+                    position: toast.POSITION.BOTTOM_LEFT
+                });
+            })
+            .catch(error => {
+                const serverErrors = error.response.data.errors;
+                Object.keys(serverErrors).forEach(key => {
+                    this.errors[key] = serverErrors[key];
+                });
+            });
         }
     }
 }
@@ -89,6 +126,16 @@ form > div > input {
 .btns > button:last-child:hover {
     background-color: #84D296;
     cursor: pointer;
+}
+
+ul {
+    margin: 5px;
+    padding-left: 20px;
+    font-size: 14px;
+}
+
+.invalid {
+  border-color: red;
 }
 
 </style>

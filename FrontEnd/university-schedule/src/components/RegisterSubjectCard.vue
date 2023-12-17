@@ -31,7 +31,7 @@ export default {
           .then(response => {
             this.$emit('subjectsUpdate');
             toast.success("Subject was successfully registered!", {
-              autoClose: 5000,
+              autoClose: 500,
               position: toast.POSITION.BOTTOM_RIGHT,
             });
           })

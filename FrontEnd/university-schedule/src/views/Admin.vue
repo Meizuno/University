@@ -13,7 +13,6 @@
                 <UserList 
                     v-if="isUserLoad && isUserListOpen"
                     :userArray="userArray"
-                    @new-user="NewUser"
                     @edit-user="EditUser"
                 />
                 <CreateUser
@@ -39,7 +38,6 @@
                 <SubjectList 
                     v-if="isSubjectLoad && isSubjectListOpen"
                     :subjectArray="subjectArray"
-                    @new-subject="NewSubject"
                     @edit-subject="EditSubject"
                 />
                 <CreateSubject
@@ -65,7 +63,6 @@
                 <RoomList 
                     v-if="isRoomLoad && isRoomListOpen"
                     :roomArray="roomArray"
-                    @new-room="NewRoom"
                     @edit-room="EditRoom"
                 />
                 <CreateRoom
@@ -106,9 +103,9 @@ import 'vue3-toastify/dist/index.css';
 
 export default {
     emits: [
-        "new-user", "edit-user", "back", "create-user", "update-user", "delete-user",
-        "new-subject", "edit-subject", "create-subject", "update-subject", "delete-subject",
-        "new-room", "edit-room", "create-room", "update-room", "delete-room"
+        "edit-user", "back", "create-user", "update-user", "delete-user",
+        "edit-subject", "create-subject", "update-subject", "delete-subject",
+        "edit-room", "create-room", "update-room", "delete-room"
     ],
     data() {
         return{
@@ -201,7 +198,7 @@ export default {
 
                     return 0;
                 });
-                this.guarantors = this.userArray.filter(user => user.permission.level <= 2);
+                this.guarantors = this.userArray.filter(user => user.permission.level === 2);
                 this.GetGuarantors();
                 this.isUserLoad = true;
             })
@@ -221,6 +218,7 @@ export default {
             });
         },
         UserBack() {
+            this.GetUserList();
             this.isUserListOpen = true;
             this.isCerateUserOpen = false;
             this.isUpdateDeleteUserOpen = false;
@@ -230,24 +228,12 @@ export default {
             this.isCerateUserOpen = true;
             this.isUpdateDeleteUserOpen = false;
         },
-        CreateUser(user) {
-            axios.post(`${import.meta.env.VITE_API_HOST}/user`, user, {headers: this.header})
-            .then(response => {
-                this.GetUserList();
-                this.isUserListOpen = true;
-                this.isCerateUserOpen = false;
-                this.isUpdateDeleteUserOpen = false;
-                toast.success("Create user is success!", {
-                    autoClose: 3000,
-                    position: toast.POSITION.BOTTOM_RIGHT
-                });
-            })
-            .catch(error => {
-                toast.error("Dublicate username or email.", {
-                    autoClose: 3000,
-                    position: toast.POSITION.BOTTOM_RIGHT
-                });
-            });
+        CreateUser() {
+            this.GetUserList();
+            this.GetGuarantors();
+            this.isUserListOpen = true;
+            this.isCerateUserOpen = false;
+            this.isUpdateDeleteUserOpen = false;
         },
         EditUser(user){
             this.user = user;
@@ -255,25 +241,12 @@ export default {
             this.isCerateUserOpen = false;
             this.isUpdateDeleteUserOpen = true;
         },
-        UpdateUser(id, user){
-            axios.put(`${import.meta.env.VITE_API_HOST}/user/${id}`, user, {headers: this.header})
-            .then(response => {
-                this.GetUserList();
-                this.isUserListOpen = true;
-                this.isCerateUserOpen = false;
-                this.isUpdateDeleteUserOpen = false;
-                toast.success("Update user is success!", {
-                    autoClose: 3000,
-                    position: toast.POSITION.BOTTOM_RIGHT
-                });
-            })
-            .catch(error => {
-                toast.error(error.response.data.detail, {
-                    autoClose: 3000,
-                    position: toast.POSITION.BOTTOM_RIGHT,
-
-                });
-            });
+        UpdateUser(){
+            this.GetUserList();
+            this.GetGuarantors();
+            this.isUserListOpen = true;
+            this.isCerateUserOpen = false;
+            this.isUpdateDeleteUserOpen = false;
         },
         DeleteUser(id){
             axios.delete(`${import.meta.env.VITE_API_HOST}/user/${id}`, {headers: this.header})
@@ -291,9 +264,8 @@ export default {
                 for (const key in error.response.data.errors) {
                     if (error.response.data.errors.hasOwnProperty(key)) {
                         const errorDes = error.response.data.errors[key];
-                        const errorMessage = `${key}: ${errorDes}`;
         
-                        toast.error(errorMessage, {
+                        toast.error(errorDes, {
                             autoClose: 3000,
                             position: toast.POSITION.BOTTOM_RIGHT,
                         });
@@ -358,31 +330,11 @@ export default {
             this.isUpdateDeleteSubjectOpen = false;
         },
         CreateSubject(subject) {
-            axios.post(`${import.meta.env.VITE_API_HOST}/subject`, subject, {headers: this.header})
-            .then(response => {
-                this.GetSubjectList();
-                this.isSubjectListOpen = true;
-                this.isCerateSubjectOpen = false;
-                this.isUpdateDeleteSubjectOpen = false;
-                toast.success("Create subject is success!", {
-                    autoClose: 3000,
-                    position: toast.POSITION.BOTTOM_LEFT
-                });
-            })
-            .catch(error => {
-                console.log(error);
-                for (const key in error.response.data.errors) {
-                    if (error.response.data.errors.hasOwnProperty(key)) {
-                        const errorDes = error.response.data.errors[key];
-                        const errorMessage = `${key}: ${errorDes}`;
-        
-                        toast.error(errorMessage, {
-                            autoClose: 3000,
-                            position: toast.POSITION.BOTTOM_LEFT,
-                        });
-                    }
-                }
-            });
+            this.GetSubjectList();
+            this.GetGuarantors();
+            this.isSubjectListOpen = true;
+            this.isCerateSubjectOpen = false;
+            this.isUpdateDeleteSubjectOpen = false;
         },
         EditSubject(subject) {
             this.subject = subject;
@@ -390,36 +342,17 @@ export default {
             this.isCerateSubjectOpen = false;
             this.isUpdateDeleteSubjectOpen = true;
         },
-        UpdateSubject(id, subject) {
-            axios.put(`${import.meta.env.VITE_API_HOST}/subject/${id}`, subject, {headers: this.header})
-            .then(response => {
-                this.GetSubjectList();
-                this.isSubjectListOpen = true;
-                this.isCerateSubjectOpen = false;
-                this.isUpdateDeleteSubjectOpen = false;
-                toast.success("Update subject is success!", {
-                    autoClose: 3000,
-                    position: toast.POSITION.BOTTOM_LEFT
-                });
-            })
-            .catch(error => {
-                for (const key in error.response.data.errors) {
-                    if (error.response.data.errors.hasOwnProperty(key)) {
-                        const errorDes = error.response.data.errors[key];
-                        const errorMessage = `${key}: ${errorDes}`;
-        
-                        toast.error(errorMessage, {
-                            autoClose: 3000,
-                            position: toast.POSITION.BOTTOM_LEFT,
-                        });
-                    }
-                }
-            });
+        UpdateSubject() {
+            this.GetSubjectList();
+            this.isSubjectListOpen = true;
+            this.isCerateSubjectOpen = false;
+            this.isUpdateDeleteSubjectOpen = false;
         },
         DeleteSubject(id){
             axios.delete(`${import.meta.env.VITE_API_HOST}/subject/${id}`, {headers: this.header})
             .then(response => {
                 this.GetSubjectList();
+                this.GetGuarantors();
                 this.isSubjectListOpen = true;
                 this.isCerateSubjectOpen = false;
                 this.isUpdateDeleteSubjectOpen = false;
@@ -474,24 +407,11 @@ export default {
             this.isCerateRoomOpen = true;
             this.isUpdateDeleteRoomOpen = false;
         },
-        CreateRoom(room) {
-            axios.post(`${import.meta.env.VITE_API_HOST}/room`, room, {headers: this.header})
-            .then(response => {
-                this.GetRoomList();
-                this.isRoomListOpen = true;
-                this.isCerateRoomOpen = false;
-                this.isUpdateDeleteRoomOpen = false;
-                toast.success("Create room is success!", {
-                    autoClose: 3000,
-                    position: toast.POSITION.BOTTOM_LEFT
-                });
-            })
-            .catch(error => {
-                toast.error(error.response.data.detail, {
-                    autoClose: 3000,
-                    position: toast.POSITION.BOTTOM_LEFT,
-                });
-            });
+        CreateRoom() {
+            this.GetRoomList();
+            this.isRoomListOpen = true;
+            this.isCerateRoomOpen = false;
+            this.isUpdateDeleteRoomOpen = false;
         },
         EditRoom(room) {
             this.room = room;
@@ -499,24 +419,11 @@ export default {
             this.isCerateRoomOpen = false;
             this.isUpdateDeleteRoomOpen = true;
         },
-        UpdateRoom(id, room) {
-            axios.put(`${import.meta.env.VITE_API_HOST}/room/${id}`, room, {headers: this.header})
-            .then(response => {
-                this.GetRoomList();
-                this.isRoomListOpen = true;
-                this.isCerateRoomOpen = false;
-                this.isUpdateDeleteRoomOpen = false;
-                toast.success("Update room is success!", {
-                    autoClose: 3000,
-                    position: toast.POSITION.BOTTOM_LEFT
-                });
-            })
-            .catch(error => {
-                toast.error(error.response.data.detail, {
-                    autoClose: 3000,
-                    position: toast.POSITION.BOTTOM_LEFT,
-                });
-            });
+        UpdateRoom() {
+            this.GetRoomList();
+            this.isRoomListOpen = true;
+            this.isCerateRoomOpen = false;
+            this.isUpdateDeleteRoomOpen = false;
         },
         DeleteRoom(id){
             axios.delete(`${import.meta.env.VITE_API_HOST}/room/${id}`, {headers: this.header})
@@ -559,12 +466,14 @@ template {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     gap: 20px;
+    align-content: start;
 }
 
 .admin > div {
     background-color: white;
     padding: 20px;
     border-radius: 20px;
+    height: fit-content;
 }
 
 .title {

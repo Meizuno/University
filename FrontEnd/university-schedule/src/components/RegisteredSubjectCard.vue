@@ -36,7 +36,7 @@ export default {
       axios.delete(`${import.meta.env.VITE_API_HOST}/register/${user_id}/${subject_id}`, {headers: this.header})
           .then(response => {
             toast.success("Subject was successfully unregistered!", {
-              autoClose: 5000,
+              autoClose: 500,
               position: toast.POSITION.BOTTOM_RIGHT,
             });
             this.$emit('subjectsUpdate');

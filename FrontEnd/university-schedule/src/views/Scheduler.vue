@@ -35,7 +35,7 @@ import { toast } from 'vue3-toastify';
 import 'vue3-toastify/dist/index.css';
 
 export default {
-    emits: ["remove-from-calendar", "add-to-calendar", "add-to-calendar"],
+    emits: ["remove-from-calendar", "add-to-calendar"],
     components: {
         Navigation,
         NotResolvedCell,
@@ -64,7 +64,7 @@ export default {
                 this.activitiesNotResolved = [];
                 this.activitiesResolved = [];
                 for (const activity of activities) {
-                    if (activity.time === null){
+                    if (activity.time === null || activity.room === null || activity.day === null){
                         this.activitiesNotResolved.push(activity);
                     }
                     else {
@@ -88,7 +88,7 @@ export default {
                 });
             })
             .catch(error => {
-                console.error(error);
+                console.log(error);
             });
         },
         HandleAddToCalendar(activity, data) {
@@ -102,7 +102,7 @@ export default {
                 });
             })
             .catch(error => {
-                let message = error.response.data.detail.replace(/['\[\]]/g, '');
+                const message = error.response.data[0].replace(/['\[\]]/g, '');
                 toast.error(message, {
                     autoClose: 3000,
                     position: toast.POSITION.BOTTOM_LEFT,

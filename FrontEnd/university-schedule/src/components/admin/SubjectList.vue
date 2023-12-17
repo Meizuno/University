@@ -1,67 +1,80 @@
 <template>
-    <div class="list">
+    <div>
+      <div class="search">
+        <input v-model="searchQuery" placeholder="Search by code" />
+        <button @click="searchSubjects">
+          <img src="../../assets/search.svg" alt="">
+        </button>
+      </div>
+      <div class="list">
         <div v-for="(subject, index) in paginatedSubjectArray" :key="index" @click="EditSubject(subject)">
-            <p>{{ subject.code }} ({{ subject.name }})</p>
-            <img src="../../assets/edit-item.svg" alt="">
+          <p>{{ subject.code }} ({{ subject.name }})</p>
+          <img src="../../assets/edit-item.svg" alt="">
         </div>
-    </div>
-    <div v-if="totalPages > 1" class="pagination">
+      </div>
+      <div v-if="totalPages > 1" class="pagination">
         <button @click="prevPage">
-            <img src="../../assets/prev-page.svg" alt="">
+          <img src="../../assets/prev-page.svg" alt="">
         </button>
         <span>Page {{ currentPage }}</span>
         <button @click="nextPage">
-            <img src="../../assets/next-page.svg" alt="">
+          <img src="../../assets/next-page.svg" alt="">
         </button>
+      </div>
     </div>
-</template>
-
-
-<script>
-
-export default {
+  </template>
+  
+  <script>
+  export default {
     data() {
-        return {
-            currentPage: 1,
-            itemsPerPage: 5,
-            totalPages: null,
-        };
+      return {
+        currentPage: 1,
+        itemsPerPage: 5,
+        searchQuery: "",
+      };
     },
     props: {
-        subjectArray: {
-            type: Array,
-            default: [],
-        },
-    },
-    mounted() {
-        this.totalPages = Math.ceil(this.subjectArray.length / this.itemsPerPage);
+      subjectArray: {
+        type: Array,
+        default: [],
+      },
     },
     computed: {
-        paginatedSubjectArray() {
-            const startIndex = (this.currentPage - 1) * this.itemsPerPage;
-            const endIndex = startIndex + this.itemsPerPage;
-            return this.subjectArray.slice(startIndex, endIndex);
-        },
+      totalPages() {
+        return Math.ceil(this.filteredSubjectArray.length / this.itemsPerPage);
+      },
+      paginatedSubjectArray() {
+        const startIndex = (this.currentPage - 1) * this.itemsPerPage;
+        const endIndex = startIndex + this.itemsPerPage;
+        return this.filteredSubjectArray.slice(startIndex, endIndex);
+      },
+      filteredSubjectArray() {
+        return this.subjectArray.filter(subject =>
+          subject.code.toLowerCase().includes(this.searchQuery.toLowerCase())
+        );
+      },
     },
     methods: {
-        EditSubject(subject){
-            this.$emit("edit-subject", subject);
-        },
-        nextPage() {
-            if (this.currentPage < this.totalPages) {
-                this.currentPage += 1;
-            }
-        },
-
-        prevPage() {
-            if (this.currentPage > 1) {
-                this.currentPage -= 1;
-            }
-        },
-    }
-}
-
-</script>
+      EditSubject(subject) {
+        this.$emit("edit-subject", subject);
+      },
+      nextPage() {
+        if (this.currentPage < this.totalPages) {
+          this.currentPage += 1;
+        }
+      },
+      prevPage() {
+        if (this.currentPage > 1) {
+          this.currentPage -= 1;
+        }
+      },
+      searchSubjects() {
+        this.currentPage = 1;
+      },
+    },
+  };
+  </script>
+  
 
 
 <style scoped>
@@ -74,7 +87,7 @@ export default {
 }
 
 .list > div {
-    border: 1px solid rgb(0, 0, 0, 0.2);
+    border: 1px solid rgb(0, 0, 0, 0.5);
     border-radius: 10px;
     padding: 10px;
     margin: 5px 10px;
@@ -120,6 +133,28 @@ img {
 .pagination > button > img {
     width: 15px;
     height: 15px;
+}
+
+.search {
+    margin: 5px 10px;
+    display: flex;
+}
+
+.search > input {
+  width: 100%;
+  box-sizing: border-box;
+  border-radius: 7px 0px 0px 7px;
+  border-color: rgb(0, 0, 0, 0.2);
+  border-style: solid none solid solid;
+  border-width: 1px;
+  padding: 7px;
+}
+
+.search > button {
+  background-color: white;
+  border-radius: 0px 7px 7px 0px;
+  border-color: rgb(0, 0, 0, 0.2);
+  border-width: 1px;
 }
 
 </style>

@@ -39,6 +39,24 @@ class UserSerializer(serializers.Serializer):
             Get enum on 'api/auth/permissions/'",
     )
 
+    def validate_email(self, value):
+        user_id = self.instance.id if self.instance else None
+        existing_user = User.objects.filter(email=value).exclude(id=user_id).exists()
+
+        if existing_user:
+            raise serializers.ValidationError("User with this email already exists.")
+
+        return value
+
+    def validate_username(self, value):
+        user_id = self.instance.id if self.instance else None
+        existing_user = User.objects.filter(username=value).exclude(id=user_id).exists()
+
+        if existing_user:
+            raise serializers.ValidationError("User with this username already exists.")
+
+        return value
+
 
 class ReadRoomSerializer(serializers.ModelSerializer):
 
@@ -50,6 +68,14 @@ class ReadRoomSerializer(serializers.ModelSerializer):
 class RoomSerializer(serializers.Serializer):
     number = serializers.IntegerField()
     description = serializers.CharField(allow_blank=True)
+
+    def validate_number(self, value):
+        room_id = self.instance.id if self.instance else None
+        existing_room = Room.objects.filter(number=value).exclude(id=room_id).exists()
+
+        if existing_room:
+            raise serializers.ValidationError("Room with this number already exists.")
+        return value
 
 
 class ReadSubjectSerializer(serializers.ModelSerializer):
@@ -65,6 +91,17 @@ class SubjectSerializer(serializers.Serializer):
     name = serializers.CharField()
     description = serializers.CharField()
     guarantor_id = serializers.IntegerField()
+
+    def validate_code(self, value):
+        if len(value) != 3:
+            raise serializers.ValidationError("Subject code consists of 3 characters.")
+        
+        subject_id = self.instance.id if self.instance else None
+        existing_subject = Subject.objects.filter(code=value).exclude(id=subject_id).exists()
+
+        if existing_subject:
+            raise serializers.ValidationError("Subject with this code already exists.")
+        return value
 
 
 class ReadActivityTypeSerializer(serializers.ModelSerializer):

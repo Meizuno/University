@@ -6,7 +6,21 @@
   <div class="main-container">
 
     <div class="range-picker">
-      <div class="picker-data">
+
+      <div class="schedule-bttns">
+        <div class="schedule-bttn">
+          <button class="schedule-button" :class="{ 'selected-schedule': !weeklySchedule }" @click="annualScheduleFunc">
+            semester schedule
+          </button>
+        </div>
+        <div class="schedule-bttn">
+          <button class="schedule-button" :class="{ 'selected-schedule': weeklySchedule }" @click="weeklyScheduleFunc">
+            weekly schedule
+          </button>
+        </div>
+      </div>
+
+      <div class="picker-data" v-if="weeklySchedule">
         <div class="date-range">
           {{ startDate }} - {{ endDate }}
         </div>
@@ -17,7 +31,7 @@
       </div>
     </div>
 
-    <CalendarTest style="margin-top: 5px"
+    <CalendarTest style="margin-top: 0px"
                   :activities="activities"
                   :key="calendarKey"
                   :is-scheduler="false"
@@ -52,6 +66,7 @@ export default {
       endDate: '24.09.2023',
       activities: [],
       calendarKey: 0,
+      weeklySchedule: true,
     }
   },
 
@@ -74,17 +89,30 @@ export default {
     updateKey(){
       this.calendarKey += 1;
     },
-    getActivities(){
-      const date_from = this.convertDate(this.startDate);
-      const date_to = this.convertDate(this.endDate);
-      axios.get(`${import.meta.env.VITE_API_HOST}/student_activities/${this.user.id}?date_from=${date_from}&date_to=${date_to}`,{headers: this.header})
-          .then(response=>{
-            this.activities = response.data.data;
-            this.updateKey();
-          })
-          .catch(e=>{
-            console.log(e);
-          })
+    async getActivities(){
+      if(this.weeklySchedule){
+        const date_from = this.convertDate(this.startDate);
+        const date_to = this.convertDate(this.endDate);
+        await axios.get(`${import.meta.env.VITE_API_HOST}/student_activities/${this.user.id}?date_from=${date_from}&date_to=${date_to}`,{headers: this.header})
+            .then(response=>{
+              this.activities = response.data.data;
+              this.updateKey();
+            })
+            .catch(e=>{
+              console.log(e);
+            })
+      }
+      else{
+        await axios.get(`${import.meta.env.VITE_API_HOST}/student_activities/${this.user.id}`,{headers: this.header})
+            .then(response=>{
+              this.activities = response.data.data;
+              this.updateKey();
+            })
+            .catch(e=>{
+              console.log(e);
+            })
+      }
+
     },
     formatDate(date) {
       const day = date.getDate();
@@ -125,6 +153,15 @@ export default {
       const [day, month, year] = inputDate.split('.');
       return `${year}-${month.padStart(2, '0')}-${day.padStart(2, '0')}`;
     },
+    weeklyScheduleFunc(){
+      this.weeklySchedule = true;
+      this.getActivities();
+    },
+    annualScheduleFunc(){
+      this.weeklySchedule = false;
+      this.getActivities();
+    },
+
   },
   mounted() {
     this.getUserAndActivities();
@@ -150,7 +187,7 @@ export default {
   width: 100%;
   height: 40px;
   display: flex;
-  justify-content: end;
+  justify-content: start;
   align-items: center;
   margin-top: 30px;
 }
@@ -159,10 +196,12 @@ export default {
   background: white;
   align-items: center;
   height: 100%;
-  width: 300px;
+  min-width: 320px;
   border: 3px solid black;
   border-radius: 10px;
   margin-right: 40px;
+  margin-left: auto;
+  margin-bottom: 5px;
 }
 .date-range{
   margin-right: 15px;
@@ -183,6 +222,39 @@ export default {
   cursor: pointer;
   height: 25px;
   width: 32px;
+}
+.schedule-bttn{
+  margin-left: 10px;
+  height: 100%;
+}
+.schedule-bttns{
+  display: flex;
+  height: 100%;
+  width: fit-content;
+  align-items: center;
+  margin-left: 5%;
 
+}
+.schedule-button{
+  height: 100%;
+  font-size: 20px;
+  border: none;
+  background: white;
+  cursor: pointer;
+  border-top-left-radius: 10px;
+  border-top-right-radius: 10px;
+  border-right: 2px solid black;
+  border-top: 2px solid black;
+  border-left: 2px solid black;
+  background: rgba(0, 0, 0, 0.1);
+  opacity: 0.5;
+}
+.schedule-button:hover{
+  background: white;
+  opacity: 1;
+}
+.selected-schedule{
+  background: white;
+  opacity: 1;
 }
 </style>

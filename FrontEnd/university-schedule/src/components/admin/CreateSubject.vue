@@ -2,19 +2,28 @@
     <form>
         <div>
             <p>Code <span style="color: red;">*</span></p>
-            <input type="text" v-model="subject.code" />
+            <input type="text" v-model="subject.code" :class="{ 'invalid': errors.code }"/>
+            <ul v-if="errors.code" style="color: red;">
+                <li v-for="error in errors.code">{{ error }}</li>
+            </ul>
         </div>
         <div>
             <p>Name <span style="color: red;">*</span></p>
-            <input type="email" v-model="subject.name" />
+            <input type="email" v-model="subject.name" :class="{ 'invalid': errors.name }"/>
+            <ul v-if="errors.name" style="color: red;">
+                <li v-for="error in errors.name">{{ error }}</li>
+            </ul>
         </div>
         <div>
             <p>Description <span style="color: red;">*</span></p>
-            <input type="text" v-model="subject.description" />
+            <input type="text" v-model="subject.description" :class="{ 'invalid': errors.description }"/>
+            <ul v-if="errors.description" style="color: red;">
+                <li v-for="error in errors.description">{{ error }}</li>
+            </ul>
         </div>
         <div>
             <p>Guarantor <span style="color: red;">*</span></p>
-            <div class="custom-select" @click.stop="toggleDropdownGuarantor" :style="{'color': selectedGuarantor ? 'initial' : 'rgb(0,0,0,0.5)'}">
+            <div class="custom-select" @click.stop="toggleDropdownGuarantor" :style="{'color': selectedGuarantor ? 'initial' : 'rgb(0,0,0,0.5)'}" :class="{ 'invalid': errors.guarantor_id }">
                 {{ selectedGuarantor || 'Guarantor' }}
                 <div v-if="isGuarantorOpen" class="dropdown" ref="dropdown" @click.stop>
                 <div v-for="guarantor in guarantors" :key="guarantor.id" @click="selectValue(guarantor)">
@@ -22,6 +31,9 @@
                 </div>
                 </div>
             </div>
+            <ul v-if="errors.guarantor_id" style="color: red;">
+                <li v-for="error in errors.guarantor_id">{{ error }}</li>
+            </ul>
         </div>
 
         <div class="btns">
@@ -34,6 +46,7 @@
 <script>
 import { toast } from 'vue3-toastify';
 import 'vue3-toastify/dist/index.css';
+import axios from 'axios';
 
 export default {
     props: {
@@ -54,6 +67,39 @@ export default {
             isGuarantorOpen: false,
             selectedGuarantor: null,
             selectedGuarantorID: null,
+
+            errors: {
+                code: null,
+                name: null,
+                description: null,
+                guarantor_id: null,
+            },
+
+            header: {
+                "Authorization": localStorage.getItem("token"),
+            },
+        }
+    },
+
+    watch: {
+        guarantors: {
+            handler() {
+                if (this.guarantors.length === 0){
+                    this.errors["guarantor_id"] = ["You don't have free guarantor."];
+                    this.isGuarantorOpen = false;
+                }
+                else {
+                    Object.keys(this.errors).forEach(key => {
+                        this.errors[key] = null;
+                    });
+                }
+            },
+        },
+    },
+
+    mounted() {
+        if (this.guarantors.length === 0){
+            this.errors["guarantor_id"] = ["You don't have free guarantor."]
         }
     },
 
@@ -62,16 +108,24 @@ export default {
             this.$emit('back');
         },
         CreateSubject() {
-            if (this.subject.code.length !== 3){
-                toast.error("Code has 3 chars.", {
+            Object.keys(this.errors).forEach(key => {
+                this.errors[key] = null;
+            });
+            this.subject.guarantor_id = this.selectedGuarantorID;
+            axios.post(`${import.meta.env.VITE_API_HOST}/subject`, this.subject, {headers: this.header})
+            .then(response => {
+                this.$emit('create-subject');
+                toast.success("Create subject is success!", {
                     autoClose: 3000,
-                    position: toast.POSITION.BOTTOM_LEFT,
+                    position: toast.POSITION.BOTTOM_LEFT
                 });
-            }
-            else{
-                this.subject.guarantor_id = this.selectedGuarantorID;
-                this.$emit('create-subject', this.subject);
-            }
+            })
+            .catch(error => {
+                const serverErrors = error.response.data.errors;
+                Object.keys(serverErrors).forEach(key => {
+                    this.errors[key] = serverErrors[key];
+                });
+            });
         },
         toggleDropdownGuarantor() {
             this.isGuarantorOpen = !this.isGuarantorOpen;
@@ -180,6 +234,16 @@ form > div > input {
 
 .dropdown div:hover {
   color: rgb(0, 0, 0);
+}
+
+ul {
+    margin: 5px;
+    padding-left: 20px;
+    font-size: 14px;
+}
+
+.invalid {
+  border-color: red;
 }
 
 </style>

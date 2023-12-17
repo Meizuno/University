@@ -58,9 +58,9 @@ export default {
         this.user = JSON.parse(storedUser);
       }
     },
-    getInstructors(){
+    async getInstructors(){
       try {
-        axios.get(`${import.meta.env.VITE_API_HOST}/get_all_instructors`, {headers: this.header})
+        await axios.get(`${import.meta.env.VITE_API_HOST}/get_all_instructors`, {headers: this.header})
             .then(response => {
               const allInstructors = response.data.data;
               console.log(allInstructors);
@@ -90,9 +90,9 @@ export default {
       await this.getSubject();
       await this.getInstructors();
     },
-    unregisterInstructor(instructor) {
+    async unregisterInstructor(instructor) {
       try {
-        axios.delete(`${import.meta.env.VITE_API_HOST}/register_instructor/${instructor.id}/${this.guarantorSubject.id}`, {headers: this.header})
+        await axios.delete(`${import.meta.env.VITE_API_HOST}/register_instructor/${instructor.id}/${this.guarantorSubject.id}`, {headers: this.header})
             .then(response => {
               const index = this.registered_instructors.findIndex(regInstructor => regInstructor.id === instructor.id);
               if (index !== -1) {
@@ -102,7 +102,7 @@ export default {
                 console.log("Instructor not found in registered instructors.");
               }
               toast.success("Instructor was successfully unregistered!", {
-                autoClose: 1000,
+                autoClose: 500,
                 position: toast.POSITION.BOTTOM_RIGHT,
               });
             });
@@ -111,9 +111,9 @@ export default {
       }
     },
 
-    registerInstructor(instructor) {
+    async registerInstructor(instructor) {
       try {
-        axios.post(`${import.meta.env.VITE_API_HOST}/register_instructor/${instructor.id}/${this.guarantorSubject.id}`,{},{headers: this.header})
+        await axios.post(`${import.meta.env.VITE_API_HOST}/register_instructor/${instructor.id}/${this.guarantorSubject.id}`,{},{headers: this.header})
             .then(response => {
               console.log(response.data);
               const index = this.instructors.findIndex(inst => inst.id === instructor.id);
