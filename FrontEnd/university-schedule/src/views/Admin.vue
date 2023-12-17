@@ -83,6 +83,13 @@
 </template>
   
 <script>
+/**
+ * @authors
+ *   xmyron00, Yurii Myronov
+ *
+ * @file Admin.vue
+ * @brief Admin view
+ */
 import Navigation from '../components/Navigation.vue';
 
 import UserList from '../components/admin/UserList.vue';

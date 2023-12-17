@@ -31,6 +31,14 @@
 </template>
 
 <script>
+/**
+ * @authors
+ *   xmyron00, Yurii Myronov
+ *
+ * @file SubjectUpdateDelete.vue
+ * @brief Component for update or delete subject
+ */
+
 import axios from 'axios';
 import { toast } from 'vue3-toastify';
 

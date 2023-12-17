@@ -52,6 +52,14 @@
 </template>
 
 <script>
+/**
+ * @authors
+ *   xmyron00, Yurii Myronov
+ *
+ * @file UserUpdateDelete.vue
+ * @brief Component for update or delete user
+ */
+
 import axios from 'axios';
 import { toast } from 'vue3-toastify';
 

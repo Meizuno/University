@@ -23,6 +23,14 @@
   </template>
   
   <script>
+  /**
+   * @authors
+   *   xmyron00, Yurii Myronov
+   *
+   * @file UserList.vue
+   * @brief Component for read users
+   */
+
   export default {
     data() {
       return {

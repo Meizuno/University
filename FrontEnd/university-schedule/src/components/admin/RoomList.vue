@@ -24,6 +24,13 @@
 
 
 <script>
+/**
+ * @authors
+ *   xmyron00, Yurii Myronov
+ *
+ * @file RoomList.vue
+ * @brief Component for read rooms
+ */
 
 export default {
     data() {

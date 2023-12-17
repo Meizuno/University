@@ -54,6 +54,13 @@
 </template>
 
 <script>
+/**
+ * @authors
+ *   xmyron00, Yurii Myronov
+ *
+ * @file ScheduleCell.vue
+ * @brief Component for calendar
+ */
 export default {
   emits: ["remove-shedule-cell"],
   props: {

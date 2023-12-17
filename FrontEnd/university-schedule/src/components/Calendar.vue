@@ -51,6 +51,13 @@
 </template>
 
 <script>
+/**
+ * @authors
+ *   xmyron00, Yurii Myronov
+ *
+ * @file Calendar.vue
+ * @brief Component calendar
+ */
 import ScheduleCell from './ScheduleCell.vue';
 
 export default {
