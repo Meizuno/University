@@ -1,3 +1,8 @@
+<!--@authors-->
+<!--xklima34, Aliaksei Klimau-->
+<!--@file Authorization.vue-->
+<!--@brief Authorization view-->
+
 <template>
   <section>
 
@@ -41,8 +46,12 @@ export default {
     }
   },
   methods:{
+
+    // Authorize and retrieve user data
     sendGetUser() {
       localStorage.clear();
+
+      // Check if user is authorized
       axios.post(`${import.meta.env.VITE_API_HOST}/auth/token`, this.postData)
           .then(response => {
             const token = response.data.access;
@@ -50,6 +59,8 @@ export default {
             const headers = {
               'Authorization': 'Bearer ' + token,
             };
+
+            // Get user info from backend
             axios.get(`${import.meta.env.VITE_API_HOST}/my-info`, {headers:headers})
                 .then(response => {
                   const user = response.data;
@@ -82,6 +93,8 @@ export default {
             console.log("Wrong user or password.");
           });
     },
+
+    // Navigate to home page
     ToHome() {
       this.$router.push('/');
     },
@@ -138,8 +151,7 @@ h2{
   font-weight: bold;
   pointer-events: none;
   transition: .5s;
-  height: 40px; /* Выравнивание высоты label с высотой input */
-
+  height: 40px;
 }
 
 

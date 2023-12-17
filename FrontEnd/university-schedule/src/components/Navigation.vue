@@ -216,9 +216,10 @@ export default {
                 button.isShow = !button.isShow;
             }
         },
-        // Show user profile card
+        // Show user profile card if user is registered
         showUserProfile() {
-          this.showProfile = true;
+          if (this.user !== null)
+            this.showProfile = true;
         },
         // Close user profile card
         closeUserProfile() {
