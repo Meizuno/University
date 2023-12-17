@@ -1,3 +1,9 @@
+<!--@authors-->
+<!--xrasst00, Sergei Rasstrigin-->
+
+<!--@file GuarantorActivities.vue-->
+<!--@brief Guarantor manage activities view-->
+
 <template>
   <navigation
       class="nav-bar"
@@ -107,13 +113,7 @@
 </template>
 
 <script>
-/**
- * @authors
- *   xrasst00, Sergei Rasstrigin
- *
- * @file GuarantorActivities.vue
- * @brief Guarantor manage activities view
- */
+
 import Navigation from "@/components/Navigation.vue";
 import GuarantRequest from "@/components/GuarantRequest.vue";
 import axios from "axios";

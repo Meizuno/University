@@ -1,3 +1,9 @@
+<!--@authors-->
+<!--xrasst00, Sergei Rasstrigin-->
+
+<!--@file StudentActivities.vue-->
+<!--@brief Student activities register view-->
+
 <template>
 
   <navigation class="nav-bar"
@@ -33,13 +39,6 @@
 </template>
 
 <script>
-/**
- * @authors
- *   xrasst00, Sergei Rasstrigin
- *
- * @file StudentActivities.vue
- * @brief Student activities register view
- */
 import Navigation from "@/components/Navigation.vue";
 import axios from "axios";
 import Calendar from "@/components/Calendar.vue";

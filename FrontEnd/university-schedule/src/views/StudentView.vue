@@ -1,3 +1,9 @@
+<!--@authors-->
+<!--xrasst00, Sergei Rasstrigin-->
+
+<!--@file StudentView.vue-->
+<!--@brief Student main page view-->
+
 <template>
   <navigation
       class="nav-bar"
@@ -45,13 +51,6 @@
 </template>
 
 <script>
-/**
- * @authors
- *   xrasst00, Sergei Rasstrigin
- *
- * @file StudentView.vue
- * @brief Student main page view
- */
 
 import Navigation from "@/components/Navigation.vue";
 import axios from "axios";

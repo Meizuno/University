@@ -1,3 +1,9 @@
+<!--@authors-->
+<!--xrasst00, Sergei Rasstrigin-->
+
+<!--@file GuarantRequest.vue-->
+<!--@brief Component of card Guarantor's requests-->
+
 <template>
   <div :class="cardClass" class="request_card">
     <div class="header">
@@ -17,13 +23,7 @@
 </template>
 
 <script>
-/**
- * @authors
- *   xrasst00, Sergei Rasstrigin
- *
- * @file GuarantRequest.vue
- * @brief Component of card Guarantor's requests
- */
+
 import Cross from "@/components/icons/Cross.vue";
 
 export default {

@@ -1,3 +1,9 @@
+<!--@authors-->
+<!--xrasst00, Sergei Rasstrigin-->
+
+<!--@file StudentSubject.vue-->
+<!--@brief Student subject register view-->
+
 <template>
   <navigation
       class="nav-bar"
@@ -39,13 +45,6 @@
 </template>
 
 <script>
-/**
- * @authors
- *   xrasst00, Sergei Rasstrigin
- *
- * @file StudentSubject.vue
- * @brief Student subject register view
- */
 import Navigation from "@/components/Navigation.vue";
 import axios from "axios";
 import RegisterSubjectCard from "@/components/RegisterSubjectCard.vue";

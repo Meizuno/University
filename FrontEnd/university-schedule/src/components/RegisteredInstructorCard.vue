@@ -1,3 +1,9 @@
+<!--@authors-->
+<!--xrasst00, Sergei Rasstrigin-->
+
+<!--@file RegisteredInstructorCard.vue-->
+<!--@brief Component for instructor card of instructors for Guarantor-->
+
 <template>
   <div class="card">
     <div class="instructor_name">PhD {{ instructor.first_name }} {{ instructor.last_name }}</div>
@@ -9,13 +15,7 @@
 </template>
 
 <script>
-/**
- * @authors
- *   xrasst00, Sergei Rasstrigin
- *
- * @file RegisteredInstructorCard.vue
- * @brief Component for instructor card of instructors for Guarantor
- */
+
 import Checkmark from "@/components/icons/Checkmark.vue";
 import Cross from "@/components/icons/Cross.vue";
 

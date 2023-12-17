@@ -1,3 +1,9 @@
+<!--@authors-->
+<!--xrasst00, Sergei Rasstrigin-->
+
+<!--@file GuarantorView.vue-->
+<!--@brief Guarantor main page with semester schedule-->
+
 <template>
   <navigation
       class="nav-bar"
@@ -14,13 +20,7 @@
 </template>
 
 <script>
-/**
- * @authors
- *   xrasst00, Sergei Rasstrigin
- *
- * @file GuarantorView.vue
- * @brief Guarantor main page with semester schedule
- */
+
 import Navigation from "@/components/Navigation.vue";
 import axios from "axios";
 import CalendarTest from "@/components/CalendarTest.vue";

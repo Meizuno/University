@@ -1,3 +1,9 @@
+<!--@authors-->
+<!--xrasst00, Sergei Rasstrigin-->
+
+<!--@file GuarantorInstructors.vue-->
+<!--@brief Guarantor manage instructors view-->
+
 <template>
   <navigation
       class="nav-bar"
@@ -13,13 +19,7 @@
 </template>
 
 <script>
-/**
- * @authors
- *   xrasst00, Sergei Rasstrigin
- *
- * @file GuarantorInstructors.vue
- * @brief Guarantor manage instructors view
- */
+
 import Navigation from "@/components/Navigation.vue";
 import axios from "axios";
 import RegisterSubjectCard from "@/components/RegisterSubjectCard.vue";

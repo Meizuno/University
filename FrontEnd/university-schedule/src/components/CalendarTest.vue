@@ -1,3 +1,10 @@
+<!--@authors-->
+<!--xmyron00,Yurii Myronov-->
+<!--xrasst00, Sergei Rasstrigin-->
+
+<!--@file CalendarTest.vue-->
+<!--@brief Optimized copy of Calendar.Vue for Student and Guarantor-->
+
 <template>
   <div class="calendar">
     <div class="grid-10">
@@ -53,14 +60,7 @@
 </template>
 
 <script>
-/**
- * @authors
- *   xmyron00,Yurii Myronov
- *   xrasst00, Sergei Rasstrigin
- *
- * @file CalendarTest.vue
- * @brief Optimized copy of Calendar.Vue for Student and Guarantor
- */
+
 import ScheduleCell from './ScheduleCell.vue';
 import ScheduleCellTest from "@/components/ScheduleCellTest.vue";
 

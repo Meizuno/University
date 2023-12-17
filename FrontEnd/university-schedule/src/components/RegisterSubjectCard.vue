@@ -1,3 +1,9 @@
+<!--@authors-->
+<!--xrasst00, Sergei Rasstrigin-->
+
+<!--@file RegisterSubjectCard.vue-->
+<!--@brief Component for subject card for Student-->
+
 <template>
   <div class="card">
     <div class="code">{{ this.subject.code }}</div>
@@ -11,13 +17,7 @@
 </template>
 
 <script>
-/**
- * @authors
- *   xrasst00, Sergei Rasstrigin
- *
- * @file RegisterSubjectCard.vue
- * @brief Component for subject card for Student
- */
+
 import Checkmark from "@/components/icons/Checkmark.vue";
 import axios from "axios";
 import {toast} from "vue3-toastify";

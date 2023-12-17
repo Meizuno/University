@@ -1,3 +1,9 @@
+<!--@authors-->
+<!--xrasst00, Sergei Rasstrigin-->
+
+<!--@file ListOfInstructors.vue-->
+<!--@brief Component for list of instructors GuarantorView-->
+
 <template>
   <div class="main-container">
     <div class="subjects-grid">
@@ -31,13 +37,7 @@
 </template>
 
 <script>
-/**
- * @authors
- *   xrasst00, Sergei Rasstrigin
- *
- * @file ListOfInstructors.vue
- * @brief Component for list of instructors GuarantorView
- */
+
 import RegisterInstructorCard from "@/components/RegisterInstructorCard.vue";
 import RegisteredInstructorCard from "@/components/RegisteredInstructorCard.vue";
 
