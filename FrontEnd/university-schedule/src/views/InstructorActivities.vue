@@ -1,10 +1,8 @@
-/**
-* @authors
-*   xklima34, Aliaksei Klimau
-*
-* @file InstructorActivities.vue
-* @brief Instructor activites registration view
-*/
+<!--@authors-->
+<!--xklima34, Aliaksei Klimau-->
+<!--@file InstructorActivities.vue-->
+<!--@brief Instructor activites registration view-->
+
 
 <template>
   <navigation class="nav-bar"></navigation>
@@ -109,21 +107,24 @@ export default {
     }
   },
   methods: {
-    checkIfRegistered() {
 
+    // Check if the current activity is registered
+    checkIfRegistered() {
       return this.registeredActivities.some(obj => obj.id === this.selectedActivity.id)
     },
+    // Open modal for writing notes
     writeNotes(activity){
       this.selectedActivity = activity;
       this.openModal();
     },
-
+    // Open guarantor notes for activity
     checkGuarantorNotes(activity)
     {
       this.selectedActivity = activity;
       this.openGuarantorModal();
     },
 
+    // Register an activity with instructor notes
     async registerActivity(payload) {
       const { activity, notes } = payload;
       const dataToSend = {
@@ -139,6 +140,7 @@ export default {
       this.closeModal();
     },
 
+    // Unregister an activity
     async unregisterActivity(activity){
       await axios.delete(`${import.meta.env.VITE_API_HOST}/instructor_register_activity/${this.user.id}/${activity.id}`, {headers: this.header})
           .then(response=>{
@@ -149,6 +151,8 @@ export default {
           })
       this.closeModal();
     },
+
+    // Get activities for the selected subject
     async getScheduleActivities(subjectId){
       await axios.get(`${import.meta.env.VITE_API_HOST}/instructor_free_activities/${subjectId}`, {headers: this.header})
           .then(response=>{
@@ -159,9 +163,8 @@ export default {
             console.log(e);
           })
     },
-    updateCalendarKey() {
-      this.calendarKey += 1;
-    },
+
+    // Fetch user information and subjects
     async getUserAndSubjects(){
       try{
         const storedUser = localStorage.getItem('user');
@@ -169,7 +172,7 @@ export default {
           this.user = JSON.parse(storedUser);
         }
         try{
-          // set to dynamic
+          // Fetch subjects for the instructor
           await axios.get(`${import.meta.env.VITE_API_HOST}/subject?instructors=${this.user.id}`, {headers: this.header})
               .then(response => {
                 this.registeredSubjects = response.data.data;
@@ -185,6 +188,8 @@ export default {
         console.log(error);
       }
     },
+
+    // Get activities for the instructor
     async getInstructorActivities(){
       await axios.get(`${import.meta.env.VITE_API_HOST}/activity?instructor=${this.user.id}&subject=${this.selectedSubject}`, {headers: this.header})
           .then(response=>{
@@ -192,30 +197,40 @@ export default {
           })
 
     },
+
+    // Close the modal and reset selected activity
     closeModal(){
       this.showModal = false;
       this.selectedActivity = {};
       this.isRegistered = false;
     },
+
+    // Close the guarantor modal and reset selected activity
     closeGuarantorModal()
     {
       this.showGuarantorModal = false;
       this.selectedActivity = {};
       this.isRegistered = false;
     },
+
+    // Open the modal
     openModal(){
       this.showModal = true;
     },
+
+    // Open the guarantor modal
     openGuarantorModal() {
       this.showGuarantorModal = true;
     }
   },
   watch: {
+    // Watch for changes in the selectedSubject and fetch new activities
     async selectedSubject(newValue, oldValue) {
       await this.getScheduleActivities(newValue);
     },
   },
   mounted() {
+    // Fetch user and subject information when the component is mounted
     this.getUserAndSubjects();
   }
 }

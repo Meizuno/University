@@ -1,3 +1,7 @@
+<!--@authors-->
+<!--xklima34, Aliaksei Klimau-->
+<!--@file SubjectCard.vue-->
+<!--@brief List of cards of existing subjects-->
 <template>
     <div class="subject-main">
         <div v-for="subject in subjects" class="subject-card">
@@ -33,10 +37,14 @@ export default {
     };
   },
   methods: {
+
+    // Function to calculate the number of weeks between two dates
     calculateWeeks(activity) {
       const millisecondsInWeek = 7 * 24 * 60 * 60 * 1000;
       const difference = Math.abs(new Date(activity.date_to) - new Date(activity.date_from));
       const weeks =  Math.ceil(difference / millisecondsInWeek);
+
+      // Adjust weeks based on activity repetition
       if (activity.activity_repetition === 2 || activity.activity_repetition === 3){
         return Math.ceil(weeks / 2);
       }
@@ -44,14 +52,22 @@ export default {
         return weeks;
       }
     },
+    // Function to fetch activities for each subject
     async fetchSubjectActivities() {
+
+      // Iterate through each subject
       for (const subject of this.subjects) {
+
+        // Fetch activities for the current subject
         const response = await axios.get(`${import.meta.env.VITE_API_HOST}/activity?subject=${subject.id}`);
         const activities = response.data.data;
 
+        // Initialize variables to store weeks for each activity type
         let lectureWeeks = 0;
         let practiceWeeks = 0;
         let laboratoryWeeks = 0;
+
+        // Iterate through each activity for the current subject and calculate weeks
         for (const activity of activities) {
           if (activity.activity_type.name === 'Lecture' && lectureWeeks === 0) {
             lectureWeeks = this.calculateWeeks(activity)
@@ -72,7 +88,8 @@ export default {
     },
   },
   mounted() {
-    console.log();
+
+    // Fetch the list of subjects when the component is mounted
     axios.get(`${import.meta.env.VITE_API_HOST}/subject`)
         .then(response => {
             this.subjects = response.data.data;

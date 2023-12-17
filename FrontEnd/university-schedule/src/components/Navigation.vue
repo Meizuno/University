@@ -1,3 +1,8 @@
+<!--@authors-->
+<!--xklima34, Aliaksei Klimau-->
+<!--@file Navigation.vue-->
+<!--@brief Navigation bar-->
+
 <template>
 
   <div v-if="showProfile">
@@ -50,6 +55,7 @@ export default {
         }
     },
     mounted() {
+        // Initialize user data and set current page based on the route
         this.UpdateUserData();
         switch(this.$route.path){
             case "/admin":
@@ -93,6 +99,7 @@ export default {
 
     },
     methods: {
+        // Update user data from localStorage and change navigation buttons accordingly
         UpdateUserData() {
             if (localStorage.getItem("token")){
                 this.user = JSON.parse(localStorage.getItem('user'));
@@ -100,6 +107,7 @@ export default {
                     this.username = this.user.username;
                     this.status = this.user.permission.description
                 }
+                // Set authentication button based on token presence
                 this.authButton = localStorage.getItem("token") ? "logout" : "login";
             }
 
@@ -183,6 +191,7 @@ export default {
             }
 
         },
+        // Authentication action (Login or Logout)
         Auth() {
             if (localStorage.getItem("token")){
                 localStorage.clear();
@@ -193,10 +202,13 @@ export default {
             }
             
         },
+
+        // Navigate to the home page
         ToHome() {
             this.$router.push('/');
         },
 
+        // Handle button clicks
         handleButtonClick(button) {
             if (button.route) {
                 this.$router.push(button.route);
@@ -204,10 +216,11 @@ export default {
                 button.isShow = !button.isShow;
             }
         },
+        // Show user profile card
         showUserProfile() {
           this.showProfile = true;
         },
-
+        // Close user profile card
         closeUserProfile() {
           this.showProfile = false;
         }

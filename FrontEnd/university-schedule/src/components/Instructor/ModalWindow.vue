@@ -1,3 +1,8 @@
+<!--@authors-->
+<!--xklima34, Aliaksei Klimau-->
+<!--@file ModalView.vue-->
+<!--@brief Window for checking notes in activity registration-->
+
 <template>
   <div class="modal">
     <div class="modal-content">
@@ -51,22 +56,29 @@ export default {
   },
   data() {
     return {
+      // Initialize instructor_notes and guarantor_notes with values from the activity prop
       instructor_notes: this.activity.instructor_notes,
       guarantor_notes: this.activity.guarantor_notes
     };
   },
   methods: {
+
+    // Method to register the activity with the provided notes
     register() {
       if (this.instructor_notes === null)
       {
         this.instructor_notes="";
       }
+      // Emit the 'register-activity' event with the activity and notes data
       this.$emit('register-activity', { activity: this.activity, notes: this.instructor_notes });
       this.closeInstructor();
     },
+
+    // Method to close the instructor modal
     closeInstructor() {
       this.$emit('close-modal');
     },
+    // Method to close the guarantor modal
     closeGuarantor()
     {
       this.$emit('close-guarantor-modal');
