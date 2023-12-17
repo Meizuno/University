@@ -1,3 +1,9 @@
+<!--@authors-->
+<!--xmyron00,Yurii Myronov-->
+<!--xrasst00, Sergei Rasstrigin-->
+
+<!--@file ScheduleCellTest.vue-->
+<!--@brief Optimized copy of ScheduleCell.vue for CalendarTest-->
 <template>
   <div class="all">
     <div

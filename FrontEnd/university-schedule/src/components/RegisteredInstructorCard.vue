@@ -71,7 +71,8 @@ export default {
 .cross{
   margin-left: auto;
   height: 100%;
-  margin-right: 5px;
+  margin-right: 12px;
+  margin-top: 12px;
   cursor: pointer;
 }
 </style>
