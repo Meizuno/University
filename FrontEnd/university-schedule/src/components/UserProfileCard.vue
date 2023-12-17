@@ -18,7 +18,7 @@
         <div class="profile-descr">
           <p class="profile-descr__name">
             <span class="profile-descr__bold">Name: </span>
-            <span>{{user.first_name}}</span>
+            <span>{{user.first_name + ' '}}</span>
             <span>{{user.last_name}}</span>
           </p>
           <p class="profile-descr__username">
