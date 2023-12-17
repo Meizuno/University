@@ -24,6 +24,14 @@
 </template>
 
 <script>
+/**
+ * @authors
+ *   xmyron00, Yurii Myronov
+ *
+ * @file RoomUpdateDelete.vue
+ * @brief Component for update or delete room
+ */
+
 import axios from 'axios';
 import { toast } from 'vue3-toastify';
 

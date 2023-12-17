@@ -26,6 +26,13 @@
 
 
 <script>
+/**
+ * @authors
+ *   xmyron00, Yurii Myronov
+ *
+ * @file Scheduler.vue
+ * @brief Scheduler view
+ */
 import Navigation from '../components/Navigation.vue';
 import ScheduleCell from '../components/ScheduleCell.vue';
 import NotResolvedCell from '../components/NotResolvedCell.vue';
