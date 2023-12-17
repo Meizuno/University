@@ -62,6 +62,14 @@
 </template>
 
 <script>
+/**
+ * @authors
+ *   xmyron00, Yurii Myronov
+ *
+ * @file CreateUser.vue
+ * @brief Component for create user
+ */
+
 import axios from 'axios';
 import { toast } from 'vue3-toastify';
 

@@ -25,6 +25,14 @@
   </template>
   
   <script>
+  /**
+   * @authors
+   *   xmyron00, Yurii Myronov
+   *
+   * @file SubjectList.vue
+   * @brief Component for read subjects
+   */
+
   export default {
     data() {
       return {

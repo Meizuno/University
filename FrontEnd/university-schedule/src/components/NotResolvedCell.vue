@@ -86,6 +86,13 @@
 </template>
 
 <script>
+/**
+ * @authors
+ *   xmyron00, Yurii Myronov
+ *
+ * @file NotResolvedCell.vue
+ * @brief Component for scheduler view
+ */
 
 export default {
   emits: ["add-to-calendar"],
