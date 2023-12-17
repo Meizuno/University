@@ -64,7 +64,7 @@ export default {
                 this.activitiesNotResolved = [];
                 this.activitiesResolved = [];
                 for (const activity of activities) {
-                    if (activity.time === null){
+                    if (activity.time === null || activity.room === null || activity.day === null){
                         this.activitiesNotResolved.push(activity);
                     }
                     else {

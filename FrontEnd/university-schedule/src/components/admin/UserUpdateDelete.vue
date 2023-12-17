@@ -104,7 +104,6 @@ export default {
             Object.keys(this.errors).forEach(key => {
                 this.errors[key] = null;
             });
-            console.log(this.update_user)
             axios.put(`${import.meta.env.VITE_API_HOST}/user/${id}`, this.update_user, {headers: this.header})
             .then(response => {
                 this.$emit('update-user');
