@@ -1,3 +1,9 @@
+<!--@authors-->
+<!--xrasst00, Sergei Rasstrigin-->
+
+<!--@file StudentView.vue-->
+<!--@brief Student main page view-->
+
 <template>
   <navigation
       class="nav-bar"
@@ -45,50 +51,62 @@
 </template>
 
 <script>
+
 import Navigation from "@/components/Navigation.vue";
 import axios from "axios";
 import ScheduleCell from "@/components/ScheduleCell.vue";
 import RegisterInstructorCard from "@/components/RegisterInstructorCard.vue";
 import GuarantRequest from "@/components/GuarantRequest.vue";
-import DaysSchedule from "@/components/DaysSchedule.vue";
 import Calendar from "@/components/Calendar.vue";
 import CalendarTest from "@/components/CalendarTest.vue";
 
 export default {
-  components: {CalendarTest, Calendar, DaysSchedule, GuarantRequest, RegisterInstructorCard, ScheduleCell, Navigation},
+  components: {CalendarTest, Calendar, GuarantRequest, RegisterInstructorCard, ScheduleCell, Navigation},
   data(){
     return{
-      user: {},
+      user: {}, /**< User information */
       header: {
-        "Authorization": localStorage.getItem("token"),
+        "Authorization": localStorage.getItem("token"), /**< Authorization token from local storage */
       },
-      startDate: '18.09.2023',
-      endDate: '24.09.2023',
-      activities: [],
-      calendarKey: 0,
-      weeklySchedule: true,
+      startDate: '18.09.2023', /**< Start date for activities */
+      endDate: '24.09.2023', /**< End date for activities */
+      activities: [], /**< Array to store fetched activities */
+      calendarKey: 0, /**< Key to force re-render of CalendarTest component */
+      weeklySchedule: true, /**< Flag for weekly schedule */
     }
   },
 
   methods:{
+    /**
+     * @brief Redirects to the authorization page
+     */
     Authorization() {
-      this.$router.push('/authorization');
+      this.$router.push('/authorization'); /**< Redirects to the authorization page */
     },
+    /**
+     * @brief Fetches user information and activities from local storage
+     */
     getUserAndActivities(){
       try{
-        const storedUser = localStorage.getItem('user');
+        const storedUser = localStorage.getItem('user'); /**< Get user data from local storage */
         if(storedUser){
-          this.user = JSON.parse(storedUser);
-          this.getActivities();
+          this.user = JSON.parse(storedUser); /**< Parse user data */
+          this.getActivities(); /**< Fetch user activities */
         }
 
       }catch (error){
         console.log(error);
       }
     },
+    /**
+     * @brief Updates the key to force re-rendering of the CalendarTest component
+     */
     updateKey(){
       this.calendarKey += 1;
     },
+    /**
+     * @brief Fetches activities based on the selected schedule type
+     */
     async getActivities(){
       if(this.weeklySchedule){
         const date_from = this.convertDate(this.startDate);
@@ -114,6 +132,11 @@ export default {
       }
 
     },
+    /**
+     * @brief Formats a given date to a specific string format
+     * @param {Date} date - The date object to be formatted
+     * @returns {string} - Formatted date string
+     */
     formatDate(date) {
       const day = date.getDate();
       const month = date.getMonth() + 1;
@@ -121,6 +144,9 @@ export default {
 
       return `${day < 10 ? '0' : ''}${day}.${month < 10 ? '0' : ''}${month}.${year}`;
     },
+    /**
+     * @brief Increases the displayed date range by 7 days
+     */
     increaseDate() {
       const startDateArr = this.startDate.split('.').map(Number);
       const endDateArr = this.endDate.split('.').map(Number);
@@ -135,6 +161,9 @@ export default {
       this.endDate = this.formatDate(end);
       this.getActivities();
     },
+    /**
+     * @brief Decreases the displayed date range by 7 days
+     */
     decreaseDate() {
       const startDateArr = this.startDate.split('.').map(Number);
       const endDateArr = this.endDate.split('.').map(Number);
@@ -149,14 +178,25 @@ export default {
       this.endDate = this.formatDate(end);
       this.getActivities();
     },
+    /**
+     * @brief Converts a date string to a specific format
+     * @param {string} inputDate - The date string to be converted
+     * @returns {string} - Converted date string
+     */
     convertDate(inputDate) {
       const [day, month, year] = inputDate.split('.');
       return `${year}-${month.padStart(2, '0')}-${day.padStart(2, '0')}`;
     },
+    /**
+     * @brief Switches to displaying weekly schedule and fetches activities
+     */
     weeklyScheduleFunc(){
       this.weeklySchedule = true;
       this.getActivities();
     },
+    /**
+     * @brief Switches to displaying annual schedule and fetches activities
+     */
     annualScheduleFunc(){
       this.weeklySchedule = false;
       this.getActivities();

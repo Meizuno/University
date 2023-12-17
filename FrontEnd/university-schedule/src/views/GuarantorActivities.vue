@@ -1,3 +1,9 @@
+<!--@authors-->
+<!--xrasst00, Sergei Rasstrigin-->
+
+<!--@file GuarantorActivities.vue-->
+<!--@brief Guarantor manage activities view-->
+
 <template>
   <navigation
       class="nav-bar"
@@ -107,6 +113,7 @@
 </template>
 
 <script>
+
 import Navigation from "@/components/Navigation.vue";
 import GuarantRequest from "@/components/GuarantRequest.vue";
 import axios from "axios";
@@ -159,6 +166,9 @@ export default {
     }
   },
   methods:{
+    /**
+     * Sends a request to create a new activity entry.
+     */
     sendRequest(){
       const dataToSend = {
         "guarantor_notes": this.notes,
@@ -192,6 +202,9 @@ export default {
       this.range = ref(null);
 
     },
+    /**
+     * Retrieves the list of requests for display.
+     */
     async getRequests(){
       // change to subject id
       await axios.get(`${import.meta.env.VITE_API_HOST}/get_requests/${this.guarantorSubject.id}`, {headers: this.header})
@@ -202,6 +215,9 @@ export default {
             console.log(error)
           });
     },
+    /**
+     * Retrieves information about the subject.
+     */
     getSubject(){
       try {
         // change to user.id
@@ -214,6 +230,10 @@ export default {
         console.log(e);
       }
     },
+    /**
+     * Deletes a request.
+     * @param {Object} activity - The activity to be deleted.
+     */
     async deleteRequest(activity){
       await axios.delete(`${import.meta.env.VITE_API_HOST}/activity/${activity.id}`, {headers: this.header})
           .then(response=>{
@@ -328,14 +348,14 @@ export default {
   display: flex;
   flex-direction: column;
   justify-items: center;
-  font-size: 25px;
+  font-size: 24px;
   font-weight: bold;
 }
 .select-duration{
   display: flex;
   flex-direction: column;
   justify-items: center;
-  font-size: 25px;
+  font-size: 24px;
   font-weight: bold;
   width: 100%;
   height: 15%;
@@ -348,7 +368,7 @@ export default {
   display: flex;
   flex-direction: column;
   justify-items: center;
-  font-size: 25px;
+  font-size: 24px;
   font-weight: bold;
 }
 .select-date{
@@ -357,7 +377,7 @@ export default {
   display: flex;
   margin-top: 10px;
   flex-direction: column;
-  font-size: 25px;
+  font-size: 24px;
   font-weight: bold;
 }
 .notes{
@@ -365,8 +385,9 @@ export default {
   width: 100%;
   display: flex;
   flex-direction: column;
-  font-size: 25px;
+  font-size: 24px;
   font-weight: bold;
+  margin-top: 3px;
 }
 .input-label{
   margin-left: 5%;

@@ -1,3 +1,9 @@
+<!--@authors-->
+<!--xrasst00, Sergei Rasstrigin-->
+
+<!--@file GuarantorView.vue-->
+<!--@brief Guarantor main page with semester schedule-->
+
 <template>
   <navigation
       class="nav-bar"
@@ -14,13 +20,13 @@
 </template>
 
 <script>
+
 import Navigation from "@/components/Navigation.vue";
-import DaysSchedule from "@/components/DaysSchedule.vue";
 import axios from "axios";
 import CalendarTest from "@/components/CalendarTest.vue";
 
 export default {
-  components: {CalendarTest, DaysSchedule, Navigation},
+  components: {CalendarTest, Navigation},
   data(){
     return{
       header: {
@@ -34,12 +40,18 @@ export default {
   },
 
   methods: {
+    /**
+     * @brief Fetches the user data from local storage
+     */
     getUser(){
       const storedUser = localStorage.getItem('user');
       if(storedUser) {
         this.user = JSON.parse(storedUser);
       }
     },
+    /**
+     * @brief Fetches the guarantor subject and related activities
+     */
     async getGuarantorSubjectAndActivities(){
       try {
         // change to user.id
@@ -61,6 +73,9 @@ export default {
         console.log(e);
       }
     },
+    /**
+     * @brief Updates the calendar key to force re-rendering
+     */
     updateKey(){
       this.calendarKey += 1;
     }

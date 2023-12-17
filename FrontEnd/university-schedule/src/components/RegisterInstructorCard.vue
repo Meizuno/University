@@ -1,3 +1,9 @@
+<!--@authors-->
+<!--xrasst00, Sergei Rasstrigin-->
+
+<!--@file RegisterInstructorCard.vue-->
+<!--@brief Component for instructor card of instructors for Guarantor-->
+
 <template>
   <div class="card">
     <div class="instructor_name">PhD {{ instructor.first_name }} {{ instructor.last_name }}</div>
@@ -9,6 +15,7 @@
 </template>
 
 <script>
+
 import Checkmark from "@/components/icons/Checkmark.vue";
 
 export default {
@@ -25,6 +32,10 @@ export default {
     }
   },
   methods:{
+    /**
+     * @brief Emits an event to register the instructor.
+     * @returns {void}
+     */
     sendDataToList(){
       this.$emit('instructor_register', this.instructor);
     }

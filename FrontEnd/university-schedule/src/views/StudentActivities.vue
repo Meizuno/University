@@ -1,3 +1,9 @@
+<!--@authors-->
+<!--xrasst00, Sergei Rasstrigin-->
+
+<!--@file StudentActivities.vue-->
+<!--@brief Student activities register view-->
+
 <template>
 
   <navigation class="nav-bar"
@@ -56,6 +62,10 @@ export default {
     }
   },
   methods: {
+    /**
+     * @brief Registers an activity for the user
+     * @param {Object} activity - The activity to be registered
+     */
     async registerActivity(activity){
       await axios.post(`${import.meta.env.VITE_API_HOST}/student_register_activity/${this.user.id}/${activity.id}`,{},{headers: this.header})
           .then(response=>{
@@ -69,6 +79,10 @@ export default {
             console.log(e);
           })
     },
+    /**
+     * @brief Unregisters an activity for the user
+     * @param {Object} activity - The activity to be unregistered
+     */
     async unregisterActivity(activity){
       await axios.delete(`${import.meta.env.VITE_API_HOST}/student_register_activity/${this.user.id}/${activity.id}`,{headers: this.header})
           .then(response=>{
@@ -87,6 +101,10 @@ export default {
             });
           })
     },
+    /**
+     * @brief Fetches schedule activities for a specific subject
+     * @param {number} subjectId - The ID of the subject
+     */
     async getScheduleActivities(subjectId){
       await axios.get(`${import.meta.env.VITE_API_HOST}/subject_activities/${subjectId}`, {headers: this.header})
           .then(response=>{
@@ -97,9 +115,15 @@ export default {
             console.log(e);
           })
     },
+    /**
+     * @brief Updates the calendar key to force re-rendering
+     */
     updateCalendarKey() {
       this.calendarKey += 1;
     },
+    /**
+     * @brief Updates activity types based on registration status
+     */
     activityTypes(){
       this.activities.forEach(activity => {
         const registeredActivity = this.registeredActivities.find(
@@ -108,6 +132,9 @@ export default {
         activity.regtype = registeredActivity ? 'registered' : 'unregistered';
       });
     },
+    /**
+     * @brief Fetches user data and registered subjects
+     */
     async getUserAndSubjects(){
       try{
         const storedUser = localStorage.getItem('user');
@@ -129,6 +156,9 @@ export default {
         console.log(error);
       }
     },
+    /**
+     * @brief Fetches student activities for the selected subject
+     */
     async getStudentActivities(){
       await axios.get(`${import.meta.env.VITE_API_HOST}/student_activities_subject/${this.user.id}/${this.selectedSubject}`, {headers: this.header})
           .then(response=>{
@@ -142,6 +172,11 @@ export default {
     }
   },
   watch: {
+    /**
+     * @brief Watches for changes in the selectedSubject and fetches corresponding activities
+     * @param {number} newValue - The new selected subject ID
+     * @param {number} oldValue - The previous selected subject ID
+     */
     async selectedSubject(newValue, oldValue) {
         await this.getScheduleActivities(newValue);
     },

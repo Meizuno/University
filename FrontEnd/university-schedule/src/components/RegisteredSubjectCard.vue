@@ -1,3 +1,9 @@
+<!--@authors-->
+<!--xrasst00, Sergei Rasstrigin-->
+
+<!--@file RegisteredSubjectCard.vue-->
+<!--@brief Component for subject card for Student-->
+
 <template>
   <div class="card">
     <div class="code">{{ this.subject.code }}</div>
@@ -11,6 +17,7 @@
 </template>
 
 <script>
+
 import Cross from "@/components/icons/Cross.vue";
 import axios from "axios";
 import {toast} from "vue3-toastify";
@@ -32,6 +39,12 @@ export default {
     },
   },
   methods: {
+    /**
+     * @brief Unregisters the subject by making a DELETE request.
+     * @param {number} user_id - User ID for the current session.
+     * @param {number} subject_id - Subject ID to unregister.
+     * @returns {void}
+     */
     unregisterSubject(user_id, subject_id){
       axios.delete(`${import.meta.env.VITE_API_HOST}/register/${user_id}/${subject_id}`, {headers: this.header})
           .then(response => {
