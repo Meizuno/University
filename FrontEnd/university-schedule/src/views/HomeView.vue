@@ -1,12 +1,7 @@
-<script setup>
-import Navigation from '../components/Navigation.vue'
-import SubjectCard from '../components/SubjectCard.vue'
-
-const navigationButtons = [
-  { text: 'Home', class: 'selected' },
-];
-
-</script>
+<!--@authors-->
+<!--xklima34, Aliaksei Klimau-->
+<!--@file HomeView.vue-->
+<!--@brief Home page view with existing subjects schedule-->
 
 <template>
   <header>
@@ -14,6 +9,16 @@ const navigationButtons = [
   </header>
   
   <main>
-    <SubjectCard />
+    <SubjectCard/>
   </main>
 </template>
+
+<script setup>
+import Navigation from '../components/Navigation.vue'
+import SubjectCard from '../components/SubjectCard.vue'
+
+// Buttons for navigation bar
+const navigationButtons = [
+  { text: 'Home', class: 'selected' },
+];
+</script>

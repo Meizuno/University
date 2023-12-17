@@ -1,6 +1,19 @@
+<!--@authors-->
+<!--xklima34, Aliaksei Klimau-->
+<!--@file Navigation.vue-->
+<!--@brief Navigation bar-->
+
 <template>
+
+  <div v-if="showProfile">
+    <UserProfileCard
+        :user = "user"
+        @close-user-profile="closeUserProfile"
+    ></UserProfileCard>
+  </div>
+
     <div class="header">
-        <div class="user">
+        <div class="user" @click="showUserProfile">
             <img src="../assets/avatar.svg" alt="">
             <div>
                 <p class="username">{{ username }}</p>
@@ -24,9 +37,13 @@
 </template>
 
 <script>
+import UserProfileCard from "@/components/UserProfileCard.vue";
+
 export default {
+  components: {UserProfileCard},
     data() {
         return {
+            showProfile: false,
             username: 'Anonymous',
             status: '',
             buttons: [
@@ -38,6 +55,7 @@ export default {
         }
     },
     mounted() {
+        // Initialize user data and set current page based on the route
         this.UpdateUserData();
         switch(this.$route.path){
             case "/admin":
@@ -81,6 +99,7 @@ export default {
 
     },
     methods: {
+        // Update user data from localStorage and change navigation buttons accordingly
         UpdateUserData() {
             if (localStorage.getItem("token")){
                 this.user = JSON.parse(localStorage.getItem('user'));
@@ -88,6 +107,7 @@ export default {
                     this.username = this.user.username;
                     this.status = this.user.permission.description
                 }
+                // Set authentication button based on token presence
                 this.authButton = localStorage.getItem("token") ? "logout" : "login";
             }
 
@@ -171,6 +191,7 @@ export default {
             }
 
         },
+        // Authentication action (Login or Logout)
         Auth() {
             if (localStorage.getItem("token")){
                 localStorage.clear();
@@ -181,10 +202,13 @@ export default {
             }
             
         },
+
+        // Navigate to the home page
         ToHome() {
             this.$router.push('/');
         },
 
+        // Handle button clicks
         handleButtonClick(button) {
             if (button.route) {
                 this.$router.push(button.route);
@@ -192,6 +216,14 @@ export default {
                 button.isShow = !button.isShow;
             }
         },
+        // Show user profile card
+        showUserProfile() {
+          this.showProfile = true;
+        },
+        // Close user profile card
+        closeUserProfile() {
+          this.showProfile = false;
+        }
     }
 
 };
@@ -232,7 +264,7 @@ export default {
     color: rgba(0, 0, 0, 0.6);
     margin: 5px;
     border: none;
-    background-color: white;
+    background: none;
     font-size: 16px;
     font-weight: bold;
 }
@@ -284,6 +316,7 @@ export default {
 }
 
 .btn-route {
+    background: none;
     margin: 0;
 }
 

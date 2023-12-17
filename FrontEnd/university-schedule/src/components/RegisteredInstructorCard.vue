@@ -1,3 +1,9 @@
+<!--@authors-->
+<!--xrasst00, Sergei Rasstrigin-->
+
+<!--@file RegisteredInstructorCard.vue-->
+<!--@brief Component for instructor card of instructors for Guarantor-->
+
 <template>
   <div class="card">
     <div class="instructor_name">PhD {{ instructor.first_name }} {{ instructor.last_name }}</div>
@@ -9,6 +15,7 @@
 </template>
 
 <script>
+
 import Checkmark from "@/components/icons/Checkmark.vue";
 import Cross from "@/components/icons/Cross.vue";
 
@@ -27,6 +34,10 @@ export default {
   },
   methods:{
     sendDataToList(){
+      /**
+       * @brief Sends instructor information to the parent component.
+       * @returns {void}
+       */
       this.$emit('instructor_register', this.instructor);
     }
   },

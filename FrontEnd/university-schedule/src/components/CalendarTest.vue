@@ -1,3 +1,10 @@
+<!--@authors-->
+<!--xmyron00,Yurii Myronov-->
+<!--xrasst00, Sergei Rasstrigin-->
+
+<!--@file CalendarTest.vue-->
+<!--@brief Optimized copy of Calendar.Vue for Student and Guarantor-->
+
 <template>
   <div class="calendar">
     <div class="grid-10">
@@ -53,6 +60,7 @@
 </template>
 
 <script>
+
 import ScheduleCell from './ScheduleCell.vue';
 import ScheduleCellTest from "@/components/ScheduleCellTest.vue";
 
@@ -81,6 +89,11 @@ export default {
     this.UpdateCalendar();
   },
   methods: {
+    /**
+     * @brief Update the calendar display with scheduled activities.
+     * @details This function arranges activities into a grid-based calendar view
+     *          based on their day and time.
+     */
     UpdateCalendar() {
       let result = {"Mon": [], "Tue": [], "Wed": [], "Thu": [], "Fri": []};
       const timeToColumn = [
@@ -129,13 +142,24 @@ export default {
       // console.log(result);
       this.activitiesInCalendar = result;
     },
-
+    /**
+     * @brief Handle the removal of a schedule cell.
+     * @param {Object} activity - The activity to be removed.
+     */
     handleRemoveScheduleCell(activity){
       this.$emit("remove-from-calendar", activity);
     },
+    /**
+     * @brief Unregister an activity from the calendar.
+     * @param {Object} activity - The activity to be unregistered.
+     */
     unregisterActivity(activity){
       this.$emit('unregister_activity', activity)
     },
+    /**
+     * @brief Register an activity into the calendar.
+     * @param {Object} activity - The activity to be registered.
+     */
     registerActivity(activity){
       this.$emit('register_activity', activity)
     },
